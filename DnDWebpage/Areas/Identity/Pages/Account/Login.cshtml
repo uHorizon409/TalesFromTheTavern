@@ -1,0 +1,145 @@
+﻿@page
+@model DnDWebpage.Areas.Identity.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!-- Fantasy Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=MedievalSharp&display=swap" rel="stylesheet">
+
+<!-- Audio -->
+<audio id="loginMagicSound" src="/sounds/magic-sound-effect.mp3" preload="auto"></audio>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: url('/images/dndlogin.jpeg') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Cinzel Decorative', serif;
+    }
+
+    .login-wrapper {
+        background-color: rgba(0, 0, 0, 0.85); /* keep this for readability inside the box */
+        padding: 2rem;
+        border-radius: 1rem;
+        max-width: 500px;
+        margin: 5rem auto;
+        box-shadow: 0 0 60px rgba(255, 0, 0, 0.4), 0 0 120px rgba(255, 255, 0, 0.2) inset;
+    }
+
+    @@keyframes flickerGlow {
+        0% {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+
+        100% {
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.6);
+        }
+    }
+
+    .login-heading {
+        font-size: 2.5rem;
+        text-align: center;
+        color: #ffd700;
+        text-shadow: 0 0 8px #8b0000;
+        margin-bottom: 2rem;
+        font-family: 'MedievalSharp', cursive;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .login-icon {
+        width: 32px;
+        height: 32px;
+        filter: drop-shadow(0 0 3px #ffcc00);
+    }
+
+    .form-label {
+        font-family: 'MedievalSharp', cursive;
+        color: #ff4b4b;
+    }
+
+    .form-control {
+        background-color: #1c1c1c;
+        color: #f2e6d8;
+        border: 2px solid #8B0000;
+    }
+
+        .form-control::placeholder {
+            color: #bbb;
+        }
+
+    .form-check-label {
+        font-family: 'MedievalSharp', cursive;
+        color: #e0d8c3;
+    }
+
+    .btn-login {
+        background-color: #8b0000;
+        color: gold;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        font-family: 'Cinzel Decorative', serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+        .btn-login:hover {
+            background-color: gold;
+            color: #000;
+            box-shadow: 0 0 10px #ffd700;
+        }
+</style>
+
+<div class="login-wrapper">
+    <h2 class="login-heading">
+        Welcome Back, Adventurer
+    </h2>
+
+    <form method="post">
+        <div class="mb-3">
+            <label asp-for="Input.Username" class="form-label"></label>
+            <input asp-for="Input.Username" class="form-control" placeholder="Enter your name..." />
+            <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Input.Password" class="form-label"></label>
+            <input asp-for="Input.Password" class="form-control" placeholder="Your secret incantation..." />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="Input.RememberMe" class="form-check-input" />
+            <label asp-for="Input.RememberMe" class="form-check-label"></label>
+        </div>
+
+        <button type="submit" class="btn btn-login w-100" id="loginBtn">
+            <img src="/images/dndicon.png" alt="D&D Icon" class="login-icon me-2" />
+            Login
+        </button>
+    </form>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const btn = document.getElementById('loginBtn');
+            const sound = document.getElementById('loginMagicSound');
+            if (btn && sound) {
+                btn.addEventListener('mouseenter', () => {
+                    sound.currentTime = 0;
+                    sound.play();
+                });
+            }
+        });
+    </script>
+}

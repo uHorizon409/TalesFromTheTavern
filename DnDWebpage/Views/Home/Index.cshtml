@@ -1,0 +1,148 @@
+﻿@model List<DnDWebpage.Models.CharacterViewModel>
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Home";
+    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    var random = new Random();
+    var reasons = new[]
+    {
+        "smuggling illicit dragon eggs",
+        "harboring fugitive wizards",
+        "looting the King’s treasury",
+        "poaching unicorns in the Enchanted Forest",
+        "practicing forbidden necromancy",
+        "sabotaging the Queen’s warships",
+        "stealing the High Priest’s relics",
+        "leading a band of highwaymen",
+        "cursing the harvest fields",
+        "rescuing a captured archmage",
+        "betraying the Elven council",
+        "peddling cursed artifacts",
+        "dueling the Duke’s champion",
+        "inciting a peasant rebellion",
+        "kidnapping the royal heir"
+    };
+}
+
+<!-- 🧙 Epic Site Title (above banner) -->
+<div class="text-center mt-3">
+    <h1 class="epic-header">Tales From The Tavern</h1>
+</div>
+
+<!-- 🔥 Banner Image -->
+<div class="banner"></div>
+
+<!-- 📖 Begin Your Journey Book Section -->
+<div class="container book-section mt-4">
+    <div class="book-page text-center">
+        <h2 class="book-title">Begin Your Journey</h2>
+        <p class="book-subtext">Choose your path and prepare your spells, hero.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+            <a href="/Rules" class="btn dnd-btn" data-theme="rules">📜 Rules</a>
+            <a href="/Character/Create" class="btn dnd-btn" data-theme="character">🧝 Character Creator</a>
+            <a href="/Spells" class="btn dnd-btn" data-theme="spells">🪄 Spell Dictionary</a>
+            <a href="/Campaign" class="btn dnd-btn" data-theme="campaign">🏰 Campaigns</a>
+            <a href="/Bestiary" class="btn dnd-btn" data-theme="bestiary">🐲 Bestiary</a>
+        </div>
+    </div>
+</div>
+
+<!-- 🪧 Tavern Bulletin Board -->
+<div class="container mt-5 bulletin-wrapper">
+    <div class="position-relative text-center mb-3">
+        <h2 class="bulletin-header w-100">Tavern Bulletin Board</h2>
+        <button id="toggleEditorBtn" class="btn dnd-btn btn-sm position-absolute top-0 end-0 mt-2 me-3" data-theme="spells">✏️ Update Board</button>
+    </div>
+    <p class="engraved-text">The scent of ale and ink fills the air as you approach the worn parchment nailed to the oak post...</p>
+    <div id="editorSection" style="display: none;">
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label text-white">🗡 Bounty Title</label>
+                <input type="text" class="form-control" id="bountyTitle" placeholder="Bounty Title" />
+                <label class="form-label text-white mt-2">Description</label>
+                <textarea class="form-control" id="bountyText" rows="3" placeholder="Write about the bounty..."></textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-white">📜 Rumor Title</label>
+                <input type="text" class="form-control" id="rumorTitle" placeholder="Rumor Title" />
+                <label class="form-label text-white mt-2">Description</label>
+                <textarea class="form-control" id="rumorText" rows="3" placeholder="Write the rumor..."></textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-white">☠️ Wanted Title</label>
+                <input type="text" class="form-control" id="wantedTitle" placeholder="Wanted Poster Title" />
+                <label class="form-label text-white mt-2">Description</label>
+                <textarea class="form-control" id="wantedText" rows="3" placeholder="Describe the villain..."></textarea>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <button id="updateBoardBtn" class="btn dnd-btn" data-theme="rules">✅ Submit</button>
+        </div>
+    </div>
+    <div class="row mt-4" id="bulletin-board"></div>
+</div>
+
+<!-- 🔊 Sound & Script Includes -->
+<audio id="click-sound" src="~/sounds/click.mp3" preload="auto"></audio>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sound = document.getElementById("click-sound");
+        document.querySelectorAll(".dnd-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                sound.currentTime = 0;
+                sound.play();
+            });
+        });
+
+        const toggleEditorBtn = document.getElementById("toggleEditorBtn");
+        const editorSection = document.getElementById("editorSection");
+        toggleEditorBtn.addEventListener("click", () => {
+            editorSection.style.display = editorSection.style.display === "none" ? "block" : "none";
+        });
+
+        document.getElementById("updateBoardBtn").addEventListener("click", function () {
+            const bountyTitle = document.getElementById("bountyTitle").value;
+            const bountyText = document.getElementById("bountyText").value;
+            const rumorTitle = document.getElementById("rumorTitle").value;
+            const rumorText = document.getElementById("rumorText").value;
+            const wantedTitle = document.getElementById("wantedTitle").value;
+            const wantedText = document.getElementById("wantedText").value;
+            const board = document.getElementById("bulletin-board");
+
+            board.innerHTML = `
+                <div class="col-md-4 mb-4">
+                    <a href="/Quest/Bounty" class="text-decoration-none">
+                        <div class="card bg-dark text-white border-warning shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">🗡 ${bountyTitle}</h5>
+                                <p class="card-text">${bountyText}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <a href="/Quest/Rumor" class="text-decoration-none">
+                        <div class="card bg-dark text-white border-info shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">📜 ${rumorTitle}</h5>
+                                <p class="card-text">${rumorText}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <a href="/Quest/Wanted" class="text-decoration-none">
+                        <div class="card bg-dark text-white border-danger shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">☠️ ${wantedTitle}</h5>
+                                <p class="card-text">${wantedText}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>`;
+        });
+    });
+</script>
+
+<!-- 🎮 Include Mini D20 Game Section -->
+@await Html.PartialAsync("_D20BattleGame")

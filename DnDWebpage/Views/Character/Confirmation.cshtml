@@ -1,0 +1,23 @@
+﻿@model DnDWebpage.Models.CharacterViewModel
+
+@{
+    ViewData["Title"] = "Character Created";
+}
+
+<div class="text-center mt-5">
+    <h1 class="text-success">@Model.Name Enters The Realm!</h1>
+    <p class="lead">@ViewBag.Message</p>
+
+    <div class="mt-4">
+        <h3>@Model.Name</h3>
+        <p><strong>Class:</strong> @Model.Class | <strong>Race:</strong> @Model.Race | <strong>Level:</strong> @Model.Level</p>
+        <img src="@Model.ImageUrl" alt="Character Image" style="max-width: 200px;" class="img-thumbnail" />
+    </div>
+
+    <div class="mt-4">
+        <a href="/Character/Create" class="btn btn-outline-primary">Create Another</a>
+        <a href="/" class="btn btn-outline-secondary">Return to Home</a>
+    </div>
+</div>
+
+

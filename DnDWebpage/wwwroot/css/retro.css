@@ -1,0 +1,332 @@
+﻿/* 🔮 DnD Retro Theme Styling */
+
+/* BODY: clean font + black-to-red gradient */
+body {
+    background: linear-gradient(to bottom, #000000, #8B0000);
+    color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
+    padding-top: 20px;
+    min-height: 100vh;
+}
+
+/* HEADERS: MedievalSharp + DnD red */
+h2, h3, h4, h5, h6 {
+    font-family: 'MedievalSharp', cursive;
+    color: #8B0000;
+    text-shadow: 1px 1px 0 #000;
+    margin-top: 20px;
+}
+
+/* 🧙 Main Epic Header Styling */
+.banner h1,
+.epic-header {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 4.2rem;
+    color: #fff;
+    padding: 20px 60px;
+    margin-bottom: 25px;
+    background-color: rgba(0, 0, 0, 0.75);
+    border: 3px double #8B0000;
+    border-radius: 12px;
+    box-shadow: 0 0 25px #8B0000, 0 0 10px #000 inset;
+    text-shadow: 3px 3px 6px #000, 0 0 12px #8B0000;
+    animation: riseIn 1.5s ease-out forwards;
+}
+
+/* Rise-in cinematic animation */
+@keyframes riseIn {
+    0% {
+        opacity: 0;
+        transform: translateY(40px) scale(0.96);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* FADE-IN Animation */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* LINKS & BUTTONS */
+a, .btn {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+/* THEMED BUTTONS */
+.dnd-btn {
+    border: 2px solid #8B0000;
+    color: #fff;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 0.5rem;
+    cursor: pointer;
+}
+
+    .dnd-btn:hover {
+        background-color: #8B0000;
+        box-shadow: 0 0 12px #8B0000;
+        transform: scale(1.05);
+    }
+    /* Themed Glows on Hover */
+    .dnd-btn[data-theme="rules"]:hover {
+        box-shadow: 0 0 15px #ff4d4d;
+    }
+
+    .dnd-btn[data-theme="character"]:hover {
+        background: #003366;
+        box-shadow: 0 0 15px #3399ff;
+    }
+
+    .dnd-btn[data-theme="spells"]:hover {
+        background: #4b0082;
+        box-shadow: 0 0 15px #a64dff;
+    }
+
+    .dnd-btn[data-theme="campaign"]:hover {
+        background: #2d2d2d;
+        box-shadow: 0 0 15px #f0e68c;
+    }
+
+    .dnd-btn[data-theme="bestiary"]:hover {
+        background: #004d00;
+        box-shadow: 0 0 15px #33cc33;
+    }
+
+/* CONTAINER STYLING */
+.container {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #8B0000;
+}
+
+/* CARD STYLING */
+.card {
+    background-color: #262626;
+    border: 1px solid #8B0000;
+    margin-bottom: 15px;
+    padding: 15px;
+    color: #ffffff;
+}
+
+/* NAVBAR */
+.navbar {
+    background-color: #1a1a1a !important;
+    border-bottom: 2px solid #8B0000;
+}
+
+/* FOOTER */
+footer {
+    color: #aaa;
+    background-color: transparent;
+    border-top: 1px solid #8B0000;
+    padding-top: 15px;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+/* BANNER */
+.banner {
+    background: url('/images/DnDBanner.jpg') no-repeat center center;
+    background-size: cover;
+    height: 320px;
+    border-bottom: 4px solid #8B0000;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+/* TEXT SHADOW UTILITY */
+.shadow {
+    text-shadow: 2px 2px 4px #000;
+}
+
+.card-title {
+    font-family: 'MedievalSharp', cursive;
+    color: #f5c518;
+    text-shadow: 1px 1px 2px #000;
+}
+
+/* Tavern Bulletin Board */
+.bulletin-wrapper {
+    background: url('/images/corkboard-texture.jpg') center/cover no-repeat;
+    background-size: cover;
+    padding: 30px;
+    border: 4px solid #8B0000;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #8B0000;
+}
+
+    .bulletin-wrapper h2 {
+        font-family: 'MedievalSharp', cursive;
+        font-size: 2.2rem;
+        color: #ffcc66;
+        text-align: center;
+        text-shadow: 2px 2px #000, 0 0 6px #8B0000;
+        letter-spacing: 1px;
+        border-bottom: 3px dashed #ffcc66;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+/* Bulletin cards */
+#bulletin-board .card {
+    background-color: #f9f2dc;
+    color: #2d1a05;
+    border: 2px dashed #8B0000;
+    font-family: 'Segoe UI', serif;
+    transform: rotate(-1deg);
+    transition: transform 0.2s ease;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+}
+
+    #bulletin-board .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px #ffcc66;
+    }
+
+#bulletin-board .card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+#bulletin-board .card-text {
+    font-size: 0.95rem;
+}
+
+/* Book-Like Section */
+.book-section {
+    background: url('/images/parchment-bg.jpg') center/cover no-repeat;
+    background-size: cover;
+    padding: 40px;
+    margin-top: 40px;
+    border: 5px double #8B0000;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #8B0000;
+}
+
+.book-page {
+    background-color: rgba(255,248,220,0.9);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px #8B0000;
+}
+
+.book-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2.4rem;
+    color: #000;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 0 #ccc;
+}
+
+.book-subtext {
+    font-style: italic;
+    color: #000;
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+.book-page .dnd-btn {
+    background-color: #f5e6c4;
+    color: #000;
+    border: 2px solid #8B0000;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+    .book-page .dnd-btn:hover {
+        background-color: #8B0000;
+        color: #fff;
+        box-shadow: 0 0 10px #8B0000;
+        transform: scale(1.05);
+    }
+
+/* Engraved wood-style text */
+.engraved-text {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.3rem;
+    color: #e6d5aa;
+    text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 3px rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.4);
+    padding: 8px 20px;
+    border-radius: 10px;
+    display: inline-block;
+    opacity: 0;
+    animation: fadeInApproach 2s ease-in-out forwards;
+    animation-delay: 1s;
+}
+
+/* Fade-in approach for engraved text */
+@keyframes fadeInApproach {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Epic header override */
+.epic-header {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 4rem;
+    color: #8B0000;
+    padding: 20px 60px;
+    margin-bottom: 0;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+    .epic-header::after {
+        content: "";
+        display: block;
+        width: 120px;
+        margin: 10px auto 0;
+        border-bottom: 3px solid #8B0000;
+    }
+
+/* You Died Overlay */
+#youDiedOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    z-index: 9999;
+    color: #B22222;
+    font-family: 'MedievalSharp', cursive;
+    font-size: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 5px;
+    text-shadow: 0 0 10px #8B0000;
+    padding: 20px;
+}

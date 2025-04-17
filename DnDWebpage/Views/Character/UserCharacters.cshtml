@@ -1,0 +1,36 @@
+﻿@model List<DnDWebpage.Models.CharacterViewModel>
+
+@{
+    ViewData["Title"] = $"{ViewBag.Username}'s Characters";
+    Layout = "~/Views/Shared/_ParchmentLayout.cshtml";
+}
+
+<h1 class="text-center text-light mb-4">📜 Characters Created by @ViewBag.Username</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning text-center">This user hasn't created any characters yet.</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var c in Model)
+        {
+            <div class="col">
+                <div class="card bounty-card h-100">
+                    <img src="@c.ImageUrl" class="card-img-top" alt="@c.Name" />
+                    <div class="bounty-body">
+                        <h5 class="card-title text-warning">@c.Name</h5>
+                        <p><strong>Class:</strong> @c.Class (@c.Subclass)</p>
+                        <p><strong>Race:</strong> @c.Race (@c.Subrace)</p>
+                        <p><strong>Level:</strong> @c.Level</p>
+                        <p><strong>Background:</strong> @c.Background</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a class="btn btn-sm btn-outline-info" href="/Character/Details/@c.Id">📖 View</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

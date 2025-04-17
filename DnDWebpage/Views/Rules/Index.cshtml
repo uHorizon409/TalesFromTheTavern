@@ -1,0 +1,408 @@
+﻿@{
+    ViewData["Title"] = "Dungeons & Dragons Core Rules";
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+}
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    window.addEventListener("load", function () {
+        lucide.createIcons();
+    });
+</script>
+<!-- JavaScript -->
+<script>
+    window.onscroll = function () {
+        const btn = document.querySelector('.scroll-top');
+        btn.classList.toggle("show", window.scrollY > 300);
+        updateActiveLink();
+    };
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToGroup(id) {
+        const group = document.getElementById(id);
+        if (group) {
+            group.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            group.setAttribute('open', 'open');
+            document.querySelectorAll('.group-wrapper').forEach(g => {
+                if (g !== group) g.removeAttribute('open');
+            });
+            updateActiveLink(id);
+        }
+    }
+
+    function updateActiveLink(activeId) {
+        document.querySelectorAll('.floating-nav a').forEach(link => {
+            link.classList.remove('active-link');
+            const href = link.getAttribute('href')?.replace('#', '');
+            if (href === activeId) {
+                link.classList.add('active-link');
+            }
+        });
+    }
+</script>
+
+<!-- Floating Nav Menu -->
+<nav class="floating-nav">
+    <h3>Jump to</h3>
+    <ul>
+        <li><a href="#section0" onclick="scrollToGroup('section0')"><i data-lucide="scroll"></i> Overview</a></li>
+        <li><a href="#char-rules" onclick="scrollToGroup('char-rules')"><i data-lucide="user"></i> Character</a></li>
+        <li><a href="#combat-rules" onclick="scrollToGroup('combat-rules')"><i data-lucide="swords"></i> Combat</a></li>
+        <li><a href="#magic-rules" onclick="scrollToGroup('magic-rules')"><i data-lucide="sparkles"></i> Magic</a></li>
+        <li><a href="#equipment-rules" onclick="scrollToGroup('equipment-rules')"><i data-lucide="backpack"></i> Equipment</a></li>
+        <li><a href="#essentials-rules" onclick="scrollToGroup('essentials-rules')"><i data-lucide="bookmark"></i> Essentials</a></li>
+    </ul>
+</nav>
+
+<!-- Main Container -->
+<div class="rules-background">
+    <div class="rules-wrapper">
+        <div class="rules-grid">
+
+            <!-- Overview -->
+            <div id="section0" class="rule-section">
+                <details class="animated-detail" open>
+                    <summary><h2>0. @(ViewData["Heading22"] ?? "Core Rules at a Glance")</h2></summary>
+                    <p>@Html.Raw(ViewData["Content0"] ?? "This section summarizes the core rules.")</p>
+                </details>
+            </div>
+
+            <!-- Character Rules -->
+            <details class="group-wrapper" id="char-rules">
+                <summary class="group-heading"><i data-lucide="user"></i> Character Rules</summary>
+                <div class="rules-grid">
+                    @for (int i = 1; i <= 7; i++)
+                    {
+                        <div id="section@i" class="rule-section">
+                            <details class="animated-detail">
+                                <summary><h2><i data-lucide="user-round"></i> @i. @(ViewData[$"Heading{i}"] ?? "Rule")</h2></summary>
+                                <p>@Html.Raw(ViewData[$"Content{i}"] ?? "This section will be filled with detailed content about rule @(i).")</p>
+                            </details>
+                        </div>
+                    }
+                </div>
+            </details>
+
+            <!-- Combat Rules -->
+            <details class="group-wrapper" id="combat-rules">
+                <summary class="group-heading"><i data-lucide="swords"></i> Combat Rules</summary>
+                <div class="rules-grid">
+                    @for (int i = 8; i <= 14; i++)
+                    {
+                        <div id="section@i" class="rule-section">
+                            <details class="animated-detail">
+                                <summary><h2><i data-lucide="axe"></i> @i. @(ViewData[$"Heading{i}"] ?? "Rule")</h2></summary>
+                                <p>@Html.Raw(ViewData[$"Content{i}"] ?? "This section will be filled with detailed content about rule @(i).")</p>
+                            </details>
+                        </div>
+                    }
+                </div>
+            </details>
+
+            <!-- Magic Rules -->
+            <details class="group-wrapper" id="magic-rules">
+                <summary class="group-heading"><i data-lucide="sparkles"></i> Magic & Spells</summary>
+                <div class="rules-grid">
+                    @for (int i = 15; i <= 18; i++)
+                    {
+                        <div id="section@i" class="rule-section">
+                            <details class="animated-detail">
+                                <summary><h2><i data-lucide="wand"></i> @i. @(ViewData[$"Heading{i}"] ?? "Rule")</h2></summary>
+                                <p>@Html.Raw(ViewData[$"Content{i}"] ?? "This section will be filled with detailed content about rule @(i).")</p>
+                            </details>
+                        </div>
+                    }
+                </div>
+            </details>
+
+            <!-- Equipment Rules -->
+            <details class="group-wrapper" id="equipment-rules">
+                <summary class="group-heading"><i data-lucide="backpack"></i> Equipment & Items</summary>
+                <div class="rules-grid">
+                    @for (int i = 19; i <= 21; i++)
+                    {
+                        <div id="section@i" class="rule-section">
+                            <details class="animated-detail">
+                                <summary><h2><i data-lucide="package"></i> @i. @(ViewData[$"Heading{i}"] ?? "Rule")</h2></summary>
+                                <p>@Html.Raw(ViewData[$"Content{i}"] ?? "This section will be filled with detailed content about rule @(i).")</p>
+                            </details>
+                        </div>
+                    }
+                </div>
+            </details>
+
+            <!-- Essentials Rules -->
+            <details class="group-wrapper" id="essentials-rules">
+                <summary class="group-heading"><i data-lucide="bookmark"></i> Essentials</summary>
+                <div class="rules-grid">
+                    @for (int i = 23; i <= 25; i++)
+                    {
+                        <div id="section@i" class="rule-section">
+                            <details class="animated-detail">
+                                <summary><h2><i data-lucide="info"></i> @i. @(ViewData[$"Heading{i}"] ?? "Essential Rule")</h2></summary>
+                                <p>@Html.Raw(ViewData[$"Content{i}"] ?? "This section explains an essential rule.")</p>
+                            </details>
+                        </div>
+                    }
+                </div>
+            </details>
+
+        </div>
+    </div>
+</div>
+
+<!-- Scroll-to-top Button -->
+<button onclick="scrollToTop()" class="scroll-top" title="Back to Top">⬆</button>
+<!-- Styling -->
+<style>
+    body {
+        margin: 0;
+        background: #0f0f0f url('/images/parchment-background.jpg') repeat;
+        background-size: cover;
+        color: #e0d8c3;
+        font-family: 'Garamond', serif;
+        line-height: 1.7;
+    }
+
+    .rules-background {
+        padding-bottom: 4rem;
+    }
+
+    .rules-wrapper {
+        border: 12px groove #4c2b1a;
+        background-color: rgba(24, 20, 18, 0.97);
+        box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
+        padding: 3rem;
+        position: relative;
+    }
+
+   
+
+    .rule-section {
+        background: url('/images/parchment-texture.jpg') center/cover no-repeat;
+        border: 4px double #a07b45;
+        padding: 2rem;
+        margin: 2rem 0;
+        border-radius: 16px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.6);
+        font-family: 'Garamond', serif;
+        transform: rotateZ(-0.3deg);
+    }
+
+
+        .rule-section h2 {
+            font-size: 2rem;
+            color: goldenrod;
+            text-align: center;
+            text-shadow: 1px 1px #cda87f;
+            border-bottom: 2px solid #a07b45;
+            margin-bottom: 1rem;
+            font-family: 'Cinzel Decorative', serif;
+        }
+
+
+        .rule-section details summary {
+            cursor: pointer;
+            padding: 0.5rem 0;
+            list-style: none;
+            font-weight: bold;
+            color: #c75a5a;
+            transition: color 0.3s;
+        }
+
+            .rule-section details summary:hover {
+                color: #f15c5c;
+            }
+
+        .rule-section p {
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            color: #d3cbb3;
+        }
+
+    .animated-detail {
+        transition: all 0.4s ease-in-out;
+    }
+
+        .animated-detail[open] summary + * {
+            animation: fadeIn 0.6s ease-in forwards;
+        }
+
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .highlight-section {
+        animation: glow 1s ease-in-out;
+        box-shadow: 0 0 12px 3px #cda87f;
+        border-radius: 10px;
+    }
+
+    @@keyframes glow {
+        0%
+
+    {
+        box-shadow: 0 0 0 0 #cda87f;
+    }
+
+    50% {
+        box-shadow: 0 0 12px 6px #cda87f;
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 #cda87f;
+    }
+
+    }
+
+    .scroll-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        background-color: #550000;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+        display: none;
+    }
+
+        .scroll-top.show {
+            display: block;
+        }
+
+    .floating-nav {
+        position: fixed;
+        top: 100px;
+        left: 20px;
+        background: rgba(32, 18, 18, 0.95);
+        border: 2px solid #5a1c1c;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.7);
+        z-index: 999;
+    }
+
+        .floating-nav h3 {
+            margin: 0 0 0.5rem;
+            color: #cda87f;
+            font-size: 1.1rem;
+        }
+
+        .floating-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .floating-nav li {
+            margin-bottom: 0.4rem;
+        }
+
+        .floating-nav a {
+            background: radial-gradient(#4b2c2c, #2a1212);
+            border: 2px groove #cda87f;
+            color: #f5e3c8;
+            font-family: 'Cinzel Decorative', serif;
+            text-shadow: 0 0 2px #000;
+            transition: transform 0.2s;
+        }
+
+            .floating-nav a:hover {
+                transform: scale(1.05);
+                background: radial-gradient(#6e3939, #3b1a1a);
+            }
+
+
+    $1
+
+    .floating-nav a:focus {
+        outline: 2px solid #f3d7b6;
+        outline-offset: 2px;
+    }
+
+    .floating-nav a.active-link {
+        background-color: #7b2c1f !important;
+        color: #fff;
+    }
+
+    .group-wrapper {
+        margin-bottom: 2rem;
+        background: rgba(40, 30, 25, 0.9);
+        border: 2px solid #7b2c1f;
+        border-radius: 12px;
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+    }
+
+    .group-heading {
+        cursor: pointer;
+        font-size: 1.4rem;
+        font-weight: bold;
+        padding: 1rem;
+        background: #2e1c1c;
+        color: goldenrod;
+        border-bottom: 2px solid #7b2c1f;
+        font-family: 'Garamond', serif;
+    }
+
+    .group-wrapper[open] > .group-heading::after {
+        content: " ▲";
+        float: right;
+        font-size: 1rem;
+        color: #d3a976;
+    }
+
+    .group-wrapper:not([open]) > .group-heading::after {
+        content: " ▼";
+        float: right;
+        font-size: 1rem;
+        color: #d3a976;
+    }
+
+    $1
+    .group-wrapper {
+        animation: pageFade 1s ease;
+    }
+
+    @@keyframes pageFade {
+        from
+
+    {
+        opacity: 0;
+        transform: translateX(-40px) rotateZ(-1deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) rotateZ(0deg);
+    }
+
+    }
+
+    [data-lucide] {
+        width: 1.2em;
+        height: 1.2em;
+        vertical-align: middle;
+        stroke: currentColor;
+        stroke-width: 1.5;
+        margin-right: 0.5em;
+    }
+
