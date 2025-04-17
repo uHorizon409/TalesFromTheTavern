@@ -23,3 +23,36 @@ wwwroot/uploads/
 # Other
 *.log
 
+# ─── BUILD ARTIFACTS ───────────────────────────────
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.log
+
+# ─── USER & IDE FILES ──────────────────────────────
+.vs/
+.vscode/
+*.user
+*.suo
+
+# ─── SECRETS / SENSITIVE FILES ─────────────────────
+secrets.json
+*.pfx
+*.db
+
+# ─── MEDIA ─────────────────────────────────────────
+wwwroot/uploads/
+*.mp3
+*.wav
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# ─── DEPENDENCIES ──────────────────────────────────
+node_modules/
+
+
