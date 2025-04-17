@@ -9,7 +9,7 @@ namespace DnDWebpage.Controllers
 {
     public class BaseController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        protected readonly ApplicationDbContext _context;
 
         public BaseController(ApplicationDbContext context)
         {

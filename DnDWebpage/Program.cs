@@ -8,7 +8,8 @@ namespace DnDWebpage
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
+
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,7 @@ namespace DnDWebpage
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // ??? Configure Identity with your custom ApplicationUser
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 // Optional: Relax password strength here if desired
                 options.Password.RequireDigit = false;
@@ -60,6 +61,11 @@ namespace DnDWebpage
 
             // ?? Enable Razor Pages (required for Identity UI like Login, Register, etc.)
             app.MapRazorPages();
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                await RoleInitializer.SeedRolesAndAdmin(services);
+            }
 
             app.Run();
         }

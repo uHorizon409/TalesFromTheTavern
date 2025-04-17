@@ -1,0 +1,33 @@
+﻿@model IEnumerable<DnDWebpage.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<h2 class="text-center text-light">🛡️ Manage Users</h2>
+
+<table class="table table-dark table-striped table-bordered mt-4">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    <form asp-action="DeleteUser" method="post" onsubmit="return confirm('Are you sure you want to delete @user.UserName?');">
+                        <input type="hidden" name="id" value="@user.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

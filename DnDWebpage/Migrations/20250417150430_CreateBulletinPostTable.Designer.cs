@@ -4,6 +4,7 @@ using DnDWebpage.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnDWebpage.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417150430_CreateBulletinPostTable")]
+    partial class CreateBulletinPostTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,39 +59,6 @@ namespace DnDWebpage.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("BulletinPosts");
-                });
-
-            modelBuilder.Entity("BulletinVote", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BulletinPostId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("VotedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("X")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Y")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BulletinPostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BulletinVotes");
                 });
 
             modelBuilder.Entity("DnDWebpage.Models.ApplicationUser", b =>
@@ -370,23 +340,6 @@ namespace DnDWebpage.Migrations
                     b.HasOne("DnDWebpage.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BulletinVote", b =>
-                {
-                    b.HasOne("BulletinPost", "BulletinPost")
-                        .WithMany()
-                        .HasForeignKey("BulletinPostId");
-
-                    b.HasOne("DnDWebpage.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BulletinPost");
 
                     b.Navigation("User");
                 });

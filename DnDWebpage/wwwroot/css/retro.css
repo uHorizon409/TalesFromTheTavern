@@ -330,3 +330,78 @@ footer {
     text-shadow: 0 0 10px #8B0000;
     padding: 20px;
 }
+
+
+
+/* Vote tile styling */
+#staging-area {
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 2px dashed gold;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+
+.vote-area {
+    min-height: 100px;
+    position: relative;
+    z-index: 100;
+}
+
+    .vote-area img.vote-tile {
+        display: inline-block;
+        background-color: rgba(0, 0, 0, 0.5); /* 50% transparent black */
+    }
+
+
+.vote-tile {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border: 2px solid black;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 215, 0, 0.3); /* soft white + faint gold glow */
+    border-radius: 50%;
+    cursor: grab;
+    background-color: black;
+    z-index: 10;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transform: scale(1.05);
+}
+
+
+    .vote-tile:active {
+        transform: scale(1.2) rotate(2deg);
+        box-shadow: 0 10px 20px rgba(255, 215, 0, 0.5);
+        cursor: grabbing;
+    }
+
+/* Touch support fallback if needed */
+@media (hover: none) {
+    .vote-tile {
+        cursor: pointer;
+    }
+}
+@keyframes bounce-glow {
+    0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 0 10px gold;
+    }
+
+    50% {
+        transform: translateY(-6px);
+        box-shadow: 0 0 20px gold;
+    }
+}
+
+.vote-tile.bouncy {
+    animation: bounce-glow 1.5s ease-in-out infinite;
+}
+.drop-zone {
+    transition: box-shadow 0.2s ease;
+}
+
+    .drop-zone:hover {
+        box-shadow: 0 0 20px gold;
+    }
+

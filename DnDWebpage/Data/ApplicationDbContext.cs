@@ -14,6 +14,12 @@ namespace DnDWebpage.Data
         // Characters created by users
         public DbSet<CharacterViewModel> Characters { get; set; }
 
+        // Tavern Bulletin Posts
+        public DbSet<BulletinPost> BulletinPosts { get; set; }
+
+        // ✅ Votes cast by users on bulletin posts
+        public DbSet<BulletinVote> BulletinVotes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -26,6 +32,8 @@ namespace DnDWebpage.Data
                     .HasForeignKey(c => c.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            // (Optional) future configs for BulletinPost and BulletinVote can go here
         }
     }
 }

@@ -139,13 +139,22 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index"> Home</a>
                         </li>
+
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">  Characters</a>
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> Characters</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" asp-controller="Character" asp-action="Index"> View All</a></li>
                                 <li><a class="dropdown-item" asp-controller="Character" asp-action="Create"> Create New</a></li>
                             </ul>
                         </li>
+
+                        <!-- ✅ Admin-only link -->
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-controller="Admin" asp-action="Dashboard">🛡️ Admin Panel</a>
+                            </li>
+                        }
                     </ul>
 
                     <ul class="navbar-nav">

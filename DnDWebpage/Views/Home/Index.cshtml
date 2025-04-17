@@ -1,8 +1,9 @@
-﻿@model List<DnDWebpage.Models.CharacterViewModel>
+﻿@model DnDWebpage.Models.BulletinBoardViewModel
+
+
 @using System.Security.Claims
 @{
     ViewData["Title"] = "Home";
-    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     var random = new Random();
     var reasons = new[]
     {
@@ -51,98 +52,304 @@
 <div class="container mt-5 bulletin-wrapper">
     <div class="position-relative text-center mb-3">
         <h2 class="bulletin-header w-100">Tavern Bulletin Board</h2>
-        <button id="toggleEditorBtn" class="btn dnd-btn btn-sm position-absolute top-0 end-0 mt-2 me-3" data-theme="spells">✏️ Update Board</button>
+
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <button id="toggleEditorBtn" class="btn dnd-btn btn-sm position-absolute top-0 end-0 mt-2 me-3" data-theme="spells">✏️ Update Board</button>
+        }
     </div>
+
     <p class="engraved-text">The scent of ale and ink fills the air as you approach the worn parchment nailed to the oak post...</p>
-    <div id="editorSection" style="display: none;">
-        <div class="row">
-            <div class="col-md-4">
-                <label class="form-label text-white">🗡 Bounty Title</label>
-                <input type="text" class="form-control" id="bountyTitle" placeholder="Bounty Title" />
-                <label class="form-label text-white mt-2">Description</label>
-                <textarea class="form-control" id="bountyText" rows="3" placeholder="Write about the bounty..."></textarea>
+
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <div id="editorSection" style="display: none;">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label text-white">🗡 Bounty Title</label>
+                    <input type="text" class="form-control" id="bountyTitle" placeholder="Bounty Title" />
+                    <label class="form-label text-white mt-2">Description</label>
+                    <textarea class="form-control" id="bountyText" rows="3" placeholder="Write about the bounty..."></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-white">📜 Rumor Title</label>
+                    <input type="text" class="form-control" id="rumorTitle" placeholder="Rumor Title" />
+                    <label class="form-label text-white mt-2">Description</label>
+                    <textarea class="form-control" id="rumorText" rows="3" placeholder="Write the rumor..."></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-white">☠️ Wanted Title</label>
+                    <input type="text" class="form-control" id="wantedTitle" placeholder="Wanted Poster Title" />
+                    <label class="form-label text-white mt-2">Description</label>
+                    <textarea class="form-control" id="wantedText" rows="3" placeholder="Describe the villain..."></textarea>
+                </div>
             </div>
-            <div class="col-md-4">
-                <label class="form-label text-white">📜 Rumor Title</label>
-                <input type="text" class="form-control" id="rumorTitle" placeholder="Rumor Title" />
-                <label class="form-label text-white mt-2">Description</label>
-                <textarea class="form-control" id="rumorText" rows="3" placeholder="Write the rumor..."></textarea>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label text-white">☠️ Wanted Title</label>
-                <input type="text" class="form-control" id="wantedTitle" placeholder="Wanted Poster Title" />
-                <label class="form-label text-white mt-2">Description</label>
-                <textarea class="form-control" id="wantedText" rows="3" placeholder="Describe the villain..."></textarea>
+            <div class="text-center mt-3">
+                <button id="updateBoardBtn" class="btn dnd-btn" data-theme="rules">✅ Submit</button>
             </div>
         </div>
-        <div class="text-center mt-3">
-            <button id="updateBoardBtn" class="btn dnd-btn" data-theme="rules">✅ Submit</button>
+    }
+    @if (User.Identity.IsAuthenticated)
+    {
+        var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        <div id="staging-area" class="text-center mb-4">
+            <p style="color: #fcecc3; font-weight: 600;">Move Your Token and Cast Your Vote</p>
+
+
+            <div class="vote-area d-flex justify-content-center flex-wrap align-items-center gap-2" style="min-height: 40px;">
+                @foreach (var user in Model.Users)
+                {
+                    var isCurrentUser = user.Id == currentUserId;
+                    var draggable = isCurrentUser ? "true" : "false";
+                    var cursor = isCurrentUser ? "grab" : "pointer";
+                    var extraClass = isCurrentUser ? "bouncy shadow" : "";
+                    var id = isCurrentUser ? "user-tile" : "";
+
+                    <img id="@id"
+                         src="@user.ProfileImagePath"
+                         onerror="this.src='/images/icons/user.png'"
+                         class="vote-tile @extraClass"
+                         alt="@user.UserName"
+                         title="@user.UserName"
+                         draggable="@draggable"
+                         data-userid="@user.Id"
+                         style="width: 32px; height: 32px; object-fit: cover; border: 2px solid gold; margin: 4px; cursor: @cursor;" />
+                }
+            </div>
         </div>
-    </div>
-    <div class="row mt-4" id="bulletin-board"></div>
+    }
+    <!-- 🔧 DROP ZONE CONTAINER (for drag positioning) -->
+    <div id="bulletin-board" class="position-relative" style="min-height: 500px; height: 100%; width: 100%; overflow: hidden;"></div>
+
 </div>
+@if (User.Identity.IsAuthenticated)
+{
+    <script>
+        document.body.dataset.userid = '@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value';
+        document.body.dataset.username = '@User.Identity.Name';
+        document.body.dataset.avatar = '@ViewBag.NavAvatar';
+    </script>
+}
 
 <!-- 🔊 Sound & Script Includes -->
 <audio id="click-sound" src="~/sounds/click.mp3" preload="auto"></audio>
+<audio id="tile-drop-sound" src="~/sounds/tile-drop.mp3" preload="auto"></audio>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const sound = document.getElementById("click-sound");
-        document.querySelectorAll(".dnd-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                sound.currentTime = 0;
-                sound.play();
-            });
+    let draggedToken = null;
+
+    function dragToken(e) {
+        draggedToken = e.target;
+    }
+
+    function showVoteConfirmation() {
+        const message = document.createElement("div");
+        message.textContent = "✅ Vote Registered!";
+        Object.assign(message.style, {
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "rgba(0, 0, 0, 0.85)",
+            padding: "0.5rem 1rem",
+            border: "2px solid gold",
+            borderRadius: "12px",
+            color: "gold",
+            fontSize: "1.2rem",
+            fontFamily: "'Cinzel Decorative', serif",
+            zIndex: 9999,
+            boxShadow: "0 0 10px gold",
+            pointerEvents: "none",
+            transition: "opacity 0.5s ease"
         });
+        document.body.appendChild(message);
+        setTimeout(() => {
+            message.style.opacity = 0;
+            setTimeout(() => message.remove(), 500);
+        }, 1600);
+    }
 
-        const toggleEditorBtn = document.getElementById("toggleEditorBtn");
-        const editorSection = document.getElementById("editorSection");
-        toggleEditorBtn.addEventListener("click", () => {
-            editorSection.style.display = editorSection.style.display === "none" ? "block" : "none";
-        });
+    async function loadBulletinBoard() {
+        const board = document.getElementById("bulletin-board");
 
-        document.getElementById("updateBoardBtn").addEventListener("click", function () {
-            const bountyTitle = document.getElementById("bountyTitle").value;
-            const bountyText = document.getElementById("bountyText").value;
-            const rumorTitle = document.getElementById("rumorTitle").value;
-            const rumorText = document.getElementById("rumorText").value;
-            const wantedTitle = document.getElementById("wantedTitle").value;
-            const wantedText = document.getElementById("wantedText").value;
-            const board = document.getElementById("bulletin-board");
+        const [postsResponse, votesResponse, usersResponse] = await Promise.all([
+            fetch("/Bulletin/GetActivePosts"),
+            fetch("/Bulletin/GetVotes"),
+            fetch("/Bulletin/GetAllUsersWithTokens") // new endpoint needed
+        ]);
 
-            board.innerHTML = `
-                <div class="col-md-4 mb-4">
-                    <a href="/Quest/Bounty" class="text-decoration-none">
-                        <div class="card bg-dark text-white border-warning shadow">
-                            <div class="card-body">
-                                <h5 class="card-title">🗡 ${bountyTitle}</h5>
-                                <p class="card-text">${bountyText}</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <a href="/Quest/Rumor" class="text-decoration-none">
-                        <div class="card bg-dark text-white border-info shadow">
-                            <div class="card-body">
-                                <h5 class="card-title">📜 ${rumorTitle}</h5>
-                                <p class="card-text">${rumorText}</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <a href="/Quest/Wanted" class="text-decoration-none">
-                        <div class="card bg-dark text-white border-danger shadow">
-                            <div class="card-body">
-                                <h5 class="card-title">☠️ ${wantedTitle}</h5>
-                                <p class="card-text">${wantedText}</p>
-                            </div>
-                        </div>
-                    </a>
+        const posts = await postsResponse.json();
+        const votes = await votesResponse.json();
+        const users = await usersResponse.json();
+
+        const typeMap = {
+            "Bounty": { icon: "🗡", border: "border-warning" },
+            "Rumor": { icon: "📜", border: "border-info" },
+            "Wanted": { icon: "☠️", border: "border-danger" }
+        };
+
+        board.querySelectorAll(".drop-zone").forEach(zone => zone.remove());
+
+        posts.forEach(post => {
+            const config = typeMap[post.type] || {};
+            const card = document.createElement("div");
+            card.className = `card bg-dark text-white ${config.border} shadow drop-zone position-absolute`;
+            card.dataset.postId = post.id;
+            card.style.top = `${Math.floor(Math.random() * 250) + 60}px`;
+            card.style.left = `${Math.floor(Math.random() * 800) + 50}px`;
+            card.style.width = "260px";
+            card.innerHTML = `
+                <div class="card-body">
+                    <h5 class="card-title">${config.icon} ${post.title}</h5>
+                    <p class="card-text">${post.description}</p>
+                    <div class="vote-area d-flex flex-wrap gap-1 mt-2"></div>
                 </div>`;
+            board.appendChild(card);
         });
+
+        await renderVotes(votes, users);
+        setupTileVoting();
+    }
+
+    function setupTileVoting() {
+        const userId = document.body.dataset.userid;
+        if (!userId) return;
+
+        const board = document.getElementById("bulletin-board");
+
+        board.addEventListener("dragover", e => e.preventDefault());
+        board.addEventListener("drop", async (e) => {
+            e.preventDefault();
+            if (!draggedToken) return;
+
+            const boardRect = board.getBoundingClientRect();
+            const dropX = e.clientX - boardRect.left;
+            const dropY = e.clientY - boardRect.top;
+
+            draggedToken.style.left = `${dropX - draggedToken.offsetWidth / 2}px`;
+            draggedToken.style.top = `${dropY - draggedToken.offsetHeight / 2}px`;
+
+            const target = document.elementFromPoint(e.clientX, e.clientY);
+            const zone = target?.closest(".drop-zone");
+            const postId = zone?.dataset.postId;
+
+            if (postId) {
+                await fetch("/Bulletin/CastVote", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ postId: parseInt(postId), x: dropX, y: dropY })
+                });
+
+                showVoteConfirmation();
+                dropSound?.play();
+
+                const [votes, users] = await Promise.all([
+                    fetch("/Bulletin/GetVotes").then(res => res.json()),
+                    fetch("/Bulletin/GetAllUsersWithTokens").then(res => res.json())
+                ]);
+                await renderVotes(votes, users);
+            }
+        });
+    }
+
+          async function renderVotes(votes, users) {
+        document.querySelectorAll(".vote-tile").forEach(tile => tile.remove());
+
+        const currentUserId = document.body.dataset.userid;
+        const board = document.getElementById("bulletin-board");
+
+        users.forEach(user => {
+            const vote = votes.find(v => v.userId === user.userId);
+
+            // ✅ Randomize only if no vote position is stored
+            const x = vote ? vote.x : Math.floor(Math.random() * 800) + 30;
+            const y = vote ? vote.y : Math.floor(Math.random() * 300) + 50;
+
+            const img = document.createElement("img");
+            const hasAvatar = user.avatarUrl?.trim();
+
+            img.src = hasAvatar ? user.avatarUrl : "/images/icons/user.png";
+            img.onerror = () => {
+                img.onerror = null;
+                img.src = "/images/icons/user.png";
+            };
+
+            img.className = "vote-tile rounded-circle";
+            img.title = user.username;
+            img.dataset.userid = user.userId;
+            img.style.width = "42px";
+            img.style.height = "42px";
+            img.style.objectFit = "cover";
+            img.style.border = "2px solid gold";
+            img.style.position = "absolute";
+            img.style.left = `${x}px`;
+            img.style.top = `${y}px`;
+            img.style.zIndex = 1000;
+            img.style.cursor = user.userId === currentUserId ? "grab" : "pointer";
+
+            if (user.userId === currentUserId) {
+                img.draggable = true;
+                img.addEventListener("dragstart", dragToken);
+            } else {
+                img.addEventListener("click", () => {
+                    window.location.href = `/Profile/View/${user.userId}`;
+                });
+            }
+
+            makeTileMobileFriendly(img);
+            board.appendChild(img);
+        });
+    }
+
+    function makeTileMobileFriendly(tile) {
+        let isDragging = false;
+
+        tile.addEventListener("touchstart", (e) => {
+            isDragging = true;
+            tile.style.zIndex = 10001;
+        });
+
+        tile.addEventListener("touchmove", (e) => {
+            if (!isDragging) return;
+            const touch = e.touches[0];
+            tile.style.left = `${touch.pageX - 20}px`;
+            tile.style.top = `${touch.pageY - 20}px`;
+        });
+
+        tile.addEventListener("touchend", async (e) => {
+            isDragging = false;
+            const touch = e.changedTouches[0];
+            const boardRect = document.getElementById("bulletin-board").getBoundingClientRect();
+            const x = touch.clientX - boardRect.left;
+            const y = touch.clientY - boardRect.top;
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            const zone = target?.closest(".drop-zone");
+            const postId = zone?.dataset.postId;
+
+            if (postId) {
+                await fetch("/Bulletin/CastVote", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ postId: parseInt(postId), x, y })
+                });
+
+                dropSound?.play();
+                showVoteConfirmation();
+                loadBulletinBoard();
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadBulletinBoard();
     });
 </script>
+
+
+
+
+
 
 <!-- 🎮 Include Mini D20 Game Section -->
 @await Html.PartialAsync("_D20BattleGame")

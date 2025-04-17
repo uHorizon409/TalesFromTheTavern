@@ -4,6 +4,7 @@ using DnDWebpage.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnDWebpage.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417200312_FinalizeVotePosition")]
+    partial class FinalizeVotePosition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,7 +69,7 @@ namespace DnDWebpage.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BulletinPostId")
+                    b.Property<int>("BulletinPostId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -76,11 +79,11 @@ namespace DnDWebpage.Migrations
                     b.Property<DateTime>("VotedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("X")
-                        .HasColumnType("real");
+                    b.Property<int>("X")
+                        .HasColumnType("int");
 
-                    b.Property<float>("Y")
-                        .HasColumnType("real");
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -378,7 +381,9 @@ namespace DnDWebpage.Migrations
                 {
                     b.HasOne("BulletinPost", "BulletinPost")
                         .WithMany()
-                        .HasForeignKey("BulletinPostId");
+                        .HasForeignKey("BulletinPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DnDWebpage.Models.ApplicationUser", "User")
                         .WithMany()

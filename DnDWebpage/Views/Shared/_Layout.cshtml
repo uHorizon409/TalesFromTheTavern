@@ -262,42 +262,54 @@
                         <!-- Top‑level Characters link -->
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Character"
-                                          && ViewContext.RouteData.Values["action"]?.ToString() == "Index"
-                                            ? "fw-bold" : "")"
+                                      && ViewContext.RouteData.Values["action"]?.ToString() == "Index"
+                                        ? "fw-bold" : "")"
                                asp-controller="Character"
                                asp-action="Index">
-                                Characters
+                                Bounty Board
                             </a>
                         </li>
 
                         <!-- Top‑level Create Character link -->
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Character"
-                                          && ViewContext.RouteData.Values["action"]?.ToString() == "Create"
-                                            ? "fw-bold" : "")"
+                                      && ViewContext.RouteData.Values["action"]?.ToString() == "Create"
+                                        ? "fw-bold" : "")"
                                asp-controller="Character"
                                asp-action="Create">
                                 Create Character
                             </a>
                         </li>
-                    </ul>
-                        <ul class="navbar-nav">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <!-- Profile link -->
-                                <li class="nav-item">
-                                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" ? "fw-bold" : "")"
-                                       asp-area="Identity"
-                                       asp-page="/Account/Manage/Profile">
-                                        <img src="@ViewBag.NavAvatar"
-                                             alt="Avatar"
-                                             class="avatar-topnav me-1"
-                                             onerror="this.src='/images/icons/user.png'" />
-                                        My Hero Profile
-                                    </a>
-                                </li>
 
-                                <!-- Retire / Logout button as a regular nav button -->
+                        <!-- ✅ Admin-only tab -->
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "fw-bold" : "")"
+                                   asp-controller="Admin" asp-action="Dashboard">
+                                    🛡️ Admin Panel
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <!-- Profile link -->
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" ? "fw-bold" : "")"
+                                   asp-area="Identity"
+                                   asp-page="/Account/Manage/Profile">
+                                    <img src="@ViewBag.NavAvatar"
+                                         alt="Avatar"
+                                         class="avatar-topnav me-1"
+                                         onerror="this.src='/images/icons/user.png'" />
+                                    My Hero Profile
+                                </a>
+                            </li>
+
+                            <!-- Retire / Logout button as a regular nav button -->
                             <li class="nav-item">
                                 <a class="nav-link btn-no-highlight"
                                    asp-area="Identity"
@@ -305,8 +317,8 @@
                                     Retire
                                 </a>
                             </li>
-                            }
-                            else
+                        }
+                        else
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
@@ -324,6 +336,7 @@
             </div>
         </nav>
     </header>
+
 
     <main role="main">
         @RenderBody()

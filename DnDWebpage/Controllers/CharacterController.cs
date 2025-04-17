@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DnDWebpage.Models;
 using DnDWebpage.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DnDWebpage.Controllers
 {
@@ -160,6 +161,12 @@ namespace DnDWebpage.Controllers
 
             return RedirectToAction("Index");
         }
-
+        // ✅ GET: /Character/AdminDelete
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminDelete()
+        {
+            var allCharacters = _db.Characters.Include(c => c.User).ToList();
+            return View("AdminDelete", allCharacters);
+        }
     }
 }
