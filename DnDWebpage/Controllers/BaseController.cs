@@ -15,7 +15,7 @@ namespace DnDWebpage.Controllers
         {
             _context = context;
         }
-
+       
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (User.Identity?.IsAuthenticated ?? false)

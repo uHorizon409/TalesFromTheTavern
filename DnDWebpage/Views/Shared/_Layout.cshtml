@@ -183,6 +183,61 @@
                     color: #ff0000;
                 }
 
+        .logout-toast {
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url('/images/parchment-background.jpg') center/cover no-repeat;
+            color: #f8f8e1;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.2rem;
+            padding: 1.2rem 2rem;
+            border: 3px double #aa4a44;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(255, 240, 200, 0.8);
+            z-index: 10000;
+            animation: toastFadeIn 0.8s ease-out;
+            transition: opacity 1s ease-in-out;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+            .logout-toast .logout-text {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .logout-toast .close-toast {
+                position: absolute;
+                top: 6px;
+                right: 10px;
+                background: none;
+                border: none;
+                font-size: 1.3rem;
+                color: #ff4040;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+                .logout-toast .close-toast:hover {
+                    color: #ff0000;
+                }
+
+        @@keyframes toastFadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        }
     </style>
 
 </head>
@@ -243,17 +298,13 @@
                                 </li>
 
                                 <!-- Retire / Logout button as a regular nav button -->
-                                <li class="nav-item">
-                                    <form method="post"
-                                          asp-area="Identity"
-                                          asp-page="/Account/Logout"
-                                          class="d-inline">
-                                        <button type="submit"
-                                                class="nav-link btn-no-highlight">
-                                            Retire
-                                        </button>
-                                    </form>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn-no-highlight"
+                                   asp-area="Identity"
+                                   asp-page="/Account/Retire">
+                                    Retire
+                                </a>
+                            </li>
                             }
                             else
                         {
@@ -295,24 +346,33 @@
     @if (TempData["LogoutMessage"] is string msg)
     {
         <div class="logout-toast" id="logoutToast">
-            <button class="close-toast"
-                    onclick="document.getElementById('logoutToast').remove()">
-                ×
-            </button>
-            @msg
+            <button class="close-toast" onclick="document.getElementById('logoutToast').remove()">×</button>
+            <div class="logout-text">
+                <i class="lucide" data-lucide="scroll-text" style="margin-right: 8px;"></i>
+                @msg
+            </div>
         </div>
         <script>
-            // Fade out after 3s
+            // Optional: Play logout sound effect
+            const pourSound = new Audio('/sounds/drink-pour.mp3');
+            pourSound.play();
+
+            // Fade out after 3 seconds
             setTimeout(() => {
-              const t = document.getElementById('logoutToast');
-              if (t) t.style.opacity = '0';
+                const t = document.getElementById('logoutToast');
+                if (t) t.style.opacity = '0';
             }, 3000);
+
             // Remove from DOM after fade
             setTimeout(() => {
-              const t = document.getElementById('logoutToast');
-              if (t) t.remove();
+                const t = document.getElementById('logoutToast');
+                if (t) t.remove();
             }, 3800);
+
+            // Render icons
+            lucide.createIcons();
         </script>
+    }
     }
 
     <footer>…</footer>
