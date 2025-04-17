@@ -1,0 +1,25 @@
+# Ignore build output
+bin/
+obj/
+*.user
+*.suo
+*.cache
+
+# Visual Studio stuff
+.vs/
+.vscode/
+
+# ASP.NET secrets
+secrets.json
+*.pfx
+
+# Ignore media
+wwwroot/uploads/
+*.mp3
+*.gif
+*.jpg
+*.png
+
+# Other
+*.log
+
