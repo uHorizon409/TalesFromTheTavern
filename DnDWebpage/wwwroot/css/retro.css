@@ -143,9 +143,9 @@ footer {
 
 /* BANNER */
 .banner {
-    background: url('/images/DnDBanner.jpg') no-repeat center center;
-    background-size: cover;
-    height: 320px;
+    background: url('/images/dndhome.jpg') no-repeat center center;
+    background-size: 100% auto;
+    height: 400px;
     border-bottom: 4px solid #8B0000;
     position: relative;
     display: flex;

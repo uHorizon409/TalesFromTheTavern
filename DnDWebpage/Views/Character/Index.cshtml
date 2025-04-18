@@ -282,7 +282,8 @@
             The Forgotten Realm's' BOUNTY BOARD
         </div>
 
-        
+        <audio id="checkSound" src="/sounds/checkingpost.mp3" preload="auto"></audio>
+
         @foreach (var c in Model)
         {
             // once-per-character
@@ -381,6 +382,17 @@
         });
 
         window.addEventListener('DOMContentLoaded', () => {
+                    // Play sound when any bounty modal opens
+        const checkSound = document.getElementById("checkSound");
+        document.querySelectorAll('[data-bs-toggle="modal"]').forEach(btn => {
+          btn.addEventListener("click", () => {
+            if (checkSound) {
+              checkSound.currentTime = 0;
+              checkSound.play();
+            }
+          });
+        });
+
           document.querySelectorAll('[title]').forEach(el => new bootstrap.Tooltip(el));
         });
     </script>
