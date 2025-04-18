@@ -18,7 +18,11 @@ namespace DnDWebpage
 
             // ?? Connect to Azure-hosted SQL Database using EF Core
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(
+                builder.Configuration.GetConnectionString("DefaultConnection"),
+                 sqlOptions => sqlOptions.EnableRetryOnFailure()
+     ));
+
 
             // ??? Configure Identity with your custom ApplicationUser
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>

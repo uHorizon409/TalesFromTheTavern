@@ -1,0 +1,158 @@
+﻿@{
+    ViewData["Title"] = "Edit Bulletin Board";
+    Layout = "~/Views/Shared/_ParchmentLayout.cshtml";
+}
+
+<div class="container mt-5 parchment-panel p-4 rounded shadow-lg">
+    <h1 class="text-center text-warning mb-4" style="font-family: 'Cinzel Decorative', serif;">
+        📜 Edit the Tavern Bulletin Board
+    </h1>
+    <p class="text-center text-light mb-5" style="font-family: 'MedievalSharp', cursive;">
+        Adjust individual bulletins below. Leave a field blank to skip it.
+    </p>
+
+    <!-- 🧾 Post Editors -->
+    <div class="row g-4">
+        <!-- 🗡 Bounty -->
+        <div class="col-md-4">
+            <div class="card bg-dark border-danger text-light shadow">
+                <div class="card-body">
+                    <h4 class="text-danger">🗡 Bounty</h4>
+                    <input id="bountyTitle" class="form-control mb-2" placeholder="Bounty Title" />
+                    <textarea id="bountyText" class="form-control" rows="4" placeholder="Bounty Description"></textarea>
+                    <button class="btn btn-sm btn-danger mt-2 w-100" onclick="updatePost('Bounty')">Update Bounty</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📜 Rumor -->
+        <div class="col-md-4">
+            <div class="card bg-dark border-info text-light shadow">
+                <div class="card-body">
+                    <h4 class="text-info">📜 Rumor</h4>
+                    <input id="rumorTitle" class="form-control mb-2" placeholder="Rumor Title" />
+                    <textarea id="rumorText" class="form-control" rows="4" placeholder="Rumor Description"></textarea>
+                    <button class="btn btn-sm btn-info mt-2 w-100" onclick="updatePost('Rumor')">Update Rumor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ☠️ Wanted -->
+        <div class="col-md-4">
+            <div class="card bg-dark border-warning text-light shadow">
+                <div class="card-body">
+                    <h4 class="text-warning">☠️ Wanted</h4>
+                    <input id="wantedTitle" class="form-control mb-2" placeholder="Wanted Title" />
+                    <textarea id="wantedText" class="form-control" rows="4" placeholder="Wanted Description"></textarea>
+                    <button class="btn btn-sm btn-warning mt-2 w-100" onclick="updatePost('Wanted')">Update Wanted</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🧹 Reset Button -->
+    <div class="text-center mt-5">
+        <button class="btn btn-outline-danger px-4 py-2" onclick="showResetConfirm()">🧹 Reset Bulletin Board</button>
+    </div>
+</div>
+
+<!-- 🔒 Reset Modal -->
+<div id="resetModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+     background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: #1a0000; color: gold; border: 3px solid crimson; padding: 2rem; border-radius: 15px;
+        max-width: 500px; text-align: center; font-family: 'Cinzel Decorative', serif;">
+        <h4>⚠️ Are you sure?</h4>
+        <p>This will archive all current posts and reset every token's position.</p>
+        <button class="btn btn-danger me-2" onclick="resetBoard()">Yes, Reset</button>
+        <button class="btn btn-outline-light" onclick="hideResetConfirm()">Cancel</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // ─────────────────────────────────────────────
+        // Function: Update a specific bulletin post
+        // ─────────────────────────────────────────────
+        async function updatePost(type) {
+            const title = document.getElementById(`${type.toLowerCase()}Title`).value.trim();
+            const description = document.getElementById(`${type.toLowerCase()}Text`).value.trim();
+
+            if (!title || !description) {
+                alert(`⚠️ Both title and description are required to update the ${type.toLowerCase()} post.`);
+                return;
+            }
+
+            const response = await fetch("/Bulletin/UpdateSinglePost", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ type, title, description })
+            });
+
+            if (response.ok) {
+                showUpdateToast(`${type} post updated!`);
+            } else {
+                alert(`❌ Failed to update ${type} post.`);
+            }
+        }
+
+        // ─────────────────────────────────────────────
+        // Function: Preload post content into fields
+        // ─────────────────────────────────────────────
+        async function preloadCurrentPosts() {
+            const posts = await fetch("/Bulletin/GetActivePosts").then(res => res.json());
+            posts.forEach(post => {
+                document.getElementById(`${post.type.toLowerCase()}Title`).value = post.title;
+                document.getElementById(`${post.type.toLowerCase()}Text`).value = post.description;
+            });
+        }
+
+        // ─────────────────────────────────────────────
+        // Function: Display a golden toast message
+        // ─────────────────────────────────────────────
+        function showUpdateToast(message) {
+            const toast = document.createElement("div");
+            toast.textContent = "✅ " + message;
+            Object.assign(toast.style, {
+                position: "fixed", top: "20px", right: "20px", background: "rgba(0,0,0,0.8)",
+                color: "gold", padding: "10px 16px", borderRadius: "10px", fontFamily: "'Cinzel Decorative', serif",
+                border: "2px solid gold", zIndex: 9999, boxShadow: "0 0 10px gold", transition: "opacity 0.3s ease"
+            });
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = 0;
+                setTimeout(() => toast.remove(), 400);
+            }, 1800);
+        }
+
+        // ─────────────────────────────────────────────
+        // Function: Show/Hide the reset confirmation modal
+        // ─────────────────────────────────────────────
+        function showResetConfirm() {
+            document.getElementById("resetModal").style.display = "flex";
+        }
+
+        function hideResetConfirm() {
+            document.getElementById("resetModal").style.display = "none";
+        }
+
+        // ─────────────────────────────────────────────
+        // Function: Call server to reset board and tokens
+        // ─────────────────────────────────────────────
+        async function resetBoard() {
+            const res = await fetch("/Bulletin/ResetBoard", { method: "POST" });
+
+            if (res.ok) {
+                hideResetConfirm();
+                showUpdateToast("Bulletin board has been reset!");
+                preloadCurrentPosts();
+            } else {
+                alert("❌ Failed to reset bulletin board.");
+            }
+        }
+
+        // ─────────────────────────────────────────────
+        // INIT: Load posts when page loads
+        // ─────────────────────────────────────────────
+        document.addEventListener("DOMContentLoaded", preloadCurrentPosts);
+    </script>
+}

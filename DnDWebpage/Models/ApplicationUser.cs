@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DnDWebpage.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        // ✅ Updated to match what the Razor view expects
+        // 📸 Optional path to profile image
         [Display(Name = "Profile Image Path")]
         public string? ProfileImagePath { get; set; }
 
-        // ✅ Navigation property for the user's characters
-        public ICollection<CharacterViewModel> Characters { get; set; } = new List<CharacterViewModel>();
+        // 🧾 Optional short biography
         public string? Bio { get; set; }
 
+        // 🖼️ Optional cover art URL for profile theming
         public string? CoverUrl { get; set; }
 
-
+        // 🧙 Navigation property to link this user to their created characters
+        public ICollection<CharacterViewModel> Characters { get; set; } = new List<CharacterViewModel>();
     }
 }

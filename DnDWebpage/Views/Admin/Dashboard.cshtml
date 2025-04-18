@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Admin Dashboard";
-    Layout = "~/Views/Shared/_ParchmentLayout.cshtml"; // Or _Layout.cshtml if you use that
+    Layout = "~/Views/Shared/_ParchmentLayout.cshtml";
 }
 
 <div class="text-center mt-5 text-light">
@@ -15,6 +15,10 @@
 
         <a class="btn btn-warning btn-lg" asp-controller="Bulletin" asp-action="Edit">
             📜 Edit Bulletin Board
+        </a>
+
+        <a class="btn btn-info btn-lg" asp-controller="Bulletin" asp-action="ArchiveList">
+            📚 View Archive
         </a>
 
         <a class="btn btn-outline-light btn-lg" asp-controller="User" asp-action="List">

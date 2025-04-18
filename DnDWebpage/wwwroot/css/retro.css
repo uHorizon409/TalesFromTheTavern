@@ -332,58 +332,103 @@ footer {
 }
 
 
-
-/* Vote tile styling */
-#staging-area {
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 2px dashed gold;
-    border-radius: 10px;
-    padding: 10px 20px;
-    margin-bottom: 20px;
+/* BODY: clean font + black-to-red gradient */
+body {
+    background: linear-gradient(to bottom, #000000, #8B0000);
+    color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
+    padding-top: 20px;
+    min-height: 100vh;
 }
 
-
-.vote-area {
-    min-height: 100px;
-    position: relative;
-    z-index: 100;
+/* Tavern Bulletin Board wrapper: just background, padding & border */
+.bulletin-wrapper {
+    background: url('/images/corkboard-texture.jpg') center/cover no-repeat;
+    padding: 30px;
+    border: 4px solid #8B0000;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #8B0000;
 }
 
-    .vote-area img.vote-tile {
-        display: inline-block;
-        background-color: rgba(0, 0, 0, 0.5); /* 50% transparent black */
+/* Posts grid: exactly three columns for your 3 post “baskets” */
+/* Three fixed columns for your 3 posts */
+#bulletin-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(220px, auto);
+    gap: 2rem; /* space between slots */
+    position: relative; /* for absolutely‑positioned tokens */
+    justify-items: center; /* center cards horizontally */
+    align-items: start; /* align cards to the top of each slot */
+}
+
+    /* map each bulletin type into one of the three grid columns */
+    /* pin each post into its own grid column */
+    #bulletin-board .post-bounty {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    #bulletin-board .post-wanted {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    #bulletin-board .post-rumor {
+        grid-column: 3;
+        grid-row: 1;
     }
 
 
+/* Drop target highlight */
+.drop-zone {
+    transition: box-shadow 0.2s ease;
+}
+
+    .drop-zone:hover,
+    .drop-zone.hovered {
+        box-shadow: 0 0 20px gold;
+    }
+
+/* Vote tile (token) styling */
 .vote-tile {
+    position: absolute; /* floats over cards */
+    z-index: 1000; /* above posts */
     width: 42px;
     height: 42px;
     object-fit: cover;
     border: 2px solid black;
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 215, 0, 0.3); /* soft white + faint gold glow */
+    box-shadow: 0 0 8px rgba(255,255,255,0.2), 0 0 15px rgba(255,215,0,0.3);
     border-radius: 50%;
     cursor: grab;
     background-color: black;
-    z-index: 10;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     transform: scale(1.05);
+    pointer-events: auto;
 }
-
 
     .vote-tile:active {
         transform: scale(1.2) rotate(2deg);
-        box-shadow: 0 10px 20px rgba(255, 215, 0, 0.5);
+        box-shadow: 0 10px 20px rgba(255,215,0,0.5);
         cursor: grabbing;
     }
 
-/* Touch support fallback if needed */
-@media (hover: none) {
-    .vote-tile {
-        cursor: pointer;
+    .vote-tile.bouncy {
+        animation: bounce-glow 1.5s ease-in-out infinite;
     }
+    .vote-tile.voted {
+        box-shadow: 0 0 12px gold, 0 0 24px rgba(255,215,0,0.4);
+    }
+
+.drop-zone.highlighted-vote {
+    box-shadow: 0 0 20px 5px gold;
+    transition: box-shadow 0.3s ease;
+    z-index: 10;
 }
+
+
 @keyframes bounce-glow {
-    0%, 100% {
+    0%,100% {
         transform: translateY(0);
         box-shadow: 0 0 10px gold;
     }
@@ -394,14 +439,108 @@ footer {
     }
 }
 
-.vote-tile.bouncy {
-    animation: bounce-glow 1.5s ease-in-out infinite;
-}
-.drop-zone {
-    transition: box-shadow 0.2s ease;
+/* Staging area styling (static token container) */
+#staging-area {
+    background-color: transparent;
+    border: none;
+    padding: 10px 0;
+    margin-bottom: 20px;
 }
 
-    .drop-zone:hover {
-        box-shadow: 0 0 20px gold;
+
+/* Vote‑area (board region under tokens) */
+.vote-area {
+    min-height: 100px;
+    position: relative;
+    z-index: 100;
+}
+
+    .vote-area img.vote-tile {
+        display: inline-block;
+        background-color: rgba(0, 0, 0, 0.5);
+        margin: 2px;
     }
+
+/* Touch support fallback */
+@media (hover: none) {
+    .vote-tile {
+        cursor: pointer;
+    }
+}
+
+/* Glow flash for badges */
+.vote-badge {
+    animation: glowFlash 0.7s ease-in-out;
+}
+
+@keyframes glowFlash {
+    0%,100% {
+        box-shadow: 0 0 0px gold;
+    }
+
+    50% {
+        box-shadow: 0 0 12px gold;
+    }
+}
+/* Parchment-style bulletin post cards */
+#bulletin-board .card {
+    background: url('/images/post.jpg') center/cover no-repeat;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transform: rotate(-1deg);
+    transition: transform 0.3s ease;
+    font-family: 'MedievalSharp', serif;
+    font-size: 1.3rem;
+    padding: 1rem;
+    color: #3e2a14;
+    position: relative;
+    margin-top: 2rem;
+}
+
+    /* Hover effect */
+    #bulletin-board .card:hover {
+        transform: scale(1.03) rotate(0deg);
+        box-shadow: 0 0 12px #e8c078;
+    }
+
+    /* Optional: Add a pin icon at the top of each post */
+    #bulletin-board .card::before {
+        position: absolute;
+        top: -16px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.5rem;
+    }
+
+#bulletin-board .card-title {
+    color: #4b2e0f; /* Dark brown for hand-drawn ink */
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: none;
+}
+
+#bulletin-board .card-text {
+    color: #2f2a25; /* Charcoal ink color */
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    line-height: 1.5;
+}
+/* 🕯️ Wax Seal Vote Badge */
+/* Wax Seal Vote Badge */
+.wax-seal {
+    background: url('/images/wax-seal.png') center/contain no-repeat;
+    width: 42px;
+    height: 42px;
+    color: #fff;
+    font-weight: bold;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 42px;
+    display: inline-block;
+    position: relative;
+    transform: rotate(-3deg);
+    text-shadow: 1px 1px 1px #000;
+}
+
 

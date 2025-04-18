@@ -48,19 +48,29 @@
     </div>
 </div>
 
-<!-- 🪧 Tavern Bulletin Board -->
-<div class="container mt-5 bulletin-wrapper">
+@* ────────────────────────────────────────────────────────────────
+   🔰 Instruction Text (Above the Wrapper to avoid overlap)
+   ──────────────────────────────────────────────────────────────── *@
+<!-- 🪧 Tavern Bulletin Board Wrapper -->
+<div class="container mt-3 bulletin-wrapper">
+    <!-- 📌 Header and Admin Button -->
     <div class="position-relative text-center mb-3">
         <h2 class="bulletin-header w-100">Tavern Bulletin Board</h2>
 
         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
         {
-            <button id="toggleEditorBtn" class="btn dnd-btn btn-sm position-absolute top-0 end-0 mt-2 me-3" data-theme="spells">✏️ Update Board</button>
+            <button id="toggleEditorBtn" class="btn dnd-btn btn-sm position-absolute top-0 end-0 mt-2 me-3" data-theme="spells">
+                Update Board
+            </button>
         }
     </div>
 
-    <p class="engraved-text">The scent of ale and ink fills the air as you approach the worn parchment nailed to the oak post...</p>
+    <!-- ✒️ Flavored description -->
+    <p class="engraved-text">
+        The scent of ale and ink fills the air as you approach the worn parchment nailed to the oak post... Pick a Quest...
+    </p>
 
+    <!-- 🛠️ Admin Post Editor -->
     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
     {
         <div id="editorSection" style="display: none;">
@@ -89,14 +99,13 @@
             </div>
         </div>
     }
+
+    <!-- 🎭 Staging Area for Tokens (BELOW instruction, no overlap) -->
     @if (User.Identity.IsAuthenticated)
     {
         var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
         <div id="staging-area" class="text-center mb-4">
-            <p style="color: #fcecc3; font-weight: 600;">Move Your Token and Cast Your Vote</p>
-
-
             <div class="vote-area d-flex justify-content-center flex-wrap align-items-center gap-2" style="min-height: 40px;">
                 @foreach (var user in Model.Users)
                 {
@@ -119,10 +128,12 @@
             </div>
         </div>
     }
-    <!-- 🔧 DROP ZONE CONTAINER (for drag positioning) -->
-    <div id="bulletin-board" class="position-relative" style="min-height: 500px; height: 100%; width: 100%; overflow: hidden;"></div>
 
+    <!-- 🧷 Bulletin Post Grid & Drag Target Area -->
+    <div id="bulletin-board" class="position-relative" style="min-height: 500px; height: 100%; width: 100%; overflow: hidden;"></div>
 </div>
+
+@* 🔒 Token + User Metadata for JS Access *@
 @if (User.Identity.IsAuthenticated)
 {
     <script>
@@ -131,36 +142,79 @@
         document.body.dataset.avatar = '@ViewBag.NavAvatar';
     </script>
 }
+<script>
+    // 📐 Layout Debug Script (run once DOM is loaded)
+    document.addEventListener("DOMContentLoaded", () => {
+        const board = document.getElementById("bulletin-board");
+        const header = document.querySelector(".bulletin-header");
+        const engraved = document.querySelector(".engraved-text");
+        const token = document.querySelector(".vote-tile");
+
+        const boardRect = board?.getBoundingClientRect();
+        const headerHeight = header?.offsetHeight || 0;
+        const engravedHeight = engraved?.offsetHeight || 0;
+        const tokenHeight = token?.offsetHeight || 0;
+
+        console.log("📐 Layout Debug:");
+        console.log("Board Y:", boardRect?.top, "Board Height:", boardRect?.height);
+        console.log("Header Height:", headerHeight);
+        console.log("Engraved Text Height:", engravedHeight);
+        console.log("Token Height:", tokenHeight);
+    });
+</script>
+
+
 
 <!-- 🔊 Sound & Script Includes -->
 <audio id="click-sound" src="~/sounds/click.mp3" preload="auto"></audio>
 <audio id="tile-drop-sound" src="~/sounds/tile-drop.mp3" preload="auto"></audio>
+<audio id="post-hover-sound" src="/sounds/checkingpost.mp3" preload="auto"></audio>
+
 
 <script>
-    let draggedToken = null;
 
-    function dragToken(e) {
-        draggedToken = e.target;
-    }
+        document.addEventListener("DOMContentLoaded", () => {
+        loadBulletinBoard();
+        if (document.body.dataset.role === "Admin") populateEditorForm();
 
+        // 🧙 Add hover sound for each bulletin post after board loads
+        document.addEventListener("mouseover", function (e) {
+            const card = e.target.closest(".drop-zone");
+            if (card && !card.dataset._hoverSoundPlayed) {
+                const sound = document.getElementById("post-hover-sound");
+                if (sound) {
+                    sound.currentTime = 0;
+                    sound.play();
+                }
+                card.dataset._hoverSoundPlayed = "true";
+
+                // Reset flag after short delay to allow re-hovering
+                setTimeout(() => {
+                    card.dataset._hoverSoundPlayed = "";
+                }, 1000);
+            }
+        });
+    });
+
+    // ────────────────────────────────────────────────────────────────────────
+    // 1. Globals and Config
+    // ────────────────────────────────────────────────────────────────────────
+    let activeToken = null, offsetX = 0, offsetY = 0;
+    let lastHoveredZone = null;
+
+    // ────────────────────────────────────────────────────────────────────────
+    // 2. Vote Confirmation Popup
+    // ────────────────────────────────────────────────────────────────────────
     function showVoteConfirmation() {
         const message = document.createElement("div");
         message.textContent = "✅ Vote Registered!";
         Object.assign(message.style, {
-            position: "absolute",
-            left: "50%",
-            top: "50%",
+            position: "absolute", left: "50%", top: "50%",
             transform: "translate(-50%, -50%)",
-            background: "rgba(0, 0, 0, 0.85)",
-            padding: "0.5rem 1rem",
-            border: "2px solid gold",
-            borderRadius: "12px",
-            color: "gold",
-            fontSize: "1.2rem",
-            fontFamily: "'Cinzel Decorative', serif",
-            zIndex: 9999,
-            boxShadow: "0 0 10px gold",
-            pointerEvents: "none",
+            background: "rgba(0, 0, 0, 0.85)", padding: "0.5rem 1rem",
+            border: "2px solid gold", borderRadius: "12px", color: "gold",
+            fontSize: "1.2rem", fontFamily: "'Cinzel Decorative', serif",
+            zIndex: 9999, boxShadow: "0 0 10px gold", pointerEvents: "none",
             transition: "opacity 0.5s ease"
         });
         document.body.appendChild(message);
@@ -170,184 +224,303 @@
         }, 1600);
     }
 
+    // ────────────────────────────────────────────────────────────────────────
+    // 3. Admin Form Prefill
+    // ────────────────────────────────────────────────────────────────────────
+    async function populateEditorForm() {
+        const posts = await (await fetch("/Bulletin/GetActivePosts")).json();
+        const bounty = posts.find(p => p.type === "Bounty");
+        const rumor = posts.find(p => p.type === "Rumor");
+        const wanted = posts.find(p => p.type === "Wanted");
+
+        if (bounty) {
+            document.getElementById("bountyTitle").value = bounty.title;
+            document.getElementById("bountyText").value = bounty.description;
+        }
+        if (rumor) {
+            document.getElementById("rumorTitle").value = rumor.title;
+            document.getElementById("rumorText").value = rumor.description;
+        }
+        if (wanted) {
+            document.getElementById("wantedTitle").value = wanted.title;
+            document.getElementById("wantedText").value = wanted.description;
+        }
+    }
+
+    // ────────────────────────────────────────────────────────────────────────
+    // 4. Load Posts + Tokens
+    // ────────────────────────────────────────────────────────────────────────
     async function loadBulletinBoard() {
         const board = document.getElementById("bulletin-board");
-
-        const [postsResponse, votesResponse, usersResponse] = await Promise.all([
+        const [postsRes, votesRes, usersRes] = await Promise.all([
             fetch("/Bulletin/GetActivePosts"),
             fetch("/Bulletin/GetVotes"),
-            fetch("/Bulletin/GetAllUsersWithTokens") // new endpoint needed
+            fetch("/Bulletin/GetAllUsersWithTokens")
         ]);
 
-        const posts = await postsResponse.json();
-        const votes = await votesResponse.json();
-        const users = await usersResponse.json();
+        const postsData = await postsRes.json();
+        const { tokens: votes = [], tallies = {} } = await votesRes.json();
+        const users = await usersRes.json();
+
+        board.innerHTML = "";
 
         const typeMap = {
-            "Bounty": { icon: "🗡", border: "border-warning" },
-            "Rumor": { icon: "📜", border: "border-info" },
-            "Wanted": { icon: "☠️", border: "border-danger" }
+            "Bounty": { icon: "", border: "border-warning" },
+            "Rumor": { icon: "", border: "border-info" },
+            "Wanted": { icon: "", border: "border-danger" }
         };
 
-        board.querySelectorAll(".drop-zone").forEach(zone => zone.remove());
-
-        posts.forEach(post => {
-            const config = typeMap[post.type] || {};
+        postsData.forEach(post => {
+            const cfg = typeMap[post.type] || {};
             const card = document.createElement("div");
-            card.className = `card bg-dark text-white ${config.border} shadow drop-zone position-absolute`;
+            card.className = ["card", "bg-dark", "text-white", cfg.border, "shadow", "drop-zone"].join(" ");
             card.dataset.postId = post.id;
-            card.style.top = `${Math.floor(Math.random() * 250) + 60}px`;
-            card.style.left = `${Math.floor(Math.random() * 800) + 50}px`;
-            card.style.width = "260px";
+            card.style.maxWidth = "260px";
+
+                const tally = tallies[post.id];
+    const badge = tally
+        ? `<span class="vote-badge wax-seal" title="${tally.voters.join(",")}">${tally.count}</span>`
+        : "";
+
+
             card.innerHTML = `
-                <div class="card-body">
-                    <h5 class="card-title">${config.icon} ${post.title}</h5>
-                    <p class="card-text">${post.description}</p>
-                    <div class="vote-area d-flex flex-wrap gap-1 mt-2"></div>
-                </div>`;
+              <div class="card-body">
+                <h5 class="card-title">${cfg.icon} ${post.title}</h5>
+                <p class="card-text">${post.description}</p>
+                <div class="vote-area d-flex flex-wrap gap-1 mt-2">${badge}</div>
+              </div>`;
             board.appendChild(card);
         });
 
         await renderVotes(votes, users);
-        setupTileVoting();
-    }
 
-    function setupTileVoting() {
-        const userId = document.body.dataset.userid;
-        if (!userId) return;
-
-        const board = document.getElementById("bulletin-board");
-
-        board.addEventListener("dragover", e => e.preventDefault());
-        board.addEventListener("drop", async (e) => {
-            e.preventDefault();
-            if (!draggedToken) return;
-
-            const boardRect = board.getBoundingClientRect();
-            const dropX = e.clientX - boardRect.left;
-            const dropY = e.clientY - boardRect.top;
-
-            draggedToken.style.left = `${dropX - draggedToken.offsetWidth / 2}px`;
-            draggedToken.style.top = `${dropY - draggedToken.offsetHeight / 2}px`;
-
-            const target = document.elementFromPoint(e.clientX, e.clientY);
-            const zone = target?.closest(".drop-zone");
-            const postId = zone?.dataset.postId;
-
-            if (postId) {
-                await fetch("/Bulletin/CastVote", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ postId: parseInt(postId), x: dropX, y: dropY })
-                });
-
-                showVoteConfirmation();
-                dropSound?.play();
-
-                const [votes, users] = await Promise.all([
-                    fetch("/Bulletin/GetVotes").then(res => res.json()),
-                    fetch("/Bulletin/GetAllUsersWithTokens").then(res => res.json())
-                ]);
-                await renderVotes(votes, users);
-            }
+        document.querySelectorAll(".vote-tile").forEach(tile => {
+            tile.removeEventListener("pointerdown", startDrag);
+            tile.addEventListener("pointerdown", startDrag);
         });
     }
 
-          async function renderVotes(votes, users) {
-        document.querySelectorAll(".vote-tile").forEach(tile => tile.remove());
-
+    // ────────────────────────────────────────────────────────────────────────
+    // 5. Render Vote Tokens
+    // ────────────────────────────────────────────────────────────────────────
+    async function renderVotes(votes, users) {
+        document.querySelectorAll(".vote-tile").forEach(t => t.remove());
         const currentUserId = document.body.dataset.userid;
         const board = document.getElementById("bulletin-board");
 
         users.forEach(user => {
             const vote = votes.find(v => v.userId === user.userId);
-
-            // ✅ Randomize only if no vote position is stored
-            const x = vote ? vote.x : Math.floor(Math.random() * 800) + 30;
-            const y = vote ? vote.y : Math.floor(Math.random() * 300) + 50;
+            const x = vote?.x ?? 100 + Math.random() * 60;
+            const y = vote?.y ?? 100 + Math.random() * 60;
 
             const img = document.createElement("img");
-            const hasAvatar = user.avatarUrl?.trim();
-
-            img.src = hasAvatar ? user.avatarUrl : "/images/icons/user.png";
-            img.onerror = () => {
-                img.onerror = null;
-                img.src = "/images/icons/user.png";
-            };
-
-            img.className = "vote-tile rounded-circle";
+            img.src = user.avatarUrl?.trim() || "/images/icons/user.png";
+            img.onerror = () => { img.src = "/images/icons/user.png"; };
+            img.className = "vote-tile";
             img.title = user.username;
             img.dataset.userid = user.userId;
-            img.style.width = "42px";
-            img.style.height = "42px";
-            img.style.objectFit = "cover";
-            img.style.border = "2px solid gold";
-            img.style.position = "absolute";
-            img.style.left = `${x}px`;
-            img.style.top = `${y}px`;
-            img.style.zIndex = 1000;
-            img.style.cursor = user.userId === currentUserId ? "grab" : "pointer";
 
-            if (user.userId === currentUserId) {
-                img.draggable = true;
-                img.addEventListener("dragstart", dragToken);
-            } else {
-                img.addEventListener("click", () => {
-                    window.location.href = `/Profile/View/${user.userId}`;
-                });
-            }
+            Object.assign(img.style, {
+                position: "absolute", left: `${x}px`, top: `${y}px`,
+                width: "42px", height: "42px", objectFit: "cover",
+                border: "2px solid gold", zIndex: 1000,
+                cursor: user.userId === currentUserId ? "grab" : "pointer"
+            });
 
-            makeTileMobileFriendly(img);
+            if (vote?.postId) img.classList.add("voted");
+
             board.appendChild(img);
+
+                // 🧭 Token click behavior — go to public profile if it's not the current user
+    if (user.userId !== currentUserId) {
+        img.style.cursor = "pointer"; // make it feel clickable
+        img.addEventListener("click", () => {
+            window.location.href = `/Profile/View/${user.userId}`;
         });
     }
 
-    function makeTileMobileFriendly(tile) {
-        let isDragging = false;
-
-        tile.addEventListener("touchstart", (e) => {
-            isDragging = true;
-            tile.style.zIndex = 10001;
         });
+    }
 
-        tile.addEventListener("touchmove", (e) => {
-            if (!isDragging) return;
-            const touch = e.touches[0];
-            tile.style.left = `${touch.pageX - 20}px`;
-            tile.style.top = `${touch.pageY - 20}px`;
-        });
+     // ────────────────────────────────────────────────────────────────────────
+    // 6. Drag Logic (Pointer-based)
+    // ────────────────────────────────────────────────────────────────────────
 
-        tile.addEventListener("touchend", async (e) => {
-            isDragging = false;
-            const touch = e.changedTouches[0];
-            const boardRect = document.getElementById("bulletin-board").getBoundingClientRect();
-            const x = touch.clientX - boardRect.left;
-            const y = touch.clientY - boardRect.top;
-            const target = document.elementFromPoint(touch.clientX, touch.clientY);
-            const zone = target?.closest(".drop-zone");
-            const postId = zone?.dataset.postId;
+    // 🚀 START DRAG
+    function startDrag(e) {
+        if (e.target.dataset.userid !== document.body.dataset.userid) return;
 
-            if (postId) {
-                await fetch("/Bulletin/CastVote", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ postId: parseInt(postId), x, y })
-                });
+        activeToken = e.target;
+        activeToken.style.pointerEvents = "none";
 
-                dropSound?.play();
-                showVoteConfirmation();
-                loadBulletinBoard();
+        const rect = activeToken.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        activeToken.setPointerCapture(e.pointerId);
+        const board = document.getElementById("bulletin-board");
+        board.addEventListener("pointermove", onDrag);
+        board.addEventListener("pointerup", endDrag);
+    }
+
+    // 🕹️ ON DRAG
+    function onDrag(e) {
+        if (!activeToken) return;
+
+        const board = document.getElementById("bulletin-board");
+        const boardRect = board.getBoundingClientRect();
+        const tokenHeight = activeToken.offsetHeight;
+        const tokenWidth = activeToken.offsetWidth;
+
+        // Calculate raw position
+        let x = e.clientX - boardRect.left - offsetX;
+        let y = e.clientY - boardRect.top - offsetY;
+
+        // Clamp X within board width
+        x = Math.max(0, Math.min(x, board.clientWidth - tokenWidth));
+
+        // Clamp Y within board height
+        const SAFE_Y = 110; // Header (54) + Engraved Text (47) + small padding
+        const maxY = board.clientHeight - tokenHeight;
+
+        // 🧪 Debug logs
+        console.log("🧭 DRAG DEBUG:");
+        console.log("Token Y:", y, "| Clamped Y:", Math.max(SAFE_Y, Math.min(y, maxY)));
+        console.log("Board Height:", board.clientHeight, "| Max Y:", maxY);
+
+        y = Math.max(SAFE_Y, Math.min(y, maxY));
+
+        // Apply token position
+        activeToken.style.left = `${x}px`;
+        activeToken.style.top = `${y}px`;
+
+        // Highlight active drop zone
+        const newZone = document.elementFromPoint(e.clientX, e.clientY)?.closest(".drop-zone");
+        if (newZone !== lastHoveredZone) {
+            if (lastHoveredZone) lastHoveredZone.classList.remove("highlighted-vote");
+            if (newZone) newZone.classList.add("highlighted-vote");
+            lastHoveredZone = newZone;
+        }
+    }
+            function playTokenDropSound() {
+        const sound = document.getElementById("tile-drop-sound");
+        sound.currentTime = 0;
+        sound.play();
+    }
+
+       // 🛑 END DRAG
+    async function endDrag(e) {
+        if (!activeToken) return;
+        const board = document.getElementById("bulletin-board");
+
+        board.removeEventListener("pointermove", onDrag);
+        board.removeEventListener("pointerup", endDrag);
+        activeToken.releasePointerCapture(e.pointerId);
+
+        const boardRect = board.getBoundingClientRect();
+        const tokenWidth = activeToken.offsetWidth;
+        const tokenHeight = activeToken.offsetHeight;
+
+        const minX = 0;
+        const maxX = board.clientWidth - tokenWidth;
+        const minY = 110;
+        const maxY = board.clientHeight - tokenHeight;
+
+        // Raw drop coords
+        let dropX = e.clientX - boardRect.left;
+        let dropY = e.clientY - boardRect.top;
+
+        // Clamp position
+        dropX = Math.max(minX, Math.min(dropX, maxX));
+        dropY = Math.max(minY, Math.min(dropY, maxY));
+
+        console.log("🎯 DROP DEBUG:");
+        console.log("Drop Y:", dropY, "| Max Y:", maxY);
+
+        const dropTarget = document.elementFromPoint(e.clientX, e.clientY)?.closest(".drop-zone");
+        const postId = dropTarget?.dataset.postId;
+
+        const userId = activeToken.dataset.userid;
+        const userName = activeToken.title;
+
+        // Remove glow
+        document.querySelectorAll(".drop-zone").forEach(zone =>
+            zone.classList.remove("highlighted-vote")
+        );
+
+        // Clear old vote badge if switching/unvoting
+        document.querySelectorAll(".drop-zone").forEach(zone => {
+            const badge = zone.querySelector(".vote-badge");
+            if (badge && badge.title.includes(userName) && (!postId || zone.dataset.postId !== postId)) {
+                let voters = badge.title.split(",").filter(n => n !== userName);
+                if (voters.length === 0) {
+                    badge.remove();
+                } else {
+                    badge.title = voters.join(",");
+                    badge.textContent = voters.length;
+                }
             }
         });
+
+        if (postId) {
+            await fetch("/Bulletin/CastVote", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ postId: +postId, x: dropX, y: dropY })
+            });
+
+            showVoteConfirmation();
+            playTokenDropSound(); // 🔊 Play drop sound
+            activeToken.classList.add("voted");
+
+            const voteArea = dropTarget.querySelector(".vote-area");
+            let badge = voteArea.querySelector(".vote-badge");
+
+            if (!badge) {
+                badge = document.createElement("span");
+                badge.className = "vote-badge wax-seal";
+                voteArea.appendChild(badge);
+            }
+
+            let voters = badge.title ? badge.title.split(",") : [];
+            if (!voters.includes(userName)) voters.push(userName);
+
+            badge.title = voters.join(",");
+            badge.textContent = voters.length;
+        } else {
+            await fetch("/Bulletin/SaveTokenPosition", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ x: dropX, y: dropY })
+            });
+
+            playTokenDropSound(); // 🔊 Play sound on unvote as well
+            activeToken.classList.remove("voted");
+        }
+
+        // Apply final token position
+        activeToken.style.left = `${dropX}px`;
+        activeToken.style.top = `${dropY}px`;
+        activeToken.style.pointerEvents = "auto";
+
+        activeToken = null;
+        lastHoveredZone = null;
+
+        // Rebind for next drag
+        document.querySelectorAll(".vote-tile").forEach(tile => {
+            tile.removeEventListener("pointerdown", startDrag);
+            tile.addEventListener("pointerdown", startDrag);
+        });
     }
 
+    // ────────────────────────────────────────────────────────────────────────
+    // 7. Init
+    // ────────────────────────────────────────────────────────────────────────
     document.addEventListener("DOMContentLoaded", () => {
         loadBulletinBoard();
+        if (document.body.dataset.role === "Admin") populateEditorForm();
     });
 </script>
-
-
-
 
 
 
