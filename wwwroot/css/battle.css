@@ -1,0 +1,1702 @@
+﻿/* =====================================
+   Base & Layout
+==================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#battle-game {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 100vh; /* always fill screen on desktop */
+}
+
+@media (max-width: 768px) {
+    #battle-game {
+        min-height: auto;
+        padding: 0.5rem;
+        box-sizing: border-box;
+    }
+}
+
+/* =====================================
+   Screen Wrappers (Desktop: full-screen, Mobile: natural height)
+==================================== */
+.game-home-screen,
+.cover-screen,
+#classSelect,
+#encounterGame {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+/* Desktop: fill viewport and center content */
+@media (min-width: 769px) {
+    .game-home-screen,
+    .cover-screen,
+    #classSelect,
+    #encounterGame {
+        min-height: 100vh;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+        #encounterGame > .sprite-container,
+        #encounterGame > #game-log {
+            flex: 1;
+            width: 100%;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        #encounterGame .button-row {
+            position: sticky;
+            bottom: 0;
+            flex-shrink: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            padding: 0.5rem 0;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+}
+
+/* Mobile: fit content naturally without excess scroll */
+@media (max-width: 768px) {
+    .game-home-screen,
+    .cover-screen,
+    #classSelect,
+    #encounterGame {
+        min-height: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        justify-content: flex-start !important;
+        padding: 1rem 0.5rem;
+    }
+
+        #encounterGame > .sprite-container,
+        #encounterGame > #game-log {
+            flex: none;
+            overflow: visible;
+            padding: 0.5rem;
+        }
+
+        #encounterGame .button-row {
+            position: static;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+}
+
+/* =====================================
+   Clamp & Center Encounter Images
+==================================== */
+#encounterGame img,
+.sprite {
+    display: block;
+    margin: 0.5rem auto;
+    max-width: clamp(80px, 20vw, 150px);
+    max-height: clamp(80px, 20vh, 150px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* =====================================
+   Cover Container – Per‑Page Backgrounds
+==================================== */
+.d20-cover-container {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 6px double #640000;
+    border-radius: 12px;
+    padding: 30px 20px;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    position: relative;
+    box-shadow: 0 0 40px #000 inset;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .d20-cover-container {
+        padding: 1rem;
+        height: auto;
+        min-height: unset;
+    }
+}
+
+/* =====================================
+   Home & Cover Screens
+==================================== */
+.game-home-screen,
+.cover-screen {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    .game-home-screen,
+    .cover-screen {
+        min-height: auto;
+        height: auto;
+        padding: 1rem 0.5rem;
+        justify-content: flex-start;
+    }
+}
+
+.game-home-screen {
+    background: url('/images/home-screen.jpg') center center no-repeat;
+    background-size: cover;
+}
+
+.cover-screen {
+    background: none; /* handled by .d20-cover-container */
+}
+
+/* Clamp cover image size for desktop & mobile */
+.cover-img {
+    width: clamp(150px, 40vw, 300px);
+    height: auto;
+    border: 3px solid #8B0000;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .cover-img {
+        width: clamp(120px, 80vw, 200px);
+        margin-bottom: 10px;
+    }
+}
+
+/* =====================================
+   Titles & Buttons
+==================================== */
+.cover-title, .home-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 3rem;
+    color: #ffcc66;
+    text-shadow: 2px 2px 5px #8B0000;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.start-btn, .home-start-btn {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.5rem;
+    background-color: #8B0000;
+    color: #fff;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #8B0000;
+    transition: 0.3s ease;
+    margin-top: 10px;
+}
+
+    .start-btn:hover, .home-start-btn:hover {
+        background-color: #a80000;
+        transform: scale(1.05);
+    }
+
+@media (max-width: 768px) {
+    .cover-title, .home-title {
+        font-size: 2rem;
+        padding: 0 1rem;
+        margin-bottom: 10px;
+    }
+
+    .start-btn, .home-start-btn {
+        font-size: 1.2rem;
+        padding: 8px 20px;
+        margin-top: 8px;
+    }
+}
+
+/* =====================================
+   Class Selection Screen
+==================================== */
+#classSelect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    background: radial-gradient(circle at center, #111, #000);
+    border: 2px solid #8B0000;
+    box-shadow: 0 0 20px #8B0000;
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    #classSelect {
+        padding: 20px 10px;
+        min-height: auto;
+    }
+}
+
+.select-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px #000;
+}
+
+.class-options {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.class-card {
+    background: #1a1a1a;
+    border: 3px solid #8B0000;
+    border-radius: 10px;
+    width: 200px;
+    min-height: 280px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+    .class-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px #ffcc66;
+    }
+
+/* Clamp class-selection images */
+.class-img {
+    width: clamp(100px, 25vw, 150px);
+    height: auto;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .select-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .class-options {
+        gap: 20px;
+    }
+
+    .class-card {
+        width: 160px;
+        min-height: 240px;
+        padding: 16px;
+    }
+
+    .class-img {
+        width: 100px;
+        margin-bottom: 10px;
+    }
+}
+
+/* =====================================
+   Container & Overflow Fix
+==================================== */
+@media (max-width: 768px) {
+    .container,
+    .main-wrapper,
+    .content-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 auto !important;
+        overflow-x: hidden !important;
+    }
+}
+
+/* =====================================
+   Mute Button – Responsive & Positioned
+==================================== */
+.mute-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #8B0000;
+    border-radius: 8px;
+    color: #ffcc66;
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.1rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-shadow: 1px 1px 2px #000;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+    .mute-btn:hover {
+        background-color: rgba(0, 0, 0, 0.9);
+        transform: scale(1.05);
+    }
+
+@media (max-width: 768px) {
+    .mute-btn {
+        font-size: 0.95rem;
+        padding: 6px 10px;
+        bottom: 8px;
+        right: 8px;
+    }
+}
+
+/* =====================================
+   Home & Cover Screen Styling
+==================================== */
+.cover-screen,
+.game-home-screen,
+#classSelect,
+#encounterGame,
+#shopScreen {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+@media (min-width: 769px) {
+    .cover-screen,
+    .game-home-screen,
+    #classSelect,
+    #encounterGame,
+    #shopScreen {
+        min-height: 100vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .cover-screen,
+    .game-home-screen,
+    #classSelect,
+    #encounterGame,
+    #shopScreen {
+        min-height: auto;
+        padding: 1rem;
+        box-sizing: border-box;
+        justify-content: flex-start;
+    }
+}
+
+/* -------------------------------------
+   Game Home Screen
+------------------------------------- */
+.game-home-screen {
+    background: url('/images/home-screen.jpg') center center no-repeat;
+    background-size: cover;
+}
+
+.home-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 4rem;
+    color: #ff0000;
+    text-shadow: 2px 2px 5px #8B0000, 0 0 8px #ff0000;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .home-title {
+        font-size: 2.2rem;
+        padding: 0 1rem;
+        margin-bottom: 12px;
+    }
+}
+
+.home-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 3px solid #8B0000;
+    box-shadow: 0 0 12px #8B0000;
+}
+
+.home-start-btn {
+    margin-top: 20px;
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.5rem;
+    background-color: #8B0000;
+    color: #fff;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 8px;
+    transition: 0.3s ease;
+}
+
+    .home-start-btn:hover {
+        background-color: #a80000;
+        transform: scale(1.05);
+        box-shadow: 0 0 10px #ffcc66;
+    }
+
+@media (max-width: 768px) {
+    .home-start-btn {
+        font-size: 1.2rem;
+        padding: 8px 20px;
+        margin-top: 12px;
+    }
+}
+
+/* -------------------------------------
+   Cover Screen
+------------------------------------- */
+.cover-screen {
+    background: none;
+}
+
+.cover-img {
+    width: 300px;
+    max-width: 90%;
+    border: 3px solid #8B0000;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .cover-img {
+        width: 80%;
+        margin-bottom: 12px;
+    }
+}
+
+/* ============================
+   🛒 Fantasy Shop Styling
+============================= */
+#shopScreen {
+    position: fixed; /* Cover entire viewport */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('/images/shop.jpg') center center no-repeat;
+    background-size: cover;
+    z-index: 9999; /* Always on top */
+    display: none; /* Toggle this with JS */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    /* Shop Headings */
+    #shopScreen h2 {
+        font-family: 'Cinzel', serif;
+        font-size: 3rem;
+        color: gold;
+        text-shadow: 2px 2px 10px #000;
+        margin-bottom: 20px;
+    }
+
+    /* Shop Description */
+    #shopScreen p {
+        font-family: 'Cinzel', serif;
+        font-size: 1.3rem;
+        color: #ffcc66;
+        text-shadow: 1px 1px 6px #000;
+        max-width: 800px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+/* Dark Overlay for Shop Content */
+.shop-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    width: 80%;
+    max-width: 500px;
+    margin: auto;
+}
+
+
+/* -------------------------------------
+   Tooltip
+------------------------------------- */
+.tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 12px 0;
+}
+
+    .tooltip-wrapper .tooltip-text {
+        visibility: hidden;
+        background-color: #222;
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 12px;
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.85rem;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+        .tooltip-wrapper .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #222 transparent transparent transparent;
+        }
+
+    .tooltip-wrapper:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+/* =====================================
+   Branch Screen & Buttons – Responsive
+==================================== */
+
+/* Buttons styled like parchment scrolls */
+.branch-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    padding: 14px 26px;
+    margin: 10px;
+    background: linear-gradient(to bottom, #f5deb3, #deb887);
+    border: 2px solid #8B0000;
+    border-radius: 10px;
+    color: red;
+    text-shadow: 1px 1px 2px #fff3d6;
+    cursor: pointer;
+    box-shadow: 0 0 10px #8B0000;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+    .branch-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px gold;
+        background: linear-gradient(to bottom, #fff8dc, #f5deb3);
+    }
+
+/* Branch Screen Container – Now as Overlay */
+.branch-screen {
+    position: fixed; /* Overlay full screen */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/images/forrest.png') center center no-repeat;
+    background-size: cover;
+    display: none; /* Toggle with JS */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: fadeZoomIn 1s ease forwards;
+    z-index: 9999;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+    /* Show class for toggling */
+    .branch-screen.show {
+        display: flex;
+    }
+
+/* Fade‑in Animation */
+@keyframes fadeZoomIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+    .branch-screen {
+        padding: 1rem;
+    }
+
+    .branch-btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+        margin: 8px;
+    }
+}
+
+/* Branch Title */
+.branch-title {
+    font-family: 'Cinzel', serif;
+    font-size: 3rem;
+    color: red;
+    text-shadow: 2px 2px 8px #000;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Descriptive Text */
+.branch-description,
+.branch-description-container p {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: red;
+    text-shadow: 1px 1px 6px #000;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 0 30px;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+/* Optional two-column layout */
+.branch-description-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.left-desc,
+.right-desc {
+    flex: 1 1 300px;
+    padding: 0 10px;
+}
+
+.right-desc {
+    text-align: right;
+}
+
+/* Fantasy-font text block */
+.fantasy-font {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: red;
+    text-shadow: 1px 1px 3px #000;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Sword Icon */
+.sword-icon {
+    width: 150px;
+    height: auto;
+    margin: 10px;
+}
+
+/* =====================================
+   Class Selection Area
+======================================= */
+
+/* Parent container for Class Select */
+#classSelect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    background: radial-gradient(circle at center, #111, #000);
+    border: 2px solid #8B0000;
+    box-shadow: 0 0 20px #8B0000;
+}
+
+/* Title for Class Selection */
+.select-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px #000;
+}
+
+/* Container for Class Cards */
+.class-options {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Individual Class Card */
+.class-card {
+    background: #1a1a1a;
+    border: 3px solid #8B0000;
+    border-radius: 10px;
+    width: 220px;
+    min-height: 320px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+    .class-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px #ffcc66;
+    }
+
+/* Class Image */
+.class-img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+/* Class Label Text */
+.class-label {
+    font-family: 'MedievalSharp', cursive;
+    color: #fff;
+    font-size: 1.4rem;
+    margin-top: 10px;
+}
+
+/* =====================================
+   Floating Damage Text
+======================================= */
+.floating-damage {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.2rem;
+    color: red;
+    text-shadow: 1px 1px 1px black;
+    animation: floatUp 1s ease forwards;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+    .floating-damage.crit {
+        font-size: 2rem;
+        color: #ff4500;
+        font-weight: bold;
+    }
+
+    .floating-damage.miss {
+        font-size: 1.5rem;
+        color: gray;
+        font-style: italic;
+    }
+
+    .floating-damage.heal {
+        font-size: 1.5rem;
+        color: #00ff88;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px #000;
+    }
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-60px);
+    }
+}
+
+/* =====================================
+   Responsive Tweaks for Mobile
+======================================= */
+@media (max-width: 768px) {
+    #classSelect {
+        padding: 20px 10px;
+    }
+
+    .select-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .class-options {
+        gap: 20px;
+    }
+
+    .class-card {
+        width: 160px;
+        min-height: 240px;
+        padding: 16px;
+    }
+
+    .class-img {
+        width: 100px;
+        margin-bottom: 10px;
+    }
+
+    .class-label {
+        font-size: 1.2rem;
+        margin-top: 8px;
+    }
+
+    .floating-damage {
+        font-size: 1rem;
+    }
+
+        .floating-damage.crit {
+            font-size: 1.5rem;
+        }
+}
+
+/* =====================================
+   Sprite Effects
+==================================== */
+.sprite.shake {
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px);
+    }
+
+    25% {
+        transform: translate(-1px, -2px);
+    }
+
+    50% {
+        transform: translate(-3px, 1px);
+    }
+
+    75% {
+        transform: translate(2px, 1px);
+    }
+
+    100% {
+        transform: translate(1px, -1px);
+    }
+}
+
+.sparkle {
+    animation: sparkle-glow 1s ease-in-out;
+    box-shadow: 0 0 20px 8px rgba(0, 255, 136, 0.7);
+    border-radius: 10px;
+}
+
+@keyframes sparkle-glow {
+    0% {
+        box-shadow: 0 0 0 rgba(0, 255, 136, 0);
+    }
+
+    50% {
+        box-shadow: 0 0 20px 8px rgba(0, 255, 136, 0.7);
+    }
+
+    100% {
+        box-shadow: 0 0 0 rgba(0, 255, 136, 0);
+    }
+}
+
+/* =====================================
+   Blood Effect
+==================================== */
+.blood-effect {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/images/blood-splatter.png') center center no-repeat;
+    background-size: cover;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+/* =====================================
+   Game Log Box
+==================================== */
+#game-log {
+    min-height: 180px;
+    max-height: 180px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.95rem;
+    background: radial-gradient(circle at top left, #1c1c1c, #000);
+    border: 2px solid #8B0000;
+    box-shadow: 0 0 12px #8B0000;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* =====================================
+   HP Bar
+==================================== */
+.hp-bar {
+    height: 24px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #333;
+}
+
+/* =====================================
+   You Died Screen
+==================================== */
+.you-died-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #B22222;
+    font-family: 'MedievalSharp', cursive;
+    font-size: 5rem;
+    letter-spacing: 5px;
+    text-shadow: 0 0 10px #8B0000;
+    padding: 1rem;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+    .you-died-overlay > div {
+        margin-bottom: 20px;
+    }
+
+/* Restart Button */
+.restart-btn {
+    font-size: 1.5rem;
+    background: #8B0000;
+    color: #fff;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.3s ease, background-color 0.3s;
+}
+
+    .restart-btn:hover {
+        background-color: #a80000;
+        transform: scale(1.05);
+    }
+
+/* =====================================
+   Responsive Tweaks for Mobile
+==================================== */
+@media (max-width: 768px) {
+    /* Game Log */
+    #game-log {
+        min-height: 120px;
+        max-height: 120px;
+        font-size: 0.85rem;
+    }
+
+    /* HP Bar */
+    .hp-bar {
+        height: 20px;
+    }
+
+    /* You Died Overlay */
+    .you-died-overlay {
+        font-size: 3rem;
+        letter-spacing: 3px;
+        padding: 0.5rem;
+    }
+
+        .you-died-overlay > div {
+            margin-bottom: 15px;
+        }
+
+    /* Restart Button */
+    .restart-btn {
+        font-size: 1.2rem;
+        padding: 8px 20px;
+    }
+}
+
+/* =====================================
+   Sprite Styling
+======================================= */
+/* Sprite Container */
+.sprite-container {
+    display: flex;
+    justify-content: space-between; /* space to edges */
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+/* Each Sprite Area */
+.player-container, .enemy-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    flex: 1; /* equal width space */
+}
+
+/* Sprite Images */
+.sprite {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+}
+
+@media (min-width: 769px) {
+    .sprite {
+        max-height: 150px;
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sprite-container {
+        flex-direction: row; /* force side-by-side */
+    }
+
+    .sprite {
+        max-height: 50px;
+        max-width: 50px;
+    }
+}
+
+
+/* =====================================
+   Button Row Styling
+======================================= */
+.button-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+    .button-row button {
+        font-family: 'MedievalSharp', cursive;
+        font-size: 1.2rem;
+        padding: 8px 16px;
+        background-color: #8B0000;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 0 6px #8B0000;
+        transition: transform 0.3s;
+    }
+
+        .button-row button:hover {
+            background-color: #a80000;
+            transform: scale(1.05);
+        }
+
+@media (max-width: 768px) {
+    .button-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.3rem;
+    }
+
+        .button-row button {
+            font-size: 1rem;
+            padding: 6px 12px;
+        }
+}
+
+/* =====================================
+   Dice Image
+======================================= */
+.dice-image {
+    display: block;
+    width: 80px;
+    max-width: 20vw;
+    height: auto;
+    margin: 0 auto 10px;
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .dice-image {
+        width: 60px;
+        margin-bottom: 8px;
+    }
+}
+
+/* =====================================
+   Restart Button
+======================================= */
+.restart-btn {
+    display: inline-block;
+    margin: 10px auto;
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.1rem;
+    padding: 12px 24px;
+    background: linear-gradient(to right, #5b2c2c, #8b0000);
+    color: #ffe;
+    border: 2px solid #f5c518;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #8b0000;
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s, color 0.3s;
+}
+
+    .restart-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px #ffcc66;
+        color: #fff;
+    }
+
+@media (max-width: 768px) {
+    .restart-btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}
+
+/* =====================================
+   Headers & Typography
+======================================= */
+.red-header,
+.blood-font {
+    display: block;
+    text-align: center;
+    margin: 10px 0;
+    font-family: 'MedievalSharp', cursive;
+}
+
+.red-header {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    color: #8B0000;
+    text-shadow: 2px 2px 8px #300;
+    letter-spacing: 1px;
+}
+
+.blood-font {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: #8B0000;
+    font-weight: bold;
+}
+
+/* =====================================
+   Victory Overlay
+==================================== */
+/* Hidden by default; JS should toggle the “show” class */
+.victory-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    /* Flex container when visible */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+    box-sizing: border-box;
+    text-align: center;
+    color: #fff;
+}
+
+    /* When the overlay is active */
+    .victory-overlay.show {
+        display: flex;
+    }
+
+/* Content wrapper */
+.victory-content {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Main victory message */
+.victory-text {
+    font-family: 'MedievalSharp', cursive;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: #ffcc66;
+    text-shadow: 2px 2px 4px #000;
+    margin-bottom: 1.5rem;
+}
+
+/* Illustration */
+.tavern-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border: 4px solid #8B0000;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #8B0000;
+    margin-bottom: 1.5rem;
+}
+
+/* =====================================
+   Retire Button
+==================================== */
+.retire-btn {
+    font-family: 'MedievalSharp', cursive;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    padding: 0.75rem 1.5rem;
+    background-color: #3e1f0d;
+    border: 2px solid #ffcc66;
+    color: #ffcc66;
+    border-radius: 6px;
+    box-shadow: 0 0 8px #8B0000;
+    transition: transform 0.3s ease, background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+    .retire-btn:hover {
+        background-color: #8B0000;
+        color: #fff;
+        box-shadow: 0 0 10px #8B0000;
+        transform: scale(1.05);
+    }
+
+/* =====================================
+   Heal Tooltip
+==================================== */
+.heal-tooltip {
+    position: absolute;
+    top: -2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #222;
+    color: #eee;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 0 6px #8B0000;
+    display: none; /* JS should toggle visibility */
+    z-index: 1000;
+    font-family: 'MedievalSharp', cursive;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .victory-overlay {
+        padding: 1rem;
+    }
+
+    .victory-text {
+        font-size: clamp(1.25rem, 5vw, 2rem);
+    }
+
+    .tavern-image {
+        max-width: 80%;
+    }
+
+    .retire-btn {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+        padding: 0.6rem 1.2rem;
+    }
+
+    .heal-tooltip {
+        top: -2rem;
+        font-size: 0.75rem;
+    }
+}
+
+
+/* =====================================
+   Animations & Shared Effects
+==================================== */
+
+/* Fade‑in for elements */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Pop‑shake effect (e.g., rewards) */
+@keyframes popShake {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8); /* Adjusted */
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.1) rotate(3deg); /* Softer */
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0);
+    }
+}
+
+.pop-shake {
+    animation: popShake 0.5s ease forwards;
+}
+
+/* Lunge forward/back without shrinking */
+@keyframes lungeForward {
+    0% {
+        transform: translate(0, 0) scale(1); /* Start normal */
+    }
+
+    100% {
+        transform: translate(12px, -6px) scale(1); /* Move, keep scale */
+    }
+}
+
+@keyframes lungeBack {
+    0% {
+        transform: translate(12px, -6px) scale(1); /* Start from the lunge position */
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1); /* Return to original */
+    }
+}
+
+.lunge-forward {
+    animation: lungeForward 0.4s ease-in-out forwards;
+}
+
+.lunge-back {
+    animation: lungeBack 0.4s ease-in-out forwards;
+}
+
+/* Base Sprite Styling */
+.sprite {
+    max-width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+
+/* Force gold text in branch/sword screens */
+#branchScreen, #branchScreen *,
+#swordRewardScreen, #swordRewardScreen * {
+    color: #FFD700 !important;
+    text-shadow: 2px 2px 4px #000 !important;
+    font-family: 'Cinzel', serif !important;
+}
+
+/* =====================================
+   Shared Styles
+==================================== */
+.d20-cover-container {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 6px double #640000;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    width: 100%;
+    height: 600px;
+    position: relative;
+    box-shadow: inset 0 0 40px #000;
+}
+
+body.home-page .d20-cover-container {
+    background-image: url('/images/home-screen.jpg');
+}
+
+body.view-page .d20-cover-container {
+    background-image: url('/images/dndgamecover.jpg');
+}
+
+.d20-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 3rem;
+    color: red;
+    text-shadow: 3px 3px 6px #000;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.d20-enter-btn {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.3rem;
+    padding: 12px 24px;
+    background-color: #8b0000;
+    border: 3px solid gold;
+    color: #fff;
+    text-shadow: 1px 1px 4px #000;
+    transition: transform 0.3s, background 0.3s;
+}
+
+    .d20-enter-btn:hover {
+        background-color: #a80000;
+        color: gold;
+        transform: scale(1.05);
+    }
+
+.mute-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: #000;
+    border: 1px solid gold;
+    color: gold;
+    padding: 4px 10px;
+    font-family: 'MedievalSharp', cursive;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.bounty-notice {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: #ffcc66;
+    background: rgba(0,0,0,0.5);
+    border: 2px solid gold;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(255,215,0,0.5);
+    text-shadow: 1px 1px 2px #000;
+    line-height: 1.6;
+}
+
+    .bounty-notice strong {
+        color: gold;
+        font-weight: bold;
+    }
+
+    .bounty-notice p:first-child {
+        font-size: 1.3rem;
+        text-align: center;
+        color: #FFD700;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px #000;
+    }
+.sprite-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+.player-container, .enemy-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.sprite {
+    max-height: 150px;
+    max-width: 150px;
+    image-rendering: pixelated;
+}
+
+@media (max-width: 768px) {
+    .sprite {
+        max-height: 50px;
+        max-width: 50px;
+    }
+}
+
+.hp-bar {
+    width: 60px; /* Bigger bar */
+    height: 16px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.3rem;
+}
+
+    .hp-bar div {
+        height: 100%;
+        font-size: 0.8rem;
+        line-height: 16px;
+    }
+
+@media (min-width: 769px) {
+    .hp-bar {
+        width: 80px; /* Slightly larger for PC */
+        height: 20px;
+    }
+
+        .hp-bar div {
+            font-size: 1rem;
+            line-height: 20px;
+        }
+}
+.button-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+    .button-row button {
+        font-family: 'MedievalSharp', cursive;
+        font-size: 1.1rem;
+        padding: 8px 14px;
+        background-color: #8B0000;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 0 6px #8B0000;
+        transition: transform 0.3s;
+    }
+
+        .button-row button:hover {
+            background-color: #a80000;
+            transform: scale(1.05);
+        }
+
+.heal-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .heal-container img {
+        margin-top: 0.3rem;
+    }
+
+@media (max-width: 768px) {
+    .button-row {
+        flex-direction: row; /* still side-by-side */
+        gap: 0.5rem;
+    }
+
+        .button-row button {
+            font-size: 1rem;
+            padding: 6px 10px;
+        }
+
+    .heal-container img {
+        width: 25px;
+    }
+
+    #heal-uses {
+        font-size: 0.8rem;
+    }
+}
+
+#game-log {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 1rem;
+    border: 2px solid red;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    box-shadow: 0 0 10px red;
+}
+/* Common Button Styling */
+.button-row button {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.1rem;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.5);
+    transition: transform 0.3s;
+}
+
+/* Roll D20 - Red */
+#rollBtn {
+    background-color: #8B0000; /* dark red */
+    color: #fff;
+}
+
+    #rollBtn:hover {
+        background-color: #a80000;
+        transform: scale(1.05);
+    }
+
+/* Heal - Green */
+#healBtn {
+    background-color: #228B22; /* forest green */
+    color: #fff;
+}
+
+    #healBtn:hover {
+        background-color: #2ecc71; /* lighter green */
+        transform: scale(1.05);
+    }
+
+/* Class Ability - Blue */
+#classAbilityBtn {
+    background-color: #1E90FF; /* dodger blue */
+    color: #fff;
+}
+
+    #classAbilityBtn:hover {
+        background-color: #4682B4; /* steel blue */
+        transform: scale(1.05);
+    }
+.sprite {
+    max-width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    transform: scale(1);
+    flex-shrink: 0; /* Prevent shrinking in flex layout */
+}
+
+
+

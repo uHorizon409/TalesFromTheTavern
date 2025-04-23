@@ -1,0 +1,261 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<!-- Fantasy fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=MedievalSharp&display=swap" rel="stylesheet">
+
+<style>
+    .register-wrapper {
+        background: url('/images/registercover.png') center center no-repeat;
+        background-size: cover; /* Fill container */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+
+        background-color: #0a0a0a;
+        border: 3px solid #5a0000;
+        border-radius: 1rem;
+        box-shadow: 0 0 60px rgba(255, 0, 0, 0.4);
+
+        padding: 2rem;
+        min-height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        animation: parchmentFadeIn 1.5s ease-out forwards;
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .register-heading {
+        font-family: 'Cinzel Decorative', serif;
+        color: #f9f3e9;
+        text-shadow: 0 0 10px #a52a2a;
+        font-size: 2.8rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .form-label-icon {
+        color: #f44336;
+        margin-right: 10px;
+    }
+
+    .form-section-label {
+        font-family: 'MedievalSharp', cursive;
+        color: #ff4b4b;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .register-form input,
+    .register-form button {
+        border-radius: 0;
+        border: 2px solid #8B0000;
+    }
+
+    .register-form input {
+        background-color: #1c1c1c;
+        color: #f2e6d8;
+        width: 100%;
+        padding: 0.75rem;
+        padding-right: 2.8rem;
+    }
+
+    .register-form input::placeholder {
+        color: #bbb;
+        font-style: italic;
+    }
+
+    .register-form input:focus {
+        border-color: gold;
+        box-shadow: 0 0 10px gold;
+    }
+
+    .btn-register {
+        background-color: #8b0000;
+        border: none;
+        color: white;
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 1.2rem;
+        transition: 0.3s;
+        padding: 0.75rem;
+        width: 100%;
+    }
+
+    .btn-register:hover {
+        background-color: gold;
+        color: #000;
+    }
+
+    .register-container {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 2rem;
+        width: 100%;
+        max-width: 600px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    }
+
+    @@keyframes parchmentFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .password-wrapper {
+        position: relative;
+        display: flex;
+    }
+
+    .password-toggle-container {
+        background-color: #1c1c1c;
+        border: 2px solid #8B0000;
+        border-left: none;
+        padding: 0.3rem 0.5rem;
+    }
+
+    .password-toggle-img {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        filter: drop-shadow(0 0 2px #000);
+        transition: transform 0.2s ease;
+    }
+
+    .password-toggle-img:hover {
+        transform: scale(1.1);
+        filter: brightness(2) drop-shadow(0 0 4px gold);
+    }
+
+    /* 📱 Mobile Optimizations */
+    @@media (max-width: 768px) {
+        .register-wrapper {
+            padding: 1.5rem 1rem;
+            background-size: cover;
+            min-height: 100vh;
+        }
+
+        .register-heading {
+            font-size: 2rem;
+            padding: 0 1rem;
+        }
+
+        .register-container {
+            padding: 1.5rem 1rem;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .btn-register {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+
+<div class="container mt-5 mb-5">
+    <div class="register-wrapper">
+        <h1 class="text-center register-heading mb-4">
+            <i class="fa-solid fa-hat-wizard"></i> Enter The Forgotten Realms
+        </h1>
+
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="register-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+            <!-- Username -->
+            <div class="mb-4">
+                <label asp-for="Input.UserName" class="form-section-label">
+                    <i class="fa-solid fa-user form-label-icon"></i>Username
+                </label>
+                <input asp-for="Input.UserName" class="form-control" placeholder="Enter your Username..." autocomplete="username" />
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+                <label asp-for="Input.Password" class="form-section-label">
+                    <i class="fa-solid fa-lock form-label-icon"></i>Password
+                </label>
+                <div class="input-group password-wrapper">
+                    <input asp-for="Input.Password" class="form-control" id="passwordInput" placeholder="Your secret incantation..." autocomplete="new-password" />
+                    <span class="input-group-text password-toggle-container">
+                        <img src="/images/blindness.png" class="password-toggle-img"
+                             data-alt="/images/true-seeing.png"
+                             onclick="togglePassword('passwordInput', this)" alt="Toggle visibility" />
+                    </span>
+                </div>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-4">
+                <label asp-for="Input.ConfirmPassword" class="form-section-label">
+                    <i class="fa-solid fa-lock-keyhole form-label-icon"></i>Confirm Password
+                </label>
+                <div class="input-group password-wrapper">
+                    <input asp-for="Input.ConfirmPassword" class="form-control" id="confirmPasswordInput" placeholder="Repeat the incantation..." autocomplete="new-password" />
+                    <span class="input-group-text password-toggle-container">
+                        <img src="/images/blindness.png" class="password-toggle-img"
+                             data-alt="/images/true-seeing.png"
+                             onclick="togglePassword('confirmPasswordInput', this)" alt="Toggle visibility" />
+                    </span>
+                </div>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <!-- Register Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-register w-100">
+                    <i class="fa-solid fa-scroll me-2"></i> Register
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <!-- Magic toggle sound -->
+    <audio id="magicSound" src="/sounds/magic-sound-effect.mp3" preload="auto"></audio>
+
+    <script>
+        function togglePassword(inputId, img) {
+            const input = document.getElementById(inputId);
+            const isHidden = input.type === "password";
+            const currentSrc = img.getAttribute("src");
+            const altSrc = img.getAttribute("data-alt");
+
+            // Toggle input type
+            input.type = isHidden ? "text" : "password";
+
+            // Swap image sources
+            img.setAttribute("src", altSrc);
+            img.setAttribute("data-alt", currentSrc);
+            img.style.filter = isHidden ? "brightness(2)" : "brightness(1.2)";
+
+            // Play magic sound
+            const sound = document.getElementById("magicSound");
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.error("Sound playback failed:", e));
+            }
+        }
+    </script>
+}

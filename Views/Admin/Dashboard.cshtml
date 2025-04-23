@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_ParchmentLayout.cshtml";
+}
+
+<div class="text-center mt-5 text-light">
+    <h1 class="mb-4 text-warning">🛡️ DM Dashboard</h1>
+
+
+    <div class="mt-5 d-grid gap-3 col-6 mx-auto">
+
+        <a class="btn btn-danger btn-lg" asp-controller="Character" asp-action="AdminDelete">
+             Delete Any Character
+        </a>
+
+        <a class="btn btn-warning btn-lg" asp-controller="Bulletin" asp-action="Edit">
+            Edit Bulletin Board
+        </a>
+
+        <a class="btn btn-info btn-lg" asp-controller="Bulletin" asp-action="ArchiveList">
+            View Archive
+        </a>
+
+        <a class="btn btn-outline-light btn-lg" asp-controller="User" asp-action="List">
+            View All Users
+        </a>
+
+        <a class="btn btn-dark btn-lg" asp-controller="Admin" asp-action="UserList">
+            Delete Users
+        </a>
+
+    </div>
+</div>

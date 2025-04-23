@@ -1,0 +1,2118 @@
+﻿@model DnDWebpage.Models.CharacterViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>D&D 5E Character Creator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: #0f0f0f url('/images/parchment-background.jpg') repeat;
+            background-size: cover;
+            color: #e0d8c3;
+            font-family: 'Garamond', serif;
+            line-height: 1.7;
+        }
+
+        .creator-wrapper {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border: 4px groove #4c2b1a;
+            background-color: rgba(24, 20, 18, 0.97);
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
+        }
+
+            .creator-wrapper h1 {
+                text-align: center;
+                font-family: 'Cinzel Decorative', serif;
+            }
+
+        .creator-step {
+            display: none;
+        }
+
+            .creator-step.active {
+                display: block;
+            }
+        /* Cards for each option */
+        .option-card {
+            border: 2px solid #a07b45;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem;
+            background: url('/images/parchment-texture.jpg') center/cover no-repeat;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            flex: 1 1 180px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+            .option-card:hover {
+                transform: scale(1.03);
+            }
+
+            .option-card img {
+                max-width: 100px;
+                display: block;
+                margin: 0 auto 0.5rem;
+            }
+
+            .option-card h3, .option-card h4 {
+                color: goldenrod;
+                margin: 0.5rem 0;
+                font-family: 'Cinzel Decorative', serif;
+                text-align: center;
+            }
+
+            .option-card p {
+                font-size: 0.9rem;
+                text-align: center;
+            }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .navigation-buttons {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+            .navigation-buttons button {
+                margin: 0 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 1.1rem;
+                background: #2e1c1c;
+                color: goldenrod;
+                border: 2px solid #7b2c1f;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        table, th, td {
+            border: 1px solid #a07b45;
+        }
+
+        th, td {
+            padding: 0.5rem;
+            text-align: center;
+        }
+        /* Character Information Section */
+        .character-info {
+            background: rgba(24, 20, 18, 0.97);
+            border: 2px solid #a07b45;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem auto;
+            max-width: 600px;
+            text-align: left;
+            color: #e0d8c3;
+            font-family: 'Garamond', serif;
+        }
+
+            .character-info h2 {
+                font-family: 'Cinzel Decorative', serif;
+                text-align: center;
+                color: goldenrod;
+            }
+
+            .character-info label {
+                display: block;
+                margin-top: 0.8rem;
+                font-weight: bold;
+            }
+
+            .character-info input,
+            .character-info textarea {
+                width: 100%;
+                padding: 0.5rem;
+                margin-top: 0.3rem;
+                border: 1px solid #a07b45;
+                border-radius: 4px;
+                background-color: #f8f8f8;
+                color: #333;
+            }
+        /* Dice Roller CSS */
+        .ability-roller {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .ability-card {
+            background: url('/images/parchment-texture.jpg') center/cover no-repeat;
+            border: 2px solid #a07b45;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            width: 200px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease-in-out;
+        }
+
+            .ability-card:hover {
+                transform: scale(1.05);
+            }
+
+            .ability-card h3 {
+                color: goldenrod;
+                font-family: 'Cinzel Decorative', serif;
+                font-size: 1.2em;
+                margin-bottom: 0.5rem;
+            }
+
+        .dice-container {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .die-box {
+            width: 50px;
+            height: 50px;
+            background-color: #fff;
+            border: 3px solid #000;
+            /* Remove or override any border-radius values */
+            border-radius: 0; /* Ensures a perfect square */
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.4), inset 0 0 3px #ccc;
+            color: #000;
+            font-weight: bold;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+
+        .rolling {
+            animation: diceRoll 0.8s linear infinite;
+        }
+        @@keyframes diceRoll {
+            0%
+
+        {
+            transform: rotate(0deg);
+        }
+
+        25% {
+            transform: rotate(90deg);
+        }
+
+        50% {
+            transform: rotate(180deg);
+        }
+
+        75% {
+            transform: rotate(270deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        .die-used {
+            background-color: green !important;
+            color: #fff !important;
+        }
+
+        .die-discard {
+            background-color: red !important;
+            color: #fff !important;
+        }
+
+        .sum-box {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: goldenrod;
+            font-size: 1.2rem;
+        }
+
+        /* Classic D&D 5e Sheet Layout Styles */
+        .dnd-sheet {
+            max-width: 800px;
+            margin: 1rem auto;
+            padding: 1rem;
+            background: url('/images/parchment-bg.jpg') no-repeat center center;
+            background-size: cover;
+            border: 2px solid #a07b45;
+            border-radius: 8px;
+            color: #e0d8c3;
+            font-family: 'Garamond', serif;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.7);
+            min-height: 400px; /* ensures there's enough room to see the background image */
+        }
+
+
+
+        /* Header Info */
+        .sheet-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .sheet-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+            .sheet-info.left {
+                margin-right: 1rem;
+            }
+
+            .sheet-info.right {
+                margin-left: 1rem;
+            }
+
+        .sheet-field {
+            background: #2a2522;
+            padding: 0.5rem;
+            border: 1px solid #a07b45;
+            border-radius: 4px;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        }
+
+            .sheet-field label {
+                font-size: 0.8rem;
+                text-transform: uppercase;
+                color: goldenrod;
+                font-weight: bold;
+                margin-bottom: 0.25rem;
+                display: block;
+            }
+
+            .sheet-field span {
+                font-size: 1rem;
+            }
+
+        /* Ability Scores */
+        .sheet-abilities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .ability-box {
+            flex: 1 1 100px;
+            background: #302722;
+            padding: 0.5rem;
+            text-align: center;
+            border: 1px solid #a07b45;
+            border-radius: 4px;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        }
+
+            .ability-box label {
+                display: block;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                color: goldenrod;
+                margin-bottom: 0.25rem;
+            }
+
+            .ability-box span {
+                font-size: 1.1rem;
+                font-weight: bold;
+                display: block;
+            }
+
+        /* Portrait Section */
+        .sheet-portrait {
+            text-align: center;
+            margin-bottom: 1rem;
+            background: #1e1a18;
+            padding: 0.5rem;
+            border: 1px solid #a07b45;
+            border-radius: 4px;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        }
+
+            .sheet-portrait label {
+                display: block;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                color: goldenrod;
+                margin-bottom: 0.25rem;
+            }
+
+            .sheet-portrait img {
+                max-width: 200px;
+                border: 2px solid #a07b45;
+                border-radius: 4px;
+                display: block;
+                margin: 0 auto;
+            }
+
+        .option-card img {
+            width: 120px; /* was 100px */
+            height: 120px; /* was 100px */
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .option-card ul {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            padding-left: 1.2rem;
+            color: #e0d8c3;
+            list-style-type: disc;
+        }
+        /* Make background field scrollable and compact in character sheet */
+        .sheet-info .sheet-field span {
+            max-height: 4.5em;
+            overflow-y: auto;
+            display: block;
+            line-height: 1.3;
+            font-size: 0.9rem;
+        }
+
+        /* Optional: tighten the background textarea in the form too */
+        .character-info textarea {
+            height: 80px;
+            font-size: 0.9rem;
+            line-height: 1.3;
+            resize: vertical;
+            margin-bottom: 0.3rem;
+        }
+
+    </style>
+</head>
+<body>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <form asp-action="Create" method="post" id="characterForm" onsubmit="return populateForm()">
+
+
+
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <!-- New Character Information Section -->
+        <div class="character-info">
+            <h2>Character Information</h2>
+            <label for="characterName">Name:</label>
+            <input type="text" id="characterName" name="Name" placeholder="Enter character name..." required>
+            <span asp-validation-for="Name" class="text-danger"></span>
+
+            <label for="characterLevel">Level:</label>
+            <input type="number" id="characterLevel" name="Level" min="1" max="20" value="1" required>
+            <span asp-validation-for="Level" class="text-danger"></span>
+
+            <label for="characterBackground">Background:</label>
+            <textarea id="characterBackground" name="Background"
+              placeholder="Enter a brief background..."
+             oninput="limitWords(this, 50)"></textarea>
+            <small id="wordCountNotice">Words remaining: 50</small>
+            <span asp-validation-for="Background" class="text-danger"></span>
+
+            <label for="characterImageUrl">Portrait Image URL:</label>
+            <input type="url" id="characterImageUrl" name="ImageUrl" placeholder="http://example.com/portrait.png">
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+
+        <!-- Multi-Step Character Creator -->
+        <div class="creator-wrapper">
+            <h1>D&D 5E Character Creator</h1>
+            <!-- STEP 1: Race Selection -->
+            <section id="step1" class="creator-step active">
+                <h2>Select Your Race</h2>
+                <p>Choose the race that best fits your character concept. Each race provides unique stat bonuses and special traits.</p>
+                <div class="options-container">
+                    <!-- Race Cards -->
+                    <label class="option-card">
+                        <input type="radio" name="race" value="human">
+                        <img src="/images/races/human.png" alt="Human" style="width: 120px; height: 120px;">
+                        <h3>Human</h3>
+                        <p>Versatile and ambitious—balanced abilities and adaptability.</p>
+                        <p><strong>Stat Bonus:</strong> +1 to all stats</p>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="race" value="elf">
+                        <img src="/images/races/elf.png" alt="Elf" style="width: 120px; height: 120px;">
+                        <h3>Elf</h3>
+                        <p>Graceful and agile—excellent in dexterity, with diverse subrace options.</p>
+                        <p><strong>Stat Bonus:</strong> +2 Dexterity</p>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="race" value="dwarf">
+                        <img src="/images/races/dwarf.png" alt="Dwarf" style="width: 120px; height: 120px;">
+                        <h3>Dwarf</h3>
+                        <p>Sturdy and wise—toughness and resilience with subrace choices.</p>
+                        <p><strong>Stat Bonus:</strong> +2 Constitution</p>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="race" value="halfling">
+                        <img src="/images/races/halfling.png" alt="Halfling" style="width: 120px; height: 120px;">
+                        <h3>Halfling</h3>
+                        <p>Small and resourceful—naturally lucky and agile.</p>
+                        <p><strong>Stat Bonus:</strong> +2 Dexterity</p>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="race" value="gnome">
+                        <img src="/images/races/gnome.png" alt="Gnome" style="width: 120px; height: 120px;">
+                        <h3>Gnome</h3>
+                        <p>Intelligent and whimsical—with inventive subrace options.</p>
+                        <p><strong>Stat Bonus:</strong> +2 Intelligence</p>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="race" value="dragonborn">
+                        <img src="/images/races/dragonborn.png" alt="Dragonborn" style="width: 120px; height: 120px;">
+                        <h3>Dragonborn</h3>
+                        <p>Noble and powerful—bearing the legacy of dragons.</p>
+                        <p><strong>Stat Bonus:</strong> +2 Strength, +1 Charisma</p>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="race" value="half-elf">
+                        <img src="/images/races/half-elf.png" alt="Half-Elf" style="width: 120px; height: 120px;">
+                        <h3>Half-Elf</h3>
+                        <p>A blend of human versatility and elven grace—adaptable to many roles.</p>
+                        <p><strong>Stat Bonus:</strong> +2 Charisma, +1 to two other stats</p>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="race" value="half-orc">
+                        <img src="/images/races/half-orc.png" alt="Half-Orc" style="width: 120px; height: 120px;">
+                        <h3>Half-Orc</h3>
+                        <p>Strong and intimidating—with raw power and survival instincts.</p>
+                        <p><strong>Stat Bonus:</strong> +2 Strength, +1 Constitution</p>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="race" value="tiefling">
+                        <img src="/images/races/tiefling.png" alt="Tiefling" style="width: 120px; height: 120px;">
+                        <h3>Tiefling</h3>
+                        <p>Mysterious and cunning—infused with infernal heritage and magical abilities.</p>
+                        <p><strong>Stat Bonus:</strong> +2 Charisma, +1 Intelligence</p>
+                    </label>
+                    <label class="option-card">
+                        <input type="radio" name="race" value="dhampir">
+                        <img src="/images/races/dhampir.png" alt="Dhampir" style="width: 120px; height: 120px;">
+                        <h3>Dhampir</h3>
+                        <p>Haunted and agile—born of both life and undeath, balancing hunger and heroism.</p>
+                        <p><strong>Stat Bonus:</strong> +2 Dexterity, +1 Constitution</p>
+                    </label>
+
+                </div>
+
+                <!-- Subrace Options (shown only if applicable) -->
+                <div id="subrace-container" style="display:none;">
+                    <h3>Select Your Subrace</h3>
+                    <div id="subrace-options" class="options-container">
+                        <!-- Elf Subraces -->
+                        <div class="subrace-option" data-parent="elf" style="display:none;">
+                            <label class="option-card">
+                                <input type="radio" name="subrace" value="high-elf">
+                                <img src="/images/subraces/high-elf-subclass.png" alt="High Elf">
+                                <h4>High Elf</h4>
+                                <p>Quick-witted and magically inclined—bonus to Intelligence.</p>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="subrace" value="wood-elf">
+                                <img src="/images/subraces/wood-elf-subclass.png" alt="Wood Elf">
+                                <h4>Wood Elf</h4>
+                                <p>Connected to nature with superior stealth and wisdom.</p>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="subrace" value="drow">
+                                <img src="/images/subraces/drow-subclass.png" alt="Drow">
+                                <h4>Drow (Dark Elf)</h4>
+                                <p>Innately magical with dark vision and mysterious abilities.</p>
+                            </label>
+                        </div>
+                        <!-- Dwarf Subraces -->
+                        <div class="subrace-option" data-parent="dwarf" style="display:none;">
+                            <label class="option-card">
+                                <input type="radio" name="subrace" value="hill-dwarf">
+                                <img src="/images/subraces/hill-dwarf-subclass.png" alt="Hill Dwarf">
+                                <h4>Hill Dwarf</h4>
+                                <p>Known for wisdom and extra hit points.</p>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="subrace" value="mountain-dwarf">
+                                <img src="/images/subraces/mountain-dwarf-subclass.png" alt="Mountain Dwarf">
+                                <h4>Mountain Dwarf</h4>
+                                <p>Tough and strong—ideal for warriors and craftsmen.</p>
+                            </label>
+                        </div>
+                        <!-- Gnome Subraces -->
+                        <div class="subrace-option" data-parent="gnome" style="display:none;">
+                            <label class="option-card">
+                                <input type="radio" name="subrace" value="forest-gnome">
+                                <img src="/images/subraces/forest-gnome-subclass.png" alt="Forest Gnome">
+                                <h4>Forest Gnome</h4>
+                                <p>Stealthy with minor innate magic.</p>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="subrace" value="rock-gnome">
+                                <img src="/images/subraces/rock-gnome-subclass.png" alt="Rock Gnome">
+                                <h4>Rock Gnome</h4>
+                                <p>Inventive and skilled in crafting and engineering.</p>
+                            </label>
+                        </div>
+                    </div>
+                    <span asp-validation-for="Subrace" class="text-danger"></span>
+
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" onclick="nextStep()">Next: Choose Class</button>
+                </div>
+            </section>
+
+
+            <!-- STEP 2: Class Selection -->
+            <section id="step2" class="creator-step">
+                <h2>Select Your Class</h2>
+                <p>Pick a class—the role you’ll play in the adventure. Each class comes with unique skills, hit dice, and abilities.</p>
+                <div class="options-container">
+
+                    <!-- Barbarian -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="barbarian">
+                        <img src="/images/classes/barbarian-class.png" alt="Barbarian" style="width: 120px; height: 120px;">
+                        <h3>Barbarian</h3>
+                        <p>Fierce warriors fueled by rage. <strong>Hit Die:</strong> d12. <strong>Primary:</strong> Strength</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Rage:</strong> Tap into primal fury to gain bonus damage (e.g., +2 at level 1, scaling with level) and resistance to physical damage.</li>
+                                <li><strong>Unarmored Defense:</strong> Calculate AC as 10 + your Dexterity modifier + your Constitution modifier.</li>
+                                <li><strong>Danger Sense:</strong> Gain advantage on Dexterity saving throws against effects you can see; improves with experience.</li>
+                                <li><strong>Reckless Attack:</strong> Attack with advantage in exchange for enemies gaining advantage on attacks against you.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Bard -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="bard">
+                        <img src="/images/classes/bard-class.png" alt="Bard" style="width: 120px; height: 120px;">
+                        <h3>Bard</h3>
+                        <p>Versatile spellcasters and performers. <strong>Hit Die:</strong> d8. <strong>Primary:</strong> Charisma</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Bardic Inspiration:</strong> Use a bonus action to grant an inspiration die (starting at d6; increases with level) to allies for ability checks, attacks, or saving throws.</li>
+                                <li><strong>Spellcasting:</strong> Cast spells using your Charisma; access a wide variety of offensive, defensive, and utility spells.</li>
+                                <li><strong>Jack of All Trades:</strong> Add half your proficiency bonus to ability checks that don’t already include your proficiency.</li>
+                                <li><strong>Performance Skills:</strong> Leverage musical or artistic talents to influence social interactions and bolster group morale.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Cleric -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="cleric">
+                        <img src="/images/classes/cleric-class.png" alt="Cleric" style="width: 120px; height: 120px;">
+                        <h3>Cleric</h3>
+                        <p>Divine healers and protectors. <strong>Hit Die:</strong> d8. <strong>Primary:</strong> Wisdom</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Channel Divinity:</strong> Use divine energy to turn undead or trigger unique domain powers (typically once per short rest, with extra uses as you level up).</li>
+                                <li><strong>Divine Spellcasting:</strong> Cast spells drawn from your divine domain that focus on healing, protection, or smiting foes.</li>
+                                <li><strong>Heavy Armor Proficiency:</strong> Wear heavy armor (if your domain allows) to maximize your defense.</li>
+                                <li><strong>Healing Abilities:</strong> Restore hit points to yourself and allies via spells like Cure Wounds, often enhanced by your Wisdom.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Druid -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="druid">
+                        <img src="/images/classes/druid-class.png" alt="Druid" style="width: 120px; height: 120px;">
+                        <h3>Druid</h3>
+                        <p>Masters of nature and transformation. <strong>Hit Die:</strong> d8. <strong>Primary:</strong> Wisdom</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Nature Spellcasting:</strong> Command the forces of nature to heal, protect, or hinder your foes.</li>
+                                <li><strong>Wild Shape:</strong> Transform into various beasts (starting with CR 1/4 creatures) for combat or utility, with new forms available as you level.</li>
+                                <li><strong>Druid Circle:</strong> Select a circle that grants additional abilities and spells themed around your natural affinity.</li>
+                                <li><strong>Herbalism & Survival:</strong> Utilize in-depth knowledge of nature for healing remedies and to navigate the wilds effectively.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Fighter -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="fighter">
+                        <img src="/images/classes/fighter-class.png" alt="Fighter" style="width: 120px; height: 120px;">
+                        <h3>Fighter</h3>
+                        <p>Skilled warriors adaptable to any combat style. <strong>Hit Die:</strong> d10. <strong>Primary:</strong> Strength or Dexterity</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Fighting Style:</strong> Choose a specialized combat technique (e.g., Defense, Dueling) that boosts your effectiveness in battle.</li>
+                                <li><strong>Second Wind:</strong> Regain a burst of hit points (typically 1d10 + fighter level) once per short rest.</li>
+                                <li><strong>Action Surge:</strong> Gain an extra action on your turn, usable once per short rest (with additional uses at higher levels).</li>
+                                <li><strong>Customization:</strong> Tailor your abilities with additional feats and techniques to match your preferred combat style.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Monk -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="monk">
+                        <img src="/images/classes/monk-class.png" alt="Monk" style="width: 120px; height: 120px;">
+                        <h3>Monk</h3>
+                        <p>Martial artists channeling inner energy. <strong>Hit Die:</strong> d8. <strong>Primary:</strong> Dexterity &amp; Wisdom</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Martial Arts:</strong> Utilize rapid unarmed strikes and monk weapons to deliver fast, precise attacks.</li>
+                                <li><strong>Ki Abilities:</strong> Spend ki points (equal to your monk level) to perform special maneuvers such as extra attacks or enhanced defense.</li>
+                                <li><strong>Flurry of Blows:</strong> Trade ki points for extra unarmed strikes after your Attack action.</li>
+                                <li><strong>Deflect Missiles:</strong> Use your reaction to reduce or nullify damage from ranged attacks.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Paladin -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="paladin">
+                        <img src="/images/classes/paladin-class.png" alt="Paladin" style="width: 120px; height: 120px;">
+                        <h3>Paladin</h3>
+                        <p>Holy warriors sworn to uphold justice. <strong>Hit Die:</strong> d10. <strong>Primary:</strong> Strength &amp; Charisma</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Lay on Hands:</strong> Heal wounds by pooling a number of hit points equal to your level × 5, replenished on a long rest.</li>
+                                <li><strong>Divine Smite:</strong> Expend spell slots to deal extra radiant damage on melee hits against enemies of evil.</li>
+                                <li><strong>Aura of Protection:</strong> Bestow a bonus to saving throws on yourself and nearby allies based on your Charisma modifier.</li>
+                                <li><strong>Heavy Armor Proficiency:</strong> Equip heavy armor and shields to stand firmly in the fray.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Ranger -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="ranger">
+                        <img src="/images/classes/ranger-class.png" alt="Ranger" style="width: 120px; height: 120px;">
+                        <h3>Ranger</h3>
+                        <p>Masters of the wilderness and ranged combat. <strong>Hit Die:</strong> d10. <strong>Primary:</strong> Dexterity &amp; Wisdom</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Favored Enemy:</strong> Gain bonuses to tracking and damage against specific enemy types that improve with experience.</li>
+                                <li><strong>Natural Explorer:</strong> Excel in navigating and surviving in your chosen terrain, gaining extra benefits for stealth and tracking.</li>
+                                <li><strong>Fighting Style:</strong> Select a combat style that enhances your ranged or melee attacks.</li>
+                                <li><strong>Spellcasting:</strong> Augment your combat and survival skills with nature-based spells.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Rogue -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="rogue">
+                        <img src="/images/classes/rogue-class.png" alt="Rogue" style="width: 120px; height: 120px;">
+                        <h3>Rogue</h3>
+                        <p>Stealthy and cunning—adept at disarming traps. <strong>Hit Die:</strong> d8. <strong>Primary:</strong> Dexterity</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Sneak Attack:</strong> Deal extra damage when conditions allow (starting at 1d6 at level 1 and increasing with level).</li>
+                                <li><strong>Cunning Action:</strong> Use a bonus action to Dash, Disengage, or Hide for improved mobility and tactical options.</li>
+                                <li><strong>Evasion:</strong> Avoid area effects, taking no damage on successful Dexterity saves and half on failures.</li>
+                                <li><strong>Uncanny Dodge:</strong> Use your reaction to halve the damage from an attack you can see.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Sorcerer -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="sorcerer">
+                        <img src="/images/classes/sorcerer-class.png" alt="Sorcerer" style="width: 120px; height: 120px;">
+                        <h3>Sorcerer</h3>
+                        <p>Spellcasters with innate magical power. <strong>Hit Die:</strong> d6. <strong>Primary:</strong> Charisma</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Sorcery Points:</strong> Convert spell slots to flexible points used to modify spells (starting with 2 points at level 2, increasing with level).</li>
+                                <li><strong>Flexible Spellcasting:</strong> Cast spells spontaneously with an adaptable pool of spell slots and resource points.</li>
+                                <li><strong>Metamagic:</strong> Alter your spells (e.g., speed up casting, target additional foes) for strategic versatility.</li>
+                                <li><strong>Innate Magic:</strong> Draw on your inherent magical talent without extensive study.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Warlock -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="warlock">
+                        <img src="/images/classes/warlock-class.png" alt="Warlock" style="width: 120px; height: 120px;">
+                        <h3>Warlock</h3>
+                        <p>Bonded with mysterious entities for arcane power. <strong>Hit Die:</strong> d8. <strong>Primary:</strong> Charisma</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Pact Magic:</strong> Wield a unique form of spellcasting with slots that refresh on a short rest.</li>
+                                <li><strong>Eldritch Invocations:</strong> Choose invocations that grant additional abilities (e.g., enhance Eldritch Blast).</li>
+                                <li><strong>Pact Boon:</strong> Select a boon (Chain, Blade, or Tome) that provides extra features and thematic abilities.</li>
+                                <li><strong>Arcane Versatility:</strong> Combine invocations and spells to customize your magical repertoire.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Wizard -->
+                    <label class="option-card">
+                        <input type="radio" name="class" value="wizard">
+                        <img src="/images/classes/wizard-class.png" alt="Wizard" style="width: 120px; height: 120px;">
+                        <h3>Wizard</h3>
+                        <p>Scholars of arcane lore—their studies yield potent spells. <strong>Hit Die:</strong> d6. <strong>Primary:</strong> Intelligence</p>
+                        <details>
+                            <summary>More Info</summary>
+                            <ul>
+                                <li><strong>Spellbook:</strong> Maintain a vast collection of spells for flexible daily preparation.</li>
+                                <li><strong>Arcane Recovery:</strong> Reclaim a portion of expended spell slots during a short rest based on your level.</li>
+                                <li><strong>School Specialization:</strong> Choose an arcane school (e.g., Evocation or Illusion) that grants extra spells and special abilities.</li>
+                                <li><strong>Arcane Knowledge:</strong> Utilize your deep study of magic to learn and adapt spells from various sources.</li>
+                            </ul>
+                        </details>
+                    </label>
+
+                    <!-- Subclass Options: This container appears only if the character’s level is high enough -->
+                    <div id="subclass-container" style="display:none; margin: 1rem 0;">
+                        <h3>Select Your Subclass</h3>
+                        <div id="subclass-options" class="options-container">
+
+                            <!-- BARBARIAN (min level: 3) -->
+                            <div class="subclass-group" data-parent="barbarian" data-required-level="3" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Path of the Berserker">
+                                    <img src="/images/subclasses/barbberserker-subclass.png" alt="Path of the Berserker">
+                                    <h4>Path of the Berserker</h4>
+                                    <p><strong>Description:</strong> Unbridled rage that maximizes raw damage.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Frenzy Attack:</strong> Unleash extra attacks at the cost of incurring exhaustion after combat.</li>
+                                            <li><strong>Brutal Critical:</strong> Increase your critical hit range and damage as you grow in power.</li>
+                                            <li><strong>Relentless Rage:</strong> Continue fighting despite severe injuries, ensuring battlefield presence.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Path of Wild Magic">
+                                    <img src="/images/subclasses/barbwildmagic-subclass.png" alt="Path of Wild Magic">
+                                    <h4>Path of Wild Magic</h4>
+                                    <p><strong>Description:</strong> Churns chaotic energies during each rage.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Chaotic Surge:</strong> Trigger unpredictable magical effects that can benefit or hinder you.</li>
+                                            <li><strong>Wild Surge Table:</strong> Use a surge table for an assortment of outcomes.</li>
+                                            <li><strong>Mana Infusion:</strong> Occasionally restore a small amount of your magical or rage-based resources.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Path of The Giant">
+                                    <img src="/images/subclasses/barbgiant-subclass.png" alt="Path of The Giant">
+                                    <h4>Path of The Giant</h4>
+                                    <p><strong>Description:</strong> Embrace the colossal might and ancient power of the giants.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Giant's Strength:</strong> Temporarily boost strength-based attacks and contests.</li>
+                                            <li><strong>Earthshaker:</strong> Unleash a ground slam that may knock down multiple foes.</li>
+                                            <li><strong>Colossal Endurance:</strong> Increase resistance to physical damage via giant heritage.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Wildheart">
+                                    <img src="/images/subclasses/barbwildheart-subclass.png" alt="Wildheart">
+                                    <h4>Wildheart</h4>
+                                    <p><strong>Description:</strong> Channel the primal fury and untamed spirit of nature.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Primal Agility:</strong> Improve movement speed and dexterity during combat.</li>
+                                            <li><strong>Nature's Resilience:</strong> Gradually regenerate health by tapping into natural energy.</li>
+                                            <li><strong>Beast Bond:</strong> Occasionally summon minor animal allies to assist in battle.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- BARD (min level: 3) -->
+                            <div class="subclass-group" data-parent="bard" data-required-level="3" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="College of Lore">
+                                    <img src="/images/subclasses/bardlore-subclass.png" alt="College of Lore">
+                                    <h4>College of Lore</h4>
+                                    <p><strong>Description:</strong> Scholars of wide knowledge and magical secrets.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Cutting Words:</strong> Distract enemies with sharp remarks, lowering their attack rolls.</li>
+                                            <li><strong>Additional Proficiencies:</strong> Gain versatility with expanded skills and knowledge bonuses.</li>
+                                            <li><strong>Magical Secrets:</strong> Learn spells from other classes to broaden your arsenal.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="College of Valor">
+                                    <img src="/images/subclasses/bardvalour-subclass.png" alt="College of Valor">
+                                    <h4>College of Valor</h4>
+                                    <p><strong>Description:</strong> Inspires martial prowess in allies.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Combat Inspiration:</strong> Boost allies’ damage and defense with motivational words.</li>
+                                            <li><strong>Weapon Training:</strong> Enhance proficiency in combat with specialized techniques.</li>
+                                            <li><strong>Defensive Techniques:</strong> Access maneuvers that improve armor and shield use.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="College of Glamour">
+                                    <img src="/images/subclasses/bardglamour-subclass.png" alt="College of Glamour">
+                                    <h4>College of Glamour</h4>
+                                    <p><strong>Description:</strong> Enchanters who harness the Feywild’s beauty and magic.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Fey Presence:</strong> Charm or frighten enemies with a magical fey aura.</li>
+                                            <li><strong>Healing Illusions:</strong> Use enchanting performances for minor healing.</li>
+                                            <li><strong>Charm Magic:</strong> Subtly influence foes and shift battle momentum.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="College of Swords">
+                                    <img src="/images/subclasses/bardsword-subclass.png" alt="College of Swords">
+                                    <h4>College of Swords</h4>
+                                    <p><strong>Description:</strong> Blends artistry with swordplay and blade flourishes.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Blade Flourish:</strong> Execute artistic maneuvers that boost damage and mobility.</li>
+                                            <li><strong>Defensive Flourish:</strong> Parry attacks and counterstrike with your blade.</li>
+                                            <li><strong>Extra Technique:</strong> Unlock additional combat moves enhancing your dexterity.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- CLERIC (Domains – level 1) -->
+                            <div class="subclass-group" data-parent="cleric" data-required-level="1" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Life Domain">
+                                    <img src="/images/subclasses/clericlife-subclass.png" alt="Life Domain">
+                                    <h4>Life Domain</h4>
+                                    <p><strong>Description:</strong> Embodies healing and the defense of life.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Enhanced Healing:</strong> Increase the potency of your healing spells.</li>
+                                            <li><strong>Divine Shield:</strong> Generate temporary hit points when healing allies.</li>
+                                            <li><strong>Radiant Health:</strong> Gain natural resistance to necrotic effects.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Light Domain">
+                                    <img src="/images/subclasses/clericlight-subclass.png" alt="Light Domain">
+                                    <h4>Light Domain</h4>
+                                    <p><strong>Description:</strong> Channels radiant power to banish darkness.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Radiant Burst:</strong> Emit blinding light that damages nearby foes.</li>
+                                            <li><strong>Fiery Soul:</strong> Infuse your spells with extra fire damage.</li>
+                                            <li><strong>Illumination:</strong> Create zones of bright light to disrupt enemy stealth.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="War Domain">
+                                    <img src="/images/subclasses/clericwar-subclass.png" alt="War Domain">
+                                    <h4>War Domain</h4>
+                                    <p><strong>Description:</strong> Mixes martial prowess with divine wrath.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Battle Fury:</strong> Infuse your strikes with divine energy for bonus damage.</li>
+                                            <li><strong>Divine Strike:</strong> Channel extra radiant damage into your weapon attacks.</li>
+                                            <li><strong>War Cry:</strong> Bolster ally morale with rousing, combat-focused words.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Knowledge Domain">
+                                    <img src="/images/subclasses/clericknowledge-subclass.png" alt="Knowledge Domain">
+                                    <h4>Knowledge Domain</h4>
+                                    <p><strong>Description:</strong> Pursues divine insight and secrets.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Insightful Deduction:</strong> Gain bonuses on intelligence and investigation checks.</li>
+                                            <li><strong>Divine Insight:</strong> Unlock spells that expose hidden information.</li>
+                                            <li><strong>Enhanced Learning:</strong> Acquire proficiency in additional skills or languages.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Nature Domain">
+                                    <img src="/images/subclasses/clericnature-subclass.png" alt="Nature Domain">
+                                    <h4>Nature Domain</h4>
+                                    <p><strong>Description:</strong> Protects flora, fauna, and the natural order.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Flora and Fauna Bond:</strong> Interact with natural elements to hinder foes.</li>
+                                            <li><strong>Nature's Wrath:</strong> Call upon environmental forces to control the battlefield.</li>
+                                            <li><strong>Earth's Resilience:</strong> Gain defensive bonuses when surrounded by nature.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Tempest Domain">
+                                    <img src="/images/subclasses/clerictempest-subclass.png" alt="Tempest Domain">
+                                    <h4>Tempest Domain</h4>
+                                    <p><strong>Description:</strong> Wields lightning and thunder in divine wrath.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Thunderous Rebuke:</strong> Use divine energy to repel attackers with thunder damage.</li>
+                                            <li><strong>Storm's Fury:</strong> Amplify lightning and thunder spells for increased damage.</li>
+                                            <li><strong>Wind's Grace:</strong> Enjoy enhanced movement and evasion in combat.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Trickery Domain">
+                                    <img src="/images/subclasses/clerictrickster-subclass.png" alt="Trickery Domain">
+                                    <h4>Trickery Domain</h4>
+                                    <p><strong>Description:</strong> Employs deception as a holy tool.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Illusory Duplicates:</strong> Create duplicates to confuse and misdirect foes.</li>
+                                            <li><strong>Deceptive Blessing:</strong> Grant allies bonuses to stealth and evasion.</li>
+                                            <li><strong>Misdirection:</strong> Manipulate enemy targeting by casting subtle illusions.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- DRUID (Circles; level 2) -->
+                            <div class="subclass-group" data-parent="druid" data-required-level="2" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Circle of the Land">
+                                    <img src="/images/subclasses/circleofland-subclass.png" alt="Circle of the Land">
+                                    <h4>Circle of the Land</h4>
+                                    <p><strong>Description:</strong> Draws arcane power from a chosen land type.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Bonus Spells:</strong> Access terrain-specific spells that enhance your versatility.</li>
+                                            <li><strong>Natural Recovery:</strong> Recover additional spell energy in your favored environment.</li>
+                                            <li><strong>Terrain Affinity:</strong> Gain benefits when adventuring in your designated land type.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Circle of the Moon">
+                                    <img src="/images/subclasses/circleofmoon-subclass.png" alt="Circle of the Moon">
+                                    <h4>Circle of the Moon</h4>
+                                    <p><strong>Description:</strong> Masters combat Wild Shape with powerful beast forms.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Combat Wild Shape:</strong> Transform into tougher beasts designed for melee combat.</li>
+                                            <li><strong>Tough Forms:</strong> Gain additional hit points and natural armor in beast form.</li>
+                                            <li><strong>Enhanced Restoration:</strong> Recover from damage faster while transformed.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Circle of Spores">
+                                    <img src="/images/subclasses/circleofspore-subclass.png" alt="Circle of Spores">
+                                    <h4>Circle of Spores</h4>
+                                    <p><strong>Description:</strong> Harnesses fungal growth for necrotic power.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Spore Cloud:</strong> Emit a damaging cloud of spores that hinders enemy actions.</li>
+                                            <li><strong>Fungal Infestation:</strong> Infect foes to debilitate them over time.</li>
+                                            <li><strong>Animated Spores:</strong> Temporarily raise spore-based minions to assist in battle.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Circle of Stars">
+                                    <img src="/images/subclasses/circleofstars-subclass.png" alt="Circle of Stars">
+                                    <h4>Circle of Stars</h4>
+                                    <p><strong>Description:</strong> Channels cosmic constellations and star maps.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Starry Form:</strong> Transform into a luminous form with healing or offensive benefits.</li>
+                                            <li><strong>Cosmic Insight:</strong> Gain foresight that can alter initiative order in combat.</li>
+                                            <li><strong>Celestial Alignment:</strong> Enhance spell potency under starlight conditions.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- FIGHTER (level 3) -->
+                            <div class="subclass-group" data-parent="fighter" data-required-level="3" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Champion">
+                                    <img src="/images/subclasses/champion-subclass.png" alt="Champion">
+                                    <h4>Champion</h4>
+                                    <p><strong>Description:</strong> Focuses on raw physical prowess and wider crit range.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Improved Critical:</strong> Expand your critical hit range for devastating damage.</li>
+                                            <li><strong>Physical Conditioning:</strong> Gain bonuses to strength and endurance tests.</li>
+                                            <li><strong>Resilient Form:</strong> Train to withstand harsher physical conditions on the battlefield.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Battle Master">
+                                    <img src="/images/subclasses/battlemaster-subclass.png" alt="Battle Master">
+                                    <h4>Battle Master</h4>
+                                    <p><strong>Description:</strong> Adopts maneuvers for battlefield control.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Superiority Dice:</strong> Use dice to fuel special maneuvers like tripping or disarming foes.</li>
+                                            <li><strong>Tactical Maneuvers:</strong> Choose from a range of combat moves to control enemy actions.</li>
+                                            <li><strong>Battle Insight:</strong> Analyze and exploit enemy weaknesses during combat.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Eldritch Knight">
+                                    <img src="/images/subclasses/fightereldritchknight-subclass.png" alt="Eldritch Knight">
+                                    <h4>Eldritch Knight</h4>
+                                    <p><strong>Description:</strong> Blends arcane magic with martial prowess.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Arcane Parry:</strong> Use spells in tandem with melee to deflect attacks.</li>
+                                            <li><strong>Spellcasting:</strong> Access a curated list of wizard spells for battle.</li>
+                                            <li><strong>War Magic:</strong> Combine weapon strikes with magical effects as a bonus action.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Arcane Archer">
+                                    <img src="/images/subclasses/fighterarcanearcher-subclass.png" alt="Arcane Archer">
+                                    <h4>Arcane Archer</h4>
+                                    <p><strong>Description:</strong> Infuses arrows with magical effects.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Arcane Shot:</strong> Empower arrows with elemental or force damage effects.</li>
+                                            <li><strong>Precision Strike:</strong> Improve accuracy and damage when targeting critical enemy spots.</li>
+                                            <li><strong>Enhanced Range:</strong> Expand your effective range when using magical projectiles.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- MONK (level 3) -->
+                            <div class="subclass-group" data-parent="monk" data-required-level="3" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Way of the Open Hand">
+                                    <img src="/images/subclasses/monkopenhand-subclass.png" alt="Way of the Open Hand">
+                                    <h4>Way of the Open Hand</h4>
+                                    <p><strong>Description:</strong> Masters of unarmed strikes and ki manipulation.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Open Hand Technique:</strong> Use ki for extra unarmed strikes that can push or trip foes.</li>
+                                            <li><strong>Healing Touch:</strong> Channel ki to mend minor wounds during combat.</li>
+                                            <li><strong>Stunning Strike:</strong> Interrupt enemy actions with precise, crippling hits.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Way of Shadow">
+                                    <img src="/images/subclasses/monkshadow-subclass.png" alt="Way of Shadow">
+                                    <h4>Way of Shadow</h4>
+                                    <p><strong>Description:</strong> Utilizes darkness for subterfuge and swift strikes.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Shadow Step:</strong> Teleport between dimly lit areas to bypass foes.</li>
+                                            <li><strong>Silence:</strong> Create zones of silence to disrupt enemy spellcasting.</li>
+                                            <li><strong>Darkness Mastery:</strong> Gain advantage on stealth and evasion when in shadow.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Way of the Four Elements">
+                                    <img src="/images/subclasses/monkfourelemants-subclass.png" alt="Way of the Four Elements">
+                                    <h4>Way of the Four Elements</h4>
+                                    <p><strong>Description:</strong> Channels elemental forces through martial arts.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Elemental Strikes:</strong> Unleash attacks imbued with fire, water, air, or earth.</li>
+                                            <li><strong>Adaptive Defense:</strong> Gain temporary resistances based on the current element.</li>
+                                            <li><strong>Area Elemental Burst:</strong> Release a burst of elemental energy affecting multiple foes.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Way of the Drunken Master">
+                                    <img src="/images/subclasses/monkdrunkmaster-subclass.png" alt="Way of the Drunken Master">
+                                    <h4>Way of the Drunken Master</h4>
+                                    <p><strong>Description:</strong> Unpredictable movements and staggering steps.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Drunken Style:</strong> Random, unpredictable movement that makes you hard to hit.</li>
+                                            <li><strong>Staggering Strikes:</strong> Perform counterattacks that catch opponents off guard.</li>
+                                            <li><strong>Fluid Footwork:</strong> Increase mobility and dodge chances with erratic steps.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- PALADIN (level 3) -->
+                            <div class="subclass-group" data-parent="paladin" data-required-level="3" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Oath of Devotion">
+                                    <img src="/images/subclasses/paladindevotion-subclass.png" alt="Oath of Devotion">
+                                    <h4>Oath of Devotion</h4>
+                                    <p><strong>Description:</strong> Embodies honesty, purity, and chivalric virtue.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Sacred Weapon:</strong> Empower your weapon with divine energy for extra damage.</li>
+                                            <li><strong>Aura of Devotion:</strong> Grant nearby allies bonuses against charm effects.</li>
+                                            <li><strong>Turn Fiends:</strong> Use Channel Divinity to repel fiends and undead.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Oath of the Ancients">
+                                    <img src="/images/subclasses/paladinancients-subclass.png" alt="Oath of the Ancients">
+                                    <h4>Oath of the Ancients</h4>
+                                    <p><strong>Description:</strong> Defends nature and fosters renewal and light.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Nature's Wrath:</strong> Use binding magic to restrain or slow enemies.</li>
+                                            <li><strong>Protective Auras:</strong> Extend defensive bonuses to nearby comrades.</li>
+                                            <li><strong>Ensnaring Smite:</strong> Add extra damage and hindrance effects to your attacks.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Oath of Vengeance">
+                                    <img src="/images/subclasses/paladinvengence-subclass.png" alt="Oath of Vengeance">
+                                    <h4>Oath of Vengeance</h4>
+                                    <p><strong>Description:</strong> Hunts down evildoers with merciless resolve.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Vow of Enmity:</strong> Mark an enemy to gain bonus damage and accuracy against them.</li>
+                                            <li><strong>Relentless Pursuit:</strong> Increase movement speed to chase down targets.</li>
+                                            <li><strong>Merciless Smites:</strong> Deliver powerful, finishing blows when the enemy is weakened.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Oathbreaker">
+                                    <img src="/images/subclasses/paladinoathbreaker-subclass.png" alt="Oathbreaker">
+                                    <h4>Oathbreaker</h4>
+                                    <p><strong>Description:</strong> A fallen paladin using unholy powers.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Unholy Command:</strong> Command undead minions to serve your bidding.</li>
+                                            <li><strong>Aura of Hate:</strong> Exude necrotic energy that weakens nearby enemies.</li>
+                                            <li><strong>Necrotic Smite:</strong> Infuse weapon strikes with dark, life-sapping power.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Oath of the Crown">
+                                    <img src="/images/subclasses/paladincrown-subclass.png" alt="Oath of the Crown">
+                                    <h4>Oath of the Crown</h4>
+                                    <p><strong>Description:</strong> Upholds civilization, law, and loyalty to a ruling entity.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Defender's Call:</strong> Strengthen allies’ defenses when in close proximity.</li>
+                                            <li><strong>Champion's Challenge:</strong> Taunt and redirect enemy attacks to protect weaker allies.</li>
+                                            <li><strong>Royal Command:</strong> Exert influence over the battlefield through commanding presence.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- RANGER (level 3) -->
+                            <div class="subclass-group" data-parent="ranger" data-required-level="3" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Hunter">
+                                    <img src="/images/subclasses/rangerhunter-subclass.png" alt="Hunter">
+                                    <h4>Hunter</h4>
+                                    <p><strong>Description:</strong> Chooses specialized tactics for monstrous foes.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Hunter's Prey:</strong> Select tactics that hinder enemy movement or reduce their defenses.</li>
+                                            <li><strong>Multiattack Options:</strong> Unlock special attack sequences against your chosen target.</li>
+                                            <li><strong>Environmental Adaptation:</strong> Benefit from the terrain to gain tactical advantages.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Beast Master">
+                                    <img src="/images/subclasses/rangerbeastmaster-subclass.png" alt="Beast Master">
+                                    <h4>Beast Master</h4>
+                                    <p><strong>Description:</strong> Forms a close bond with a loyal beast companion.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Animal Companion:</strong> Summon a beast that gains strength as you level up.</li>
+                                            <li><strong>Shared Abilities:</strong> Synchronize attacks with your companion for enhanced damage.</li>
+                                            <li><strong>Tactical Synergy:</strong> Coordinate maneuvers that allow both you and your beast to dominate the battlefield.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Gloom Stalker">
+                                    <img src="/images/subclasses/rangergloomstalker-subclass.png" alt="Gloom Stalker">
+                                    <h4>Gloom Stalker</h4>
+                                    <p><strong>Description:</strong> Thrives in the dark, striking from the shadows.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Superior Darkvision:</strong> See clearly in darkness to detect hidden enemies.</li>
+                                            <li><strong>First Strike Advantage:</strong> Gain initiative bonuses when ambushing foes.</li>
+                                            <li><strong>Stealth Mastery:</strong> Enhance your stealth capabilities even in near-total darkness.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Swarmkeeper">
+                                    <img src="/images/subclasses/rangerswarmkeeper-subclass.png" alt="Swarmkeeper">
+                                    <h4>Swarmkeeper</h4>
+                                    <p><strong>Description:</strong> Manifests a writhing swarm of nature spirits.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Swarm Infestation:</strong> Summon a spectral swarm that harasses and damages foes.</li>
+                                            <li><strong>Collective Defense:</strong> Gain defensive bonuses when the swarm is active.</li>
+                                            <li><strong>Disruptive Movement:</strong> Impair enemy actions with the chaotic motions of your swarm.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- ROGUE (level 3) -->
+                            <div class="subclass-group" data-parent="rogue" data-required-level="3" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Thief">
+                                    <img src="/images/subclasses/roguethief-subclass.png" alt="Thief">
+                                    <h4>Thief</h4>
+                                    <p><strong>Description:</strong> Experts in stealth, infiltration, and quick movement.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Fast Hands:</strong> Use bonus actions for sleight of hand and stealthy maneuvers.</li>
+                                            <li><strong>Second-Story Work:</strong> Gain improved climbing and acrobatic movement.</li>
+                                            <li><strong>Stealth Expertise:</strong> Excel in moving undetected and picking locks.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Assassin">
+                                    <img src="/images/subclasses/rogueassassin-subclass.png" alt="Assassin">
+                                    <h4>Assassin</h4>
+                                    <p><strong>Description:</strong> Strikes from the shadows for devastating surprise attacks.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Assassinate:</strong> Gain advantage on attack rolls against surprised enemies.</li>
+                                            <li><strong>Disguise Proficiency:</strong> Blend into crowds or assume a new identity with ease.</li>
+                                            <li><strong>Death Strike:</strong> Deliver critical blows with enhanced damage when conditions are met.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Arcane Trickster">
+                                    <img src="/images/subclasses/arcane-trickster-subclass.png" alt="Arcane Trickster">
+                                    <h4>Arcane Trickster</h4>
+                                    <p><strong>Description:</strong> Merges roguish stealth with minor spellcasting.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Mage Hand Legerdemain:</strong> Control your spectral hand with unparalleled finesse.</li>
+                                            <li><strong>Minor Spellcasting:</strong> Access a limited selection of spells to aid in stealth and misdirection.</li>
+                                            <li><strong>Illusion and Enchantment:</strong> Use magic to distract or disable your foes.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Swashbuckler">
+                                    <img src="/images/subclasses/rogueswashbuckler-subclass.png" alt="Swashbuckler">
+                                    <h4>Swashbuckler</h4>
+                                    <p><strong>Description:</strong> Charismatic duelists who thrive in single combat.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Fancy Footwork:</strong> Avoid opportunity attacks after engaging in melee.</li>
+                                            <li><strong>Rakish Audacity:</strong> Gain initiative bonuses and damage boosts when dueling.</li>
+                                            <li><strong>Daring Duelist:</strong> Excel in one-on-one combat with agile counterattacks.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Soulknife">
+                                    <img src="/images/subclasses/soulknife-subclass.png" alt="Soulknife">
+                                    <h4>Soulknife</h4>
+                                    <p><strong>Description:</strong> Psionic assassins who manifest psychic blades and move unseen through minds.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Psionic Energy:</strong> Channel mental power to fuel abilities like telepathy or skill boosts.</li>
+                                            <li><strong>Psychic Blades:</strong> Summon ethereal weapons that deal psychic damage and ignore physical armor.</li>
+                                            <li><strong>Stealth and Subtlety:</strong> Excel at mental infiltration, silent takedowns, and evasive movement.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+
+                            </div>
+
+                            <!-- SORCERER (level 1) -->
+                            <div class="subclass-group" data-parent="sorcerer" data-required-level="1" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Draconic Bloodline">
+                                    <img src="/images/subclasses/sorcererdragonic-subclass.png" alt="Draconic Bloodline">
+                                    <h4>Draconic Bloodline</h4>
+                                    <p><strong>Description:</strong> Arcane power inherited from ancient dragon ancestry.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Draconic Resilience:</strong> Gain bonus hit points and a natural armor boost.</li>
+                                            <li><strong>Elemental Affinity:</strong> Channel extra elemental damage based on your draconic heritage.</li>
+                                            <li><strong>Dragon's Presence:</strong> Intimidate foes with the aura of ancient dragons.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Wild Magic">
+                                    <img src="/images/subclasses/sorcererwild-subclass.png" alt="Wild Magic">
+                                    <h4>Wild Magic</h4>
+                                    <p><strong>Description:</strong> Chaotic surges that can reshape reality unexpectedly.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Wild Magic Surge:</strong> Roll on a surge table to trigger unpredictable magical events.</li>
+                                            <li><strong>Chaos Control:</strong> Occasionally harness the chaos to boost your spellcasting.</li>
+                                            <li><strong>Magic Instability:</strong> Experience sudden bursts of power that alter the tide of battle.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Shadow Magic">
+                                    <img src="/images/subclasses/sorcerershadow-subclass.png" alt="Shadow Magic">
+                                    <h4>Shadow Magic</h4>
+                                    <p><strong>Description:</strong> Harnesses the power of darkness for defensive and offensive spells.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Shadow Fortitude:</strong> Gain resistance and bonuses when in dim light or darkness.</li>
+                                            <li><strong>Umbral Spellcasting:</strong> Access unique spells that manipulate shadows.</li>
+                                            <li><strong>Dark Vision Boost:</strong> Extend your perception in the dark beyond normal limits.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Storm Sorcery">
+                                    <img src="/images/subclasses/sorcererstorm-subclass.png" alt="Storm Sorcery">
+                                    <h4>Storm Sorcery</h4>
+                                    <p><strong>Description:</strong> Channels the power of raging storms and elemental wind.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Tempestuous Magic:</strong> Cast spells while moving swiftly without provoking opportunity attacks.</li>
+                                            <li><strong>Storm's Fury:</strong> Increase the damage and range of your lightning and thunder spells.</li>
+                                            <li><strong>Wind Rider:</strong> Gain a burst of speed or temporary flight during stormy conditions.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- WARLOCK (level 1) -->
+                            <div class="subclass-group" data-parent="warlock" data-required-level="1" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="The Fiend">
+                                    <img src="/images/subclasses/warlockfiend-subclass.png" alt="The Fiend">
+                                    <h4>The Fiend</h4>
+                                    <p><strong>Description:</strong> Pact with a demon or devil for destructive flames.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Hellish Resilience:</strong> Gain temporary protection or healing when you defeat foes.</li>
+                                            <li><strong>Demonic Empowerment:</strong> Infuse spells with infernal energy for extra fire damage.</li>
+                                            <li><strong>Fiendish Bargain:</strong> Access thematic invocations that enhance your infernal powers.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="The Archfey">
+                                    <img src="/images/subclasses/warlockarchfey-subclass.png" alt="The Archfey">
+                                    <h4>The Archfey</h4>
+                                    <p><strong>Description:</strong> Gains whimsical and beguiling powers of the Feywild.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Fey Presence:</strong> Charm or frighten enemies with a magical fey aura.</li>
+                                            <li><strong>Beguiling Dodge:</strong> Gain evasive benefits when enemies are under your spell.</li>
+                                            <li><strong>Whimsical Magic:</strong> Use spells that manipulate emotions and perceptions.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="The Great Old One">
+                                    <img src="/images/subclasses/warlockgreatoldone-subclass.png" alt="The Great Old One">
+                                    <h4>The Great Old One</h4>
+                                    <p><strong>Description:</strong> Taps into cosmic horrors for forbidden knowledge.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Telepathic Bond:</strong> Communicate and manipulate others through your thoughts.</li>
+                                            <li><strong>Mind Shatter:</strong> Disorient foes with spells that attack their sanity.</li>
+                                            <li><strong>Eldritch Knowledge:</strong> Access forbidden lore to fuel your magic.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="The Hexblade">
+                                    <img src="/images/subclasses/warlockhexblade-subclass.png" alt="The Hexblade">
+                                    <h4>The Hexblade</h4>
+                                    <p><strong>Description:</strong> Channels the power of a sentient weapon from the Shadowfell.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Hex Warrior:</strong> Use your Charisma for melee attacks with your pact weapon.</li>
+                                            <li><strong>Curse Mastery:</strong> Weaken foes with debilitating hex effects.</li>
+                                            <li><strong>Otherworldly Strike:</strong> Combine melee prowess with dark, eldritch energy.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                            <!-- WIZARD (level 2) -->
+                            <div class="subclass-group" data-parent="wizard" data-required-level="2" style="display:none; flex-wrap: wrap;">
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Abjuration">
+                                    <img src="/images/subclasses/wizardabjuration-subclass.png" alt="Abjuration">
+                                    <h4>Abjuration</h4>
+                                    <p><strong>Description:</strong> Specializes in protective wards and anti-magic effects.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Arcane Ward:</strong> Create a magical barrier to absorb incoming damage.</li>
+                                            <li><strong>Enhanced Defenses:</strong> Abjuration spells bolster your resistance to magic.</li>
+                                            <li><strong>Spell Resistance:</strong> Gain defensive bonuses when targeted by hostile spells.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Conjuration">
+                                    <img src="/images/subclasses/wizardconjuration-subclass.png" alt="Conjuration">
+                                    <h4>Conjuration</h4>
+                                    <p><strong>Description:</strong> Summons creatures and objects, excels at teleportation.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Minor Conjuration:</strong> Instantly create useful objects or obstacles.</li>
+                                            <li><strong>Summoning Mastery:</strong> Enhance the strength of creatures you summon.</li>
+                                            <li><strong>Teleportation:</strong> Quickly reposition yourself with short-range portals.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Divination">
+                                    <img src="/images/subclasses/wizarddivination-subclass.png" alt="Divination">
+                                    <h4>Divination</h4>
+                                    <p><strong>Description:</strong> Uses foresight and portents to reshape fate.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Portent Dice:</strong> Manipulate dice rolls with premonitions.</li>
+                                            <li><strong>Scrying:</strong> Observe distant events or hidden locations.</li>
+                                            <li><strong>Foresight:</strong> Enhance your ability to predict enemy actions.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Enchantment">
+                                    <img src="/images/subclasses/wizardenchantment-subclass.png" alt="Enchantment">
+                                    <h4>Enchantment</h4>
+                                    <p><strong>Description:</strong> Focuses on controlling minds and emotions.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Charm Spells:</strong> Gain spells that can temporarily control enemies.</li>
+                                            <li><strong>Mind Control:</strong> Disable foes by turning their will against them.</li>
+                                            <li><strong>Subtle Magic:</strong> Cast enchantments without alerting your target.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Evocation">
+                                    <img src="/images/subclasses/wizardevocation-subclass.png" alt="Evocation">
+                                    <h4>Evocation</h4>
+                                    <p><strong>Description:</strong> Blasts foes with potent elemental spells.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Sculpt Spells:</strong> Mold your area-of-effect spells to avoid hitting allies.</li>
+                                            <li><strong>Elemental Mastery:</strong> Boost the damage of fire, cold, or lightning spells.</li>
+                                            <li><strong>Arcane Firepower:</strong> Focus your magic on raw destructive force.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Illusion">
+                                    <img src="/images/subclasses/wizardillusion-subclass.png" alt="Illusion">
+                                    <h4>Illusion</h4>
+                                    <p><strong>Description:</strong> Weaves deceptive imagery and phantasms.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Enhanced Illusions:</strong> Create more durable and convincing illusions.</li>
+                                            <li><strong>Sensory Manipulation:</strong> Trick enemy perceptions and obscure true targets.</li>
+                                            <li><strong>Misdirection:</strong> Use illusions to shift enemy focus away from you.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Necromancy">
+                                    <img src="/images/subclasses/wizardnecromancy-subclass.png" alt="Necromancy">
+                                    <h4>Necromancy</h4>
+                                    <p><strong>Description:</strong> Manipulates life energy, animates undead servants.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Grim Harvest:</strong> Recover hit points when you defeat foes using necromancy.</li>
+                                            <li><strong>Animate Dead:</strong> Raise skeletal or zombified minions to fight for you.</li>
+                                            <li><strong>Life Drain:</strong> Siphon enemy vitality to restore your own strength.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Transmutation">
+                                    <img src="/images/subclasses/wizardtransmutation-subclass.png" alt="Transmutation">
+                                    <h4>Transmutation</h4>
+                                    <p><strong>Description:</strong> Alters matter and energy, forging new possibilities.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Transmuter’s Stone:</strong> Gain a magical stone that provides various adaptive benefits.</li>
+                                            <li><strong>Shapechanging Spells:</strong> Temporarily alter objects or your own form.</li>
+                                            <li><strong>Adaptive Magic:</strong> Modify spell effects on the fly to suit the moment.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="subclass" value="Bladesinging">
+                                    <img src="/images/subclasses/wizardbladesinging-subclass.png" alt="Bladesinging">
+                                    <h4>Bladesinging</h4>
+                                    <p><strong>Description:</strong> Melds swordplay with graceful arcane dance.</p>
+                                    <details>
+                                        <summary>More Info</summary>
+                                        <ul>
+                                            <li><strong>Sword Dance:</strong> Combine melee attacks with defensive magical flourishes.</li>
+                                            <li><strong>Enhanced Mobility:</strong> Increase agility and dodge enemy attacks while sword-dancing.</li>
+                                            <li><strong>Arcane Blade:</strong> Infuse your weapon with magic to deal additional damage.</li>
+                                        </ul>
+                                    </details>
+                                </label>
+                            </div>
+
+                        </div>
+                        <span asp-validation-for="Subclass" class="text-danger"></span>
+                    </div>
+                    <div class="navigation-buttons">
+                        <button type="button" onclick="prevStep()">Back: Choose Race</button>
+                        <button type="button" onclick="nextStep()">Next: Allocate Ability Scores</button>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <!-- STEP 3: Ability Score Allocation -->
+            <section id="step3" class="creator-step">
+                <h2>Roll for Your Ability Scores</h2>
+                <p>For each ability, click "Roll Dice." Four six-sided dice will roll. The lowest die (red) is dropped; the remaining three dice determine your final score. You may also manually enter a score.</p>
+                <!-- Audio for rolling sound -->
+                <audio id="diceSound" src="/audio/click.mp3" loop></audio>
+                <div class="ability-roller">
+                    <!-- Template for all ability cards -->
+                    <!-- Repeat for each stat -->
+                    <!-- Strength -->
+                    <div class="ability-card" id="ability-str">
+                        <h3>Strength</h3>
+                        <div class="dice-container">
+                            <div class="die-box" id="die-str-0">0</div>
+                            <div class="die-box" id="die-str-1">0</div>
+                            <div class="die-box" id="die-str-2">0</div>
+                            <div class="die-box" id="die-str-3">0</div>
+                        </div>
+                        <div class="sum-box" id="sum-str">Sum: 0</div>
+                        <div class="input-group">
+                            <input type="number" id="input-str" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('str')">
+                            <button type="button" onclick="rollDice('str')">Roll Dice</button>
+                        </div>
+                    </div>
+
+                    <!-- Dexterity -->
+                    <div class="ability-card" id="ability-dex">
+                        <h3>Dexterity</h3>
+                        <div class="dice-container">
+                            <div class="die-box" id="die-dex-0">0</div>
+                            <div class="die-box" id="die-dex-1">0</div>
+                            <div class="die-box" id="die-dex-2">0</div>
+                            <div class="die-box" id="die-dex-3">0</div>
+                        </div>
+                        <div class="sum-box" id="sum-dex">Sum: 0</div>
+                        <div class="input-group">
+                            <input type="number" id="input-dex" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('dex')">
+                            <button type="button" onclick="rollDice('dex')">Roll Dice</button>
+                        </div>
+                    </div>
+
+                    <!-- Constitution -->
+                    <div class="ability-card" id="ability-con">
+                        <h3>Constitution</h3>
+                        <div class="dice-container">
+                            <div class="die-box" id="die-con-0">0</div>
+                            <div class="die-box" id="die-con-1">0</div>
+                            <div class="die-box" id="die-con-2">0</div>
+                            <div class="die-box" id="die-con-3">0</div>
+                        </div>
+                        <div class="sum-box" id="sum-con">Sum: 0</div>
+                        <div class="input-group">
+                            <input type="number" id="input-con" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('con')">
+                            <button type="button" onclick="rollDice('con')">Roll Dice</button>
+                        </div>
+                    </div>
+
+                    <!-- Intelligence -->
+                    <div class="ability-card" id="ability-int">
+                        <h3>Intelligence</h3>
+                        <div class="dice-container">
+                            <div class="die-box" id="die-int-0">0</div>
+                            <div class="die-box" id="die-int-1">0</div>
+                            <div class="die-box" id="die-int-2">0</div>
+                            <div class="die-box" id="die-int-3">0</div>
+                        </div>
+                        <div class="sum-box" id="sum-int">Sum: 0</div>
+                        <div class="input-group">
+                            <input type="number" id="input-int" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('int')">
+                            <button type="button" onclick="rollDice('int')">Roll Dice</button>
+                        </div>
+                    </div>
+
+                    <!-- Wisdom -->
+                    <div class="ability-card" id="ability-wis">
+                        <h3>Wisdom</h3>
+                        <div class="dice-container">
+                            <div class="die-box" id="die-wis-0">0</div>
+                            <div class="die-box" id="die-wis-1">0</div>
+                            <div class="die-box" id="die-wis-2">0</div>
+                            <div class="die-box" id="die-wis-3">0</div>
+                        </div>
+                        <div class="sum-box" id="sum-wis">Sum: 0</div>
+                        <div class="input-group">
+                            <input type="number" id="input-wis" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('wis')">
+                            <button type="button" onclick="rollDice('wis')">Roll Dice</button>
+                        </div>
+                    </div>
+
+                    <!-- Charisma -->
+                    <div class="ability-card" id="ability-cha">
+                        <h3>Charisma</h3>
+                        <div class="dice-container">
+                            <div class="die-box" id="die-cha-0">0</div>
+                            <div class="die-box" id="die-cha-1">0</div>
+                            <div class="die-box" id="die-cha-2">0</div>
+                            <div class="die-box" id="die-cha-3">0</div>
+                        </div>
+                        <div class="sum-box" id="sum-cha">Sum: 0</div>
+                        <div class="input-group">
+                            <input type="number" id="input-cha" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('cha')">
+                            <button type="button" onclick="rollDice('cha')">Roll Dice</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button type="button" onclick="prevStep()">Back: Choose Class</button>
+                    <button type="button" onclick="nextStep()">Next: Review Character</button>
+                </div>
+            </section>
+
+
+            <!-- STEP 4: Character Summary -->
+            <section id="step4" class="creator-step">
+                <h2>Review Your Character</h2>
+                <div class="dnd-sheet">
+                    <!-- Header: Basic Character Info -->
+                    <div class="sheet-header">
+                        <div class="sheet-info left">
+                            <div class="sheet-field">
+                                <label>Character Name</label>
+                                <span id="sheet-charname"></span>
+                            </div>
+                            <div class="sheet-field">
+                                <label>Race</label>
+                                <span id="sheet-race"></span>
+                            </div>
+                        </div>
+                        <div class="sheet-info right">
+                            <div class="sheet-field">
+                                <label>Class &amp; Level</label>
+                                <span id="sheet-classlevel"></span>
+                            </div>
+                            <div class="sheet-field">
+                                <label>Background</label>
+                                <span id="sheet-background"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ability Scores Section -->
+                    <div class="sheet-abilities">
+                        <div class="ability-box">
+                            <label>STR</label>
+                            <span id="sheet-str-score"></span>
+                            <span id="sheet-str-mod"></span>
+                        </div>
+                        <div class="ability-box">
+                            <label>DEX</label>
+                            <span id="sheet-dex-score"></span>
+                            <span id="sheet-dex-mod"></span>
+                        </div>
+                        <div class="ability-box">
+                            <label>CON</label>
+                            <span id="sheet-con-score"></span>
+                            <span id="sheet-con-mod"></span>
+                        </div>
+                        <div class="ability-box">
+                            <label>INT</label>
+                            <span id="sheet-int-score"></span>
+                            <span id="sheet-int-mod"></span>
+                        </div>
+                        <div class="ability-box">
+                            <label>WIS</label>
+                            <span id="sheet-wis-score"></span>
+                            <span id="sheet-wis-mod"></span>
+                        </div>
+                        <div class="ability-box">
+                            <label>CHA</label>
+                            <span id="sheet-cha-score"></span>
+                            <span id="sheet-cha-mod"></span>
+                        </div>
+                    </div>
+
+                    <!-- Portrait Section -->
+                    <div class="sheet-portrait">
+                        <label>Portrait</label>
+                        <img id="sheet-portrait-img" src="" alt="Character Portrait">
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" onclick="prevStep()">Back: Ability Scores</button>
+                    <button type="submit">Create Character</button>
+                </div>
+            </section>
+
+        <!-- Hidden inputs for model binding -->
+        <input type="hidden" name="Race" id="inputRace" />
+        <input type="hidden" name="Subrace" id="inputSubrace" />
+        <input type="hidden" name="Class" id="inputClass" />
+        <input type="hidden" name="Strength" id="inputStr" />
+        <input type="hidden" name="Dexterity" id="inputDex" />
+        <input type="hidden" name="Constitution" id="inputCon" />
+        <input type="hidden" name="Intelligence" id="inputInt" />
+        <input type="hidden" name="Wisdom" id="inputWis" />
+        <input type="hidden" name="Charisma" id="inputCha" />
+    </form>
+
+    <script>
+        let stats = { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 };
+        let currentStep = 1;
+
+        function showStep(step) {
+            document.querySelectorAll('.creator-step').forEach(section => {
+                section.classList.remove('active');
+            });
+            const target = document.getElementById('step' + step);
+            target.classList.add('active');
+            currentStep = step;
+        }
+
+        function nextStep() {
+            if (currentStep === 1) {
+                const selectedRace = document.querySelector('input[name="race"]:checked');
+                if (!selectedRace) {
+                    alert('Please select a race.');
+                    return;
+                }
+
+                const raceValue = selectedRace.value;
+                const subraceContainer = document.getElementById('subrace-container');
+                const subraceOptions = document.querySelectorAll('.subrace-option');
+                subraceOptions.forEach(div => div.style.display = 'none');
+
+                if (['elf', 'dwarf', 'gnome'].includes(raceValue)) {
+                    subraceContainer.style.display = 'block';
+                    let shown = false;
+                    subraceOptions.forEach(div => {
+                        if (div.getAttribute('data-parent') === raceValue) {
+                            div.style.display = 'flex';
+                            shown = true;
+                        }
+                    });
+                    const subraceSelected = document.querySelector('input[name="subrace"]:checked');
+                    if (!subraceSelected) {
+                        alert('Please select a subrace for your ' + raceValue + '.');
+                        return;
+                    }
+                } else {
+                    subraceContainer.style.display = 'none';
+                }
+            }
+
+            if (currentStep < 4) {
+                showStep(currentStep + 1);
+            }
+
+            updateSummary();
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        function showSubclassOptions() {
+            const selectedClass = document.querySelector('input[name="class"]:checked')?.value;
+            if (!selectedClass) {
+                document.getElementById("subclass-container").style.display = "none";
+                return;
+            }
+
+            document.querySelectorAll('input[name="subclass"]').forEach(input => {
+                input.checked = false;
+            });
+
+            const level = parseInt(document.getElementById("characterLevel").value, 10) || 1;
+            const allGroups = document.querySelectorAll('#subclass-options .subclass-group');
+            allGroups.forEach(group => group.style.display = "none");
+
+            const groups = document.querySelectorAll(`#subclass-options .subclass-group[data-parent="${selectedClass}"]`);
+            let anyVisible = false;
+
+            groups.forEach(group => {
+                const requiredLevel = parseInt(group.getAttribute("data-required-level"), 10);
+                if (level >= requiredLevel) {
+                    group.style.display = "flex";
+                    anyVisible = true;
+                }
+            });
+
+            document.getElementById("subclass-container").style.display = anyVisible ? "block" : "none";
+        }
+
+        document.getElementById("characterLevel").addEventListener("change", showSubclassOptions);
+        document.querySelectorAll('input[name="class"]').forEach(input => {
+            input.addEventListener("change", showSubclassOptions);
+        });
+
+        function rollDice(ability) {
+            const diceAudio = document.getElementById("diceSound");
+            if (diceAudio) {
+                diceAudio.currentTime = 0;
+                diceAudio.play().catch(error => console.error("Error playing sound:", error));
+            }
+
+            const abilityCard = document.getElementById("ability-" + ability);
+            const button = abilityCard.querySelector("button");
+            button.disabled = true;
+            const duration = 2000, intervalTime = 80;
+            let intervals = [];
+
+            for (let i = 0; i < 4; i++) {
+                let dieBox = document.getElementById(`die-${ability}-${i}`);
+                dieBox.classList.remove("die-used", "die-discard");
+                dieBox.classList.add("rolling");
+                let anim = setInterval(() => {
+                    dieBox.textContent = Math.floor(Math.random() * 6) + 1;
+                }, intervalTime);
+                intervals.push(anim);
+            }
+
+            setTimeout(() => {
+                if (diceAudio) {
+                    diceAudio.pause();
+                    diceAudio.currentTime = 0;
+                }
+                for (let i = 0; i < intervals.length; i++) {
+                    clearInterval(intervals[i]);
+                    let dieBox = document.getElementById(`die-${ability}-${i}`);
+                    dieBox.classList.remove("rolling");
+                }
+
+                let finalRolls = [];
+                for (let i = 0; i < 4; i++) {
+                    finalRolls.push(Math.floor(Math.random() * 6) + 1);
+                }
+                let minValue = Math.min(...finalRolls);
+                let dropIndex = finalRolls.indexOf(minValue);
+                let sum = 0;
+                for (let i = 0; i < 4; i++) {
+                    let dieBox = document.getElementById(`die-${ability}-${i}`);
+                    dieBox.textContent = finalRolls[i];
+                    if (i === dropIndex) {
+                        dieBox.classList.add("die-discard");
+                    } else {
+                        dieBox.classList.add("die-used");
+                        sum += finalRolls[i];
+                    }
+                }
+                let mod = Math.floor((sum - 10) / 2);
+                let modDisplay = (mod >= 0 ? "+" : "") + mod;
+                document.getElementById("sum-" + ability).textContent = "Sum: " + sum + " (Modifier: " + modDisplay + ")";
+                stats[ability] = sum;
+            }, duration);
+        }
+
+        function setScoreManually(stat) {
+            const input = document.getElementById(`input-${stat}`);
+            const value = parseInt(input.value);
+            if (!isNaN(value) && value >= 3 && value <= 18) {
+                document.getElementById(`sum-${stat}`).textContent = `Sum: ${value}`;
+                for (let i = 0; i < 4; i++) {
+                    document.getElementById(`die-${stat}-${i}`).textContent = "-";
+                }
+                stats[stat] = value; // Update global stats
+            } else {
+                alert("Enter a valid number between 3 and 18.");
+            }
+        }
+
+        function calculateModifier(score) {
+            return Math.floor((score - 10) / 2);
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function updateSummary() {
+            const name = document.getElementById("characterName").value;
+            const background = document.getElementById("characterBackground").value;
+            const imageUrl = document.getElementById("characterImageUrl").value;
+            const raceRadio = document.querySelector('input[name="race"]:checked');
+            const subraceRadio = document.querySelector('input[name="subrace"]:checked');
+            const classRadio = document.querySelector('input[name="class"]:checked');
+            const subclassRadio = document.querySelector('input[name="subclass"]:checked');
+            const level = parseInt(document.getElementById("characterLevel")?.value, 10) || 1;
+
+            document.getElementById("sheet-charname").textContent = name || "";
+
+            let raceText = raceRadio ? capitalize(raceRadio.value) : "";
+            if (subraceRadio) raceText += " (" + subraceRadio.value + ")";
+            document.getElementById("sheet-race").textContent = raceText;
+
+            let classText = classRadio ? capitalize(classRadio.value) : "";
+            if (subclassRadio) classText += " (" + subclassRadio.value + ")";
+            document.getElementById("sheet-classlevel").textContent = classText + " (" + level + ")";
+            document.getElementById("sheet-background").textContent = background || "";
+
+            const portraitImg = document.getElementById("sheet-portrait-img");
+            portraitImg.src = imageUrl || "";
+
+            const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+            abilities.forEach(stat => {
+                const inputField = document.getElementById(`input-${stat}`);
+                const sumField = document.getElementById(`sum-${stat}`);
+                const sheetScore = document.getElementById(`sheet-${stat}-score`);
+                const sheetMod = document.getElementById(`sheet-${stat}-mod`);
+                const hiddenField = document.getElementById(`input${capitalize(stat)}`);
+
+                const score = parseInt(inputField?.value) || parseInt(sumField?.textContent.replace("Sum: ", "")) || 0;
+                const mod = calculateModifier(score);
+                const modText = mod >= 0 ? `(+${mod})` : `(${mod})`;
+
+                if (sheetScore) sheetScore.textContent = score;
+                if (sheetMod) sheetMod.textContent = modText;
+                if (hiddenField) hiddenField.value = score;
+
+                stats[stat] = score; // keep global stats accurate
+            });
+
+            // Set hidden form values
+            document.getElementById("inputRace").value = raceRadio?.value || "";
+            document.getElementById("inputSubrace").value = subraceRadio?.value || "";
+            document.getElementById("inputClass").value = classRadio?.value || "";
+        }
+
+        function populateForm() {
+            document.getElementById('inputRace').value    = document.querySelector('input[name="race"]:checked')?.value || "";
+            document.getElementById('inputSubrace').value = document.querySelector('input[name="subrace"]:checked')?.value || "None";
+            document.getElementById('inputClass').value   = document.querySelector('input[name="class"]:checked')?.value || "";
+
+            document.getElementById('inputStr').value = stats.str;
+            document.getElementById('inputDex').value = stats.dex;
+            document.getElementById('inputCon').value = stats.con;
+            document.getElementById('inputInt').value = stats.int;
+            document.getElementById('inputWis').value = stats.wis;
+            document.getElementById('inputCha').value = stats.cha;
+
+            return true;
+        }
+
+        // Clear subrace selections when race changes
+        document.querySelectorAll('input[name="race"]').forEach(input => {
+            input.addEventListener('change', function () {
+                document.getElementById('subrace-container').style.display = 'none';
+                document.querySelectorAll('.subrace-option').forEach(div => div.style.display = 'none');
+                document.querySelectorAll('input[name="subrace"]').forEach(subInput => subInput.checked = false);
+            });
+        });
+    </script>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+                     }
+</body>
+</html>

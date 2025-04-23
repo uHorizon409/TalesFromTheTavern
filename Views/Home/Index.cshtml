@@ -1,0 +1,649 @@
+﻿@model DnDWebpage.Models.BulletinBoardViewModel
+
+
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Home";
+    var random = new Random();
+    var reasons = new[]
+    {
+        "smuggling illicit dragon eggs",
+        "harboring fugitive wizards",
+        "looting the King’s treasury",
+        "poaching unicorns in the Enchanted Forest",
+        "practicing forbidden necromancy",
+        "sabotaging the Queen’s warships",
+        "stealing the High Priest’s relics",
+        "leading a band of highwaymen",
+        "cursing the harvest fields",
+        "rescuing a captured archmage",
+        "betraying the Elven council",
+        "peddling cursed artifacts",
+        "dueling the Duke’s champion",
+        "inciting a peasant rebellion",
+        "kidnapping the royal heir"
+    };
+}
+
+<!-- 🧙 Epic Site Title (above banner) -->
+<div class="text-center mt-3">
+    <h1 class="epic-header">Tales From The Tavern</h1>
+</div>
+
+<!-- 🔥 Banner Image -->
+<div class="banner"></div>
+
+<!-- 📖 Begin Your Journey Book Section -->
+<div class="container book-section mt-4">
+    <div class="book-page text-center">
+        <h2 class="book-title">Begin Your Journey</h2>
+        <p class="book-subtext">Choose your path and prepare your spells, hero.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+            <a href="/Rules" class="btn dnd-btn" data-theme="rules">Rules</a>
+            <a href="/Character/Create" class="btn dnd-btn" data-theme="character">Character Forge</a>
+            <a href="/Spells" class="btn dnd-btn" data-theme="spells">Spell Grimoire</a>
+            <a href="/Campaigns" class="btn dnd-btn" data-theme="campaign">Quests</a>
+            <a href="/Bestiary" class="btn dnd-btn" data-theme="bestiary">Bestiary</a>
+        </div>
+    </div>
+</div>
+
+@* ────────────────────────────────────────────────────────────────
+   🔰 Instruction Text (Above the Wrapper to avoid overlap)
+   ──────────────────────────────────────────────────────────────── *@
+<!-- 🪧 Tavern Bulletin Board Wrapper -->
+<div class="container mt-3 bulletin-wrapper">
+    <!-- 📌 Header and Admin Button -->
+    <div class="position-relative text-center mb-3">
+        <h2 class="bulletin-header w-100">Tavern Bulletin Board</h2>
+
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <a href="/Admin/EditBulletin" class="btn dnd-btn btn-sm position-absolute top-0 end-0 mt-2 me-3" data-theme="spells">
+                Update Board
+            </a>
+
+        }
+    </div>
+
+    <!-- ✒️ Flavored description -->
+    <p class="engraved-text">
+        The scent of ale and ink fills the air as you approach the worn parchment nailed to the oak post... Pick a Quest...
+    </p>
+
+    <!-- 🛠️ Admin Post Editor -->
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <div id="editorSection" style="display: none;">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label text-white">🗡 Bounty Title</label>
+                    <input type="text" class="form-control" id="bountyTitle" placeholder="Bounty Title" />
+                    <label class="form-label text-white mt-2">Description</label>
+                    <textarea class="form-control" id="bountyText" rows="3" placeholder="Write about the bounty..."></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-white">📜 Rumor Title</label>
+                    <input type="text" class="form-control" id="rumorTitle" placeholder="Rumor Title" />
+                    <label class="form-label text-white mt-2">Description</label>
+                    <textarea class="form-control" id="rumorText" rows="3" placeholder="Write the rumor..."></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-white">☠️ Wanted Title</label>
+                    <input type="text" class="form-control" id="wantedTitle" placeholder="Wanted Poster Title" />
+                    <label class="form-label text-white mt-2">Description</label>
+                    <textarea class="form-control" id="wantedText" rows="3" placeholder="Describe the villain..."></textarea>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button id="updateBoardBtn" class="btn dnd-btn" data-theme="rules">✅ Submit</button>
+            </div>
+        </div>
+    }
+
+    <!-- 🎭 Staging Area for Tokens (BELOW instruction, no overlap) -->
+    @if (User.Identity.IsAuthenticated)
+    {
+        var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        <div id="staging-area" class="text-center mb-4">
+            <div class="vote-area d-flex justify-content-center flex-wrap align-items-center gap-2" style="min-height: 40px;">
+                @foreach (var user in Model.Users)
+                {
+                    var isCurrentUser = user.Id == currentUserId;
+                    var draggable = isCurrentUser ? "true" : "false";
+                    var cursor = isCurrentUser ? "grab" : "pointer";
+                    var extraClass = isCurrentUser ? "bouncy shadow" : "";
+                    var id = isCurrentUser ? "user-tile" : "";
+
+                    <img id="@id"
+                         src="@user.ProfileImagePath"
+                         onerror="this.src='/images/icons/user.png'"
+                         class="vote-tile @extraClass"
+                         alt="@user.UserName"
+                         title="@user.UserName"
+                         draggable="@draggable"
+                         data-userid="@user.Id"
+                         style="width: 32px; height: 32px; object-fit: cover; border: 2px solid gold; margin: 4px; cursor: @cursor;" />
+                }
+            </div>
+        </div>
+    }
+
+    <!-- 🧷 Bulletin Post Grid & Drag Target Area -->
+    <div id="bulletin-board" class="position-relative" style="min-height: 500px; height: 100%; width: 100%; overflow: hidden;"></div>
+</div>
+
+
+<div class="container mt-5">
+    <div class="d20-cover-container text-center" style="
+        background: url('/images/dndgamecover.jpg') no-repeat center center;
+        background-size: cover; /* 👈 Fills the container */
+        background-color: #000;
+        width: 100%;
+        height: 600px; /* 👈 Fixed height to control size */
+        margin: 0 auto;
+        border: 6px double #640000;
+        border-radius: 12px;
+        box-shadow: 0 0 40px #000 inset;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 1rem;
+    ">
+        <!-- Overlay for readability -->
+        <div style="
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        ">
+            <h2 class="d20-title" style="
+                font-family: 'Cinzel', serif;
+                font-size: 2.2rem;
+                color: #ffcc66;
+                text-shadow: 3px 3px 6px #000;
+                margin: 0;
+            ">
+                A D20 Encounter Awaits...
+            </h2>
+        </div>
+
+        <a href="/Game/D20BattleGame" class="btn dnd-btn d20-enter-btn" style="
+            font-size: 1.2rem;
+            padding: 10px 24px;
+            background-color: #8b0000;
+            border: 3px solid gold;
+            color: #fff;
+            text-shadow: 1px 1px 4px #000;
+            margin-bottom: 1rem;
+        ">
+            Enter the Adventure
+        </a>
+
+        <button class="mute-btn" onclick="toggleMute()" style="
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: black;
+            border: 1px solid gold;
+            color: gold;
+            padding: 4px 10px;
+            font-family: 'MedievalSharp';
+            font-size: 0.85rem;
+            border-radius: 4px;
+        ">
+            Mute
+        </button>
+    </div>
+</div>
+
+
+
+@* 🔒 Token + User Metadata for JS Access *@
+@if (User.Identity.IsAuthenticated)
+{
+    <script>
+        document.body.dataset.userid = '@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value';
+        document.body.dataset.username = '@User.Identity.Name';
+        document.body.dataset.avatar = '@ViewBag.NavAvatar';
+    </script>
+}
+<script>
+    // 📐 Layout Debug Script (run once DOM is loaded)
+    document.addEventListener("DOMContentLoaded", () => {
+        const board = document.getElementById("bulletin-board");
+        const header = document.querySelector(".bulletin-header");
+        const engraved = document.querySelector(".engraved-text");
+        const token = document.querySelector(".vote-tile");
+
+        const boardRect = board?.getBoundingClientRect();
+        const headerHeight = header?.offsetHeight || 0;
+        const engravedHeight = engraved?.offsetHeight || 0;
+        const tokenHeight = token?.offsetHeight || 0;
+
+        console.log("📐 Layout Debug:");
+        console.log("Board Y:", boardRect?.top, "Board Height:", boardRect?.height);
+        console.log("Header Height:", headerHeight);
+        console.log("Engraved Text Height:", engravedHeight);
+        console.log("Token Height:", tokenHeight);
+    });
+</script>
+
+
+
+<!-- 🔊 Sound & Script Includes -->
+<audio id="click-sound" src="~/sounds/click.mp3" preload="auto"></audio>
+<audio id="tile-drop-sound" src="~/sounds/tile-drop.mp3" preload="auto"></audio>
+<audio id="post-hover-sound" src="/sounds/checkingpost.mp3" preload="auto"></audio>
+<audio id="pageFlipSound" src="/sounds/hometome.mp3" preload="auto"></audio>
+
+
+
+<script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+        loadBulletinBoard();
+        if (document.body.dataset.role === "Admin") populateEditorForm();
+
+        // 🧙 Add hover sound for each bulletin post after board loads
+        document.addEventListener("mouseover", function (e) {
+            const card = e.target.closest(".drop-zone");
+            if (card && !card.dataset._hoverSoundPlayed) {
+                const sound = document.getElementById("post-hover-sound");
+                if (sound) {
+                    sound.currentTime = 0;
+                    sound.play();
+                }
+                card.dataset._hoverSoundPlayed = "true";
+
+                // Reset flag after short delay to allow re-hovering
+                setTimeout(() => {
+                    card.dataset._hoverSoundPlayed = "";
+                }, 1000);
+            }
+        });
+    });
+
+    // ────────────────────────────────────────────────────────────────────────
+    // 1. Globals and Config
+    // ────────────────────────────────────────────────────────────────────────
+    let activeToken = null, offsetX = 0, offsetY = 0;
+    let lastHoveredZone = null;
+
+    // ────────────────────────────────────────────────────────────────────────
+    // 2. Vote Confirmation Popup
+    // ────────────────────────────────────────────────────────────────────────
+    function showVoteConfirmation() {
+        const message = document.createElement("div");
+        message.textContent = "✅ Vote Registered!";
+        Object.assign(message.style, {
+            position: "absolute", left: "50%", top: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "rgba(0, 0, 0, 0.85)", padding: "0.5rem 1rem",
+            border: "2px solid gold", borderRadius: "12px", color: "gold",
+            fontSize: "1.2rem", fontFamily: "'Cinzel Decorative', serif",
+            zIndex: 9999, boxShadow: "0 0 10px gold", pointerEvents: "none",
+            transition: "opacity 0.5s ease"
+        });
+        document.body.appendChild(message);
+        setTimeout(() => {
+            message.style.opacity = 0;
+            setTimeout(() => message.remove(), 500);
+        }, 1600);
+    }
+
+    // ────────────────────────────────────────────────────────────────────────
+    // 3. Admin Form Prefill
+    // ────────────────────────────────────────────────────────────────────────
+    async function populateEditorForm() {
+        const posts = await (await fetch("/Bulletin/GetActivePosts")).json();
+        const bounty = posts.find(p => p.type === "Bounty");
+        const rumor = posts.find(p => p.type === "Rumor");
+        const wanted = posts.find(p => p.type === "Wanted");
+
+        if (bounty) {
+            document.getElementById("bountyTitle").value = bounty.title;
+            document.getElementById("bountyText").value = bounty.description;
+        }
+        if (rumor) {
+            document.getElementById("rumorTitle").value = rumor.title;
+            document.getElementById("rumorText").value = rumor.description;
+        }
+        if (wanted) {
+            document.getElementById("wantedTitle").value = wanted.title;
+            document.getElementById("wantedText").value = wanted.description;
+        }
+    }
+
+    // ────────────────────────────────────────────────────────────────────────
+    // 4. Load Posts + Tokens
+    // ────────────────────────────────────────────────────────────────────────
+    async function loadBulletinBoard() {
+        const board = document.getElementById("bulletin-board");
+        const [postsRes, votesRes, usersRes] = await Promise.all([
+            fetch("/Bulletin/GetActivePosts"),
+            fetch("/Bulletin/GetVotes"),
+            fetch("/Bulletin/GetAllUsersWithTokens")
+        ]);
+
+        const postsData = await postsRes.json();
+        const { tokens: votes = [], tallies = {} } = await votesRes.json();
+        const users = await usersRes.json();
+
+        board.innerHTML = "";
+
+        const typeMap = {
+            "Bounty": { icon: "", border: "border-warning" },
+            "Rumor": { icon: "", border: "border-info" },
+            "Wanted": { icon: "", border: "border-danger" }
+        };
+
+        postsData.forEach(post => {
+            const cfg = typeMap[post.type] || {};
+            const card = document.createElement("div");
+            card.className = ["card", "bg-dark", "text-white", cfg.border, "shadow", "drop-zone"].join(" ");
+            card.dataset.postId = post.id;
+            card.style.maxWidth = "260px";
+
+                const tally = tallies[post.id];
+    const badge = tally
+        ? `<span class="vote-badge wax-seal" title="${tally.voters.join(",")}">${tally.count}</span>`
+        : "";
+
+
+            card.innerHTML = `
+              <div class="card-body">
+                <h5 class="card-title">${cfg.icon} ${post.title}</h5>
+                <p class="card-text">${post.description}</p>
+                <div class="vote-area d-flex flex-wrap gap-1 mt-2">${badge}</div>
+              </div>`;
+            board.appendChild(card);
+        });
+
+        await renderVotes(votes, users);
+
+        document.querySelectorAll(".vote-tile").forEach(tile => {
+            tile.removeEventListener("pointerdown", startDrag);
+            tile.addEventListener("pointerdown", startDrag);
+        });
+    }
+
+    // ────────────────────────────────────────────────────────────────────────
+    // 5. Render Vote Tokens
+    // ────────────────────────────────────────────────────────────────────────
+       async function renderVotes(votes, users) {
+        document.querySelectorAll(".vote-tile").forEach(t => t.remove());
+        const currentUserId = document.body.dataset.userid;
+        const board = document.getElementById("bulletin-board");
+
+        const boardWidth = board.clientWidth;
+        let maxTokenBottom = 0;
+
+        users.forEach(user => {
+            const vote = votes.find(v => v.userId === user.userId);
+            let x = vote?.x ?? 100 + Math.random() * 60;
+            let y = vote?.y ?? 100 + Math.random() * 60;
+
+            // Clamp X and Y for mobile safety
+            x = Math.max(0, Math.min(x, boardWidth - 50));
+            y = Math.max(110, y); // Minimum Y to avoid overlapping header
+
+            const img = document.createElement("img");
+            img.src = user.avatarUrl?.trim() || "/images/icons/user.png";
+            img.onerror = () => { img.src = "/images/icons/user.png"; };
+            img.className = "vote-tile";
+            img.title = user.username;
+            img.dataset.userid = user.userId;
+
+            Object.assign(img.style, {
+                position: "absolute", left: `${x}px`, top: `${y}px`,
+                width: "42px", height: "42px", objectFit: "cover",
+                border: "2px solid gold", zIndex: 1000,
+                cursor: user.userId === currentUserId ? "grab" : "pointer"
+            });
+
+            if (vote?.postId) img.classList.add("voted");
+
+            board.appendChild(img);
+
+            // Adjust board height based on token position
+            const tokenBottom = y + 50; // token height + buffer
+            if (tokenBottom > maxTokenBottom) maxTokenBottom = tokenBottom;
+
+            if (user.userId !== currentUserId) {
+                img.style.cursor = "pointer";
+                img.addEventListener("click", () => {
+                    window.location.href = `/Profile/View/${user.userId}`;
+                });
+            }
+        });
+
+        // Expand board height if needed
+        if (maxTokenBottom > board.clientHeight) {
+            board.style.minHeight = `${maxTokenBottom + 50}px`; // buffer
+        }
+    }
+
+
+     // ────────────────────────────────────────────────────────────────────────
+    // 6. Drag Logic (Pointer-based)
+    // ────────────────────────────────────────────────────────────────────────
+
+    // 🚀 START DRAG
+    function startDrag(e) {
+        if (e.target.dataset.userid !== document.body.dataset.userid) return;
+
+        activeToken = e.target;
+        activeToken.style.pointerEvents = "none";
+
+        const rect = activeToken.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        activeToken.setPointerCapture(e.pointerId);
+        const board = document.getElementById("bulletin-board");
+        board.addEventListener("pointermove", onDrag);
+        board.addEventListener("pointerup", endDrag);
+    }
+
+    // 🕹️ ON DRAG
+    function onDrag(e) {
+        if (!activeToken) return;
+
+        const board = document.getElementById("bulletin-board");
+        const boardRect = board.getBoundingClientRect();
+        const tokenHeight = activeToken.offsetHeight;
+        const tokenWidth = activeToken.offsetWidth;
+
+        // Calculate raw position
+        let x = e.clientX - boardRect.left - offsetX;
+        let y = e.clientY - boardRect.top - offsetY;
+
+        // Clamp X within board width
+        x = Math.max(0, Math.min(x, board.clientWidth - tokenWidth));
+
+        // Clamp Y within board height
+        const SAFE_Y = 110; // Header (54) + Engraved Text (47) + small padding
+        const maxY = board.clientHeight - tokenHeight;
+
+        // 🧪 Debug logs
+        console.log("🧭 DRAG DEBUG:");
+        console.log("Token Y:", y, "| Clamped Y:", Math.max(SAFE_Y, Math.min(y, maxY)));
+        console.log("Board Height:", board.clientHeight, "| Max Y:", maxY);
+
+        y = Math.max(SAFE_Y, Math.min(y, maxY));
+
+        // Apply token position
+        activeToken.style.left = `${x}px`;
+        activeToken.style.top = `${y}px`;
+
+        // Highlight active drop zone
+        const newZone = document.elementFromPoint(e.clientX, e.clientY)?.closest(".drop-zone");
+        if (newZone !== lastHoveredZone) {
+            if (lastHoveredZone) lastHoveredZone.classList.remove("highlighted-vote");
+            if (newZone) newZone.classList.add("highlighted-vote");
+            lastHoveredZone = newZone;
+        }
+    }
+            function playTokenDropSound() {
+        const sound = document.getElementById("tile-drop-sound");
+        sound.currentTime = 0;
+        sound.play();
+    }
+
+       // 🛑 END DRAG
+    async function endDrag(e) {
+        if (!activeToken) return;
+        const board = document.getElementById("bulletin-board");
+
+        board.removeEventListener("pointermove", onDrag);
+        board.removeEventListener("pointerup", endDrag);
+        activeToken.releasePointerCapture(e.pointerId);
+
+        const boardRect = board.getBoundingClientRect();
+        const tokenWidth = activeToken.offsetWidth;
+        const tokenHeight = activeToken.offsetHeight;
+
+        const minX = 0;
+        const maxX = board.clientWidth - tokenWidth;
+        const minY = 110;
+        const maxY = board.clientHeight - tokenHeight;
+
+        // Raw drop coords
+        let dropX = e.clientX - boardRect.left;
+        let dropY = e.clientY - boardRect.top;
+
+        // Clamp position
+        dropX = Math.max(minX, Math.min(dropX, maxX));
+        dropY = Math.max(minY, Math.min(dropY, maxY));
+
+        console.log("🎯 DROP DEBUG:");
+        console.log("Drop Y:", dropY, "| Max Y:", maxY);
+
+        const dropTarget = document.elementFromPoint(e.clientX, e.clientY)?.closest(".drop-zone");
+        const postId = dropTarget?.dataset.postId;
+
+        const userId = activeToken.dataset.userid;
+        const userName = activeToken.title;
+
+        // Remove glow
+        document.querySelectorAll(".drop-zone").forEach(zone =>
+            zone.classList.remove("highlighted-vote")
+        );
+
+        // Clear old vote badge if switching/unvoting
+        document.querySelectorAll(".drop-zone").forEach(zone => {
+            const badge = zone.querySelector(".vote-badge");
+            if (badge && badge.title.includes(userName) && (!postId || zone.dataset.postId !== postId)) {
+                let voters = badge.title.split(",").filter(n => n !== userName);
+                if (voters.length === 0) {
+                    badge.remove();
+                } else {
+                    badge.title = voters.join(",");
+                    badge.textContent = voters.length;
+                }
+            }
+        });
+
+        if (postId) {
+            await fetch("/Bulletin/CastVote", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ postId: +postId, x: dropX, y: dropY })
+            });
+
+            showVoteConfirmation();
+            playTokenDropSound(); // 🔊 Play drop sound
+            activeToken.classList.add("voted");
+
+            const voteArea = dropTarget.querySelector(".vote-area");
+            let badge = voteArea.querySelector(".vote-badge");
+
+            if (!badge) {
+                badge = document.createElement("span");
+                badge.className = "vote-badge wax-seal";
+                voteArea.appendChild(badge);
+            }
+
+            let voters = badge.title ? badge.title.split(",") : [];
+            if (!voters.includes(userName)) voters.push(userName);
+
+            badge.title = voters.join(",");
+            badge.textContent = voters.length;
+        } else {
+            await fetch("/Bulletin/SaveTokenPosition", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ x: dropX, y: dropY })
+            });
+
+            playTokenDropSound(); // 🔊 Play sound on unvote as well
+            activeToken.classList.remove("voted");
+        }
+
+        // Apply final token position
+        activeToken.style.left = `${dropX}px`;
+        activeToken.style.top = `${dropY}px`;
+        activeToken.style.pointerEvents = "auto";
+
+        activeToken = null;
+        lastHoveredZone = null;
+
+        // Rebind for next drag
+        document.querySelectorAll(".vote-tile").forEach(tile => {
+            tile.removeEventListener("pointerdown", startDrag);
+            tile.addEventListener("pointerdown", startDrag);
+        });
+    }
+
+    // ────────────────────────────────────────────────────────────────────────
+    // 7. Init
+    // ────────────────────────────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", () => {
+        loadBulletinBoard();
+        if (document.body.dataset.role === "Admin") populateEditorForm();
+    });
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const flipSound = document.getElementById("pageFlipSound");
+
+        document.querySelectorAll(".book-page a.dnd-btn").forEach(btn => {
+            btn.addEventListener("click", function (e) {
+                e.preventDefault(); // stop navigation for a moment
+                const href = this.getAttribute("href");
+
+                flipSound.currentTime = 0;
+                flipSound.play().catch(() => {});
+
+                // Delay navigation slightly to let the sound start
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 1000); // 400ms lets the page-flip be heard before leaving
+            });
+        });
+    });
+</script>
+<script>
+    let isMuted = false;
+
+    function toggleMute() {
+        const audios = document.querySelectorAll("audio");
+        isMuted = !isMuted;
+        audios.forEach(audio => {
+            audio.muted = isMuted;
+        });
+        const btn = document.querySelector(".mute-btn");
+        if (btn) btn.textContent = isMuted ? "Unmute" : "Mute";
+    }
+</script>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/D20BattleStyles.css" />
+}
+

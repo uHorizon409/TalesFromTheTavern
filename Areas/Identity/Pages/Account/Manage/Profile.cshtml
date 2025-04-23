@@ -1,0 +1,975 @@
+﻿@page
+@model DnDWebpage.Areas.Identity.Pages.Account.Manage.ProfileModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Enforces use of main layout
+
+    // If your PageModel holds the saved background cover (e.g., Model.CoverUrl),
+    // then use it here. Otherwise, default to one of your covers:
+    var backgroundCover = !string.IsNullOrEmpty(Model.Input.CoverUrl)
+                       ? Model.Input.CoverUrl
+                       : "/images/covers/profilebanner-option10.jpg";
+
+
+    ViewData["Title"] = "Your Heroic Profile";
+}
+
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=MedievalSharp&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+
+<!-- Global Runes Container for Dynamic Effects -->
+<div id="runeContainer" class="rune-container"></div>
+
+<!-- Cover Selection Modal -->
+<div id="coverModal" class="cover-modal">
+    <div class="cover-modal-box">
+        <span class="cover-modal-close" onclick="closeCoverModal()">✖</span>
+        <h3 class="cover-modal-title">Select Your Cover</h3>
+        <div class="cover-thumbnails">
+            @for (int i = 1; i <= 15; i++)
+            {
+                var coverPath = Url.Content($"~/images/covers/profilebanner-option{i}.jpg");
+                <img src="@coverPath" alt="Cover @i" class="cover-thumbnail" onclick="selectCover('@coverPath')" />
+            }
+        </div>
+    </div>
+</div>
+<style>
+    /* Global Styles */
+    body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(92, 0, 0, 0.7)), url('@backgroundCover') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Cinzel Decorative', serif;
+    }
+
+    .profile-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 2rem 1rem;
+        min-height: 100vh;
+    }
+
+    .profile-container {
+        background-color: rgba(10, 0, 0, 0.92); /* dark blood backdrop */
+        background-blend-mode: multiply;
+        background-image: url('/images/profilecover.png');
+        background-size: cover;
+        padding: 2rem;
+        border: 4px double #550000;
+        border-radius: 20px;
+        box-shadow: 0 0 60px rgba(139, 0, 0, 0.4);
+        color: #f0e6d2; /* parchment text */
+        width: 100%;
+        max-width: 600px;
+        text-shadow: 1px 1px 1px #000;
+        position: relative;
+    }
+
+        .profile-container h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-family: 'MedievalSharp', cursive;
+            color: #c00000;
+            text-shadow: 0 0 5px #900;
+        }
+
+        .profile-container label {
+            font-family: 'MedievalSharp', cursive;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: block;
+            color: #c04040;
+        }
+
+
+        .profile-container input,
+        .profile-container textarea {
+            background-color: #1a0000;
+            border: 2px solid #8b0000;
+            color: #f0e6d2;
+            padding: 0.5rem;
+            width: 100%;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+            .profile-container input::placeholder,
+            .profile-container textarea::placeholder {
+                color: #b88;
+            }
+
+    .btn,
+    .btn-danger,
+    .btn-outline-warning,
+    .btn.magic-btn {
+        font-family: 'Cinzel Decorative', serif;
+        border-radius: 8px;
+        padding: 0.5rem 1.2rem;
+        background-color: #330000;
+        color: #f0e6d2;
+        border: 2px solid #990000;
+        box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn:hover,
+        .btn-danger:hover,
+        .btn-outline-warning:hover,
+        .btn.magic-btn:hover {
+            background-color: #660000;
+            border-color: #ff4444;
+            color: #fff;
+            box-shadow: 0 0 16px crimson;
+        }
+
+    .avatar-wrapper {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+        position: relative;
+        border: 3px solid gold;
+        box-shadow: 0 0 15px gold;
+        background-color: #222;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+    .avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: #222;
+        color: gold;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .clickable-avatar {
+        cursor: zoom-in;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .clickable-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px gold;
+        }
+
+    .hidden-file {
+        display: none;
+    }
+
+    .custom-file-label {
+        display: inline-block;
+        background: #2b0000;
+        color: #f0e6d2;
+        padding: 0.6rem 1.4rem;
+        font-family: 'MedievalSharp', cursive;
+        border: 2px solid #800000;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .custom-file-label:hover {
+            background: #990000;
+            color: #fff;
+            box-shadow: 0 0 14px crimson;
+        }
+
+    .btn.magic-btn {
+        background: linear-gradient(to right, #330000, #5a0000);
+        color: #f0e6d2; /* parchment */
+        font-family: 'Cinzel Decorative', serif;
+        border: 2px solid #800000;
+        border-radius: 12px;
+        padding: 0.6rem 1.5rem;
+        text-transform: uppercase;
+        box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+        transition: 0.3s ease;
+    }
+
+        .btn.magic-btn:hover {
+            background: #7a0000;
+            color: #ffffff;
+            box-shadow: 0 0 18px crimson;
+        }
+
+    /* Spell Button: Transparent Arcane Look */
+    .btn.spell-btn {
+        background: transparent;
+        border: 2px solid #8b0000;
+        color: #f0e6d2;
+        font-family: 'MedievalSharp', cursive;
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+        transition: 0.3s ease-in-out;
+    }
+
+        .btn.spell-btn:hover {
+            background: #400000;
+            color: #fff;
+            box-shadow: 0 0 12px #ff0000;
+        }
+
+
+    .modal-backdrop {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(10, 0, 0, 0.85);
+        backdrop-filter: blur(3px);
+        justify-content: center;
+        align-items: center;
+    }
+
+        .modal-backdrop.active {
+            display: flex;
+        }
+
+        .modal-backdrop .modal-box {
+            background-color: #120202; /* darker crimson black */
+            padding: 2rem;
+            border: 3px double #660000;
+            border-radius: 15px;
+            color: #f0e6d2; /* parchment text */
+            width: 90%;
+            max-width: 400px;
+            text-align: left;
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.6); /* blood red glow */
+            animation: magicalFadeIn 0.8s ease-out;
+            position: relative;
+            margin: 0 auto;
+        }
+
+    .modal-title {
+        text-align: center;
+        color: #c00000; /* rich blood red */
+        text-shadow: 0 0 6px #400000;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        font-family: 'Cinzel Decorative', serif;
+    }
+
+
+    .modal-close {
+        position: absolute;
+        top: 0.6rem;
+        right: 0.8rem;
+        color: crimson;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    @@keyframes magicalFadeIn {
+        0%
+
+    {
+        opacity: 0;
+        transform: scale(0.9) rotate(-5deg);
+        filter: drop-shadow(0 0 5px crimson);
+    }
+
+        50% {
+            opacity: 0.6;
+            transform: scale(1.02) rotate(1deg);
+            filter: drop-shadow(0 0 15px #8b0000); /* blood glow */
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+            filter: drop-shadow(0 0 20px #ff4444); /* vibrant red burst */
+        }
+
+    }
+
+    .rune-container {
+        pointer-events: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 11000;
+    }
+
+    .rune {
+        position: absolute;
+        bottom: -50px;
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 2rem;
+        opacity: 0;
+        animation: bubbleUp 5s linear forwards;
+    }
+
+    @@keyframes bubbleUp {
+        0%
+
+    {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-120vh);
+        opacity: 0;
+    }
+
+    }
+
+    /* COVER MODAL STYLES */
+    /* ===== Scoped Cover Modal Only ===== */
+    .cover-modal {
+        display: none;
+        position: fixed;
+        z-index: 12000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(10, 0, 0, 0.85);
+        backdrop-filter: blur(3px);
+        justify-content: center;
+        align-items: center;
+        overflow: auto;
+        padding: 2rem;
+    }
+
+        .cover-modal.active {
+            display: flex;
+        }
+
+    .cover-modal-box {
+        max-width: 950px;
+        width: 95%;
+        padding: 2rem;
+        background-color: #120202; /* deep dark crimson */
+        border: 3px double #660000; /* blood-red border */
+        border-radius: 15px;
+        color: #f0e6d2; /* parchment text */
+        box-shadow: 0 0 40px rgba(139, 0, 0, 0.6); /* red glow */
+        text-align: center;
+        overflow: hidden;
+        position: relative;
+    }
+
+
+    .cover-modal-close {
+        position: absolute;
+        top: 0.6rem;
+        right: 0.8rem;
+        color: crimson;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    .cover-modal-title {
+        color: #c00000; /* rich blood red */
+        text-shadow: 0 0 5px #400000; /* dark crimson glow */
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        font-family: 'Cinzel Decorative', serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+
+    .cover-modal .cover-thumbnails {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
+        max-height: 320px;
+        overflow-y: auto;
+        padding: 1rem 0;
+        justify-items: center;
+    }
+
+    .cover-modal .cover-thumbnail {
+        width: 140px;
+        height: 90px;
+        object-fit: cover;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        box-shadow: 0 0 4px rgba(255, 215, 0, 0.2);
+    }
+
+        .cover-modal .cover-thumbnail:hover {
+            transform: scale(1.05);
+            border-color: #8b0000; /* dark blood red */
+            box-shadow: 0 0 8px rgba(139, 0, 0, 0.6); /* faint arcane glow */
+        }
+
+        .cover-modal .cover-thumbnail.selected {
+            border-color: #ff4444; /* bright cursed red */
+            box-shadow: 0 0 14px rgba(255, 0, 0, 0.7); /* stronger glow for selected */
+        }
+
+
+    /* 📱 Tablet (2 columns) */
+    @@media (max-width: 768px) {
+        .cover-modal .cover-thumbnails {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* 📱 Mobile (1 column) */
+    @@media (max-width: 480px) {
+        .cover-modal .cover-thumbnails {
+            grid-template-columns: 1fr;
+        }
+
+        .cover-modal .cover-thumbnail {
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .cover-modal .modal-box {
+            padding: 1rem;
+        }
+
+        .cover-modal .modal-title {
+            font-size: 1.25rem;
+        }
+    }
+    /* Avatar Modal */
+    #avatarModal {
+        display: none;
+        position: fixed;
+        z-index: 13000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(15, 0, 0, 0.85);
+        backdrop-filter: blur(4px);
+        justify-content: center;
+        align-items: center;
+        overflow: auto;
+    }
+
+    .avatar-modal-content {
+        max-width: 90vw;
+        max-height: 80vh;
+        object-fit: contain;
+        border: 4px double #660000; /* deep blood-red edge */
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(139, 0, 0, 0.7); /* arcane red glow */
+    }
+
+
+    .avatar-close {
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        font-size: 2rem;
+        color: crimson;
+        cursor: pointer;
+        z-index: 14000;
+        font-weight: bold;
+        text-shadow: 0 0 8px black;
+    }
+
+    .icon-fantasy {
+        height: 20px;
+        width: 20px;
+        margin-right: 8px;
+        vertical-align: middle;
+        filter: drop-shadow(0 0 4px gold);
+    }
+
+    .avatar-profile {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid crimson;
+        box-shadow: 0 0 12px red;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+        .avatar-profile:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 16px red;
+        }
+
+    .bounty-card {
+        background: url('/images/parchment-background.jpg') center/cover no-repeat;
+        border: 5px ridge #8b0000;
+        border-radius: 12px;
+        color: #fefae0;
+        font-family: 'MedievalSharp', cursive;
+        box-shadow: 0 0 25px rgba(139, 0, 0, 0.6);
+        transition: transform 0.3s ease;
+    }
+
+        .bounty-card:hover {
+            transform: scale(1.015);
+            box-shadow: 0 0 30px gold;
+        }
+
+    .bounty-body {
+        padding: 1rem;
+        background-color: rgba(28, 11, 11, 0.95);
+    }
+
+    .bounty-card .card-footer {
+        background-color: #1a0a0a;
+        border-top: 1px solid #6b0000;
+    }
+
+    .character-sheet {
+        transition: all 0.4s ease;
+        overflow: hidden;
+    }
+
+    .character-toggle {
+        cursor: pointer;
+        background-color: rgba(64, 0, 0, 0.6);
+        border: 1px solid #aa0000;
+        border-radius: 8px;
+        padding: 0.4rem 0.75rem;
+        color: gold;
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 1rem;
+        display: inline-block;
+        box-shadow: 0 0 6px rgba(255, 0, 0, 0.3);
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+        .character-toggle:hover {
+            background-color: rgba(128, 0, 0, 0.8);
+            transform: scale(1.03);
+            box-shadow: 0 0 10px crimson;
+        }
+
+</style>
+
+<div class="profile-wrapper">
+    <div class="profile-container">
+        <h2> Your Profile</h2>
+
+        <!-- Avatar Section -->
+        <div class="text-center mb-4">
+            <div id="avatarWrapper" class="avatar-wrapper" onclick="openAvatarModal()">
+                @if (!string.IsNullOrEmpty(Model.Input.CurrentImagePath))
+                {
+                    <img id="avatarPreview"
+                         src="@Model.Input.CurrentImagePath"
+                         alt="Profile Icon"
+                         class="clickable-avatar avatar-profile"
+                         onerror="this.onerror=null;this.src='/images/icons/user.png';" />
+
+                }
+                else
+                {
+                    <div id="avatarPlaceholder" class="avatar-placeholder">
+                        <i class="fa-solid fa-dragon"></i>
+                        <span style="font-size: 0.85rem;">No Avatar</span>
+                    </div>
+                }
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Input.CurrentImagePath))
+            {
+                <form asp-page-handler="RemoveImage" method="post" class="mt-2">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <img src="~/images/icons/remove.png"
+                             alt="Remove Avatar"
+                             class="icon-fantasy" />
+                        REMOVE AVATAR
+                    </button>
+
+                </form>
+            }
+        </div>
+
+        <!-- Avatar Modal (Image Preview) -->
+        <div id="avatarModal" class="avatar-modal" onclick="closeAvatarModal(event)">
+
+            <span class="avatar-close">&times;</span>
+            <img class="avatar-modal-content" id="modalAvatarImage" />
+        </div>
+
+        <!-- Password Change Modal -->
+        <div id="passwordModal" class="modal-backdrop">
+            <div class="modal-box">
+                <span class="modal-close" onclick="closePasswordModal()">✖</span>
+                <h3 class="modal-title">
+                    Rewrite Your Past
+                </h3>
+
+
+                <form method="post" asp-page-handler="ChangePassword">
+                    <label for="OldPassword">Old Password</label>
+                    <input asp-for="PasswordChange.OldPassword" type="password" required />
+
+                    <label for="NewPassword">New Password</label>
+                    <input asp-for="PasswordChange.NewPassword" type="password" required />
+
+                    <label for="ConfirmPassword">Confirm New Password</label>
+                    <input asp-for="PasswordChange.ConfirmPassword" type="password" required />
+
+                    <button type="submit" class="btn btn-danger mt-3" onclick="stopRuneAnimation()">
+                        <i class="fa-solid fa-key me-1"></i> Confirm Change
+                    </button>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- Profile Form -->
+        <form method="post" asp-page-handler="Update" enctype="multipart/form-data">
+
+            <label>Username</label>
+            <div class="form-control-plaintext" style="background-color: transparent; color: gold; font-family: 'MedievalSharp', cursive; padding-left: 0.5rem;">
+                @User.Identity.Name
+            </div>
+
+            <label asp-for="Input.Bio">Bio</label>
+            <textarea asp-for="Input.Bio"
+                      class="form-control"
+                      placeholder="Tell your tale (max 200 characters)"
+                      rows="3"
+                      maxlength="200"
+                      oninput="updateCharCount(this)"></textarea>
+            <small id="bioCharCount" class="form-text">0 / 200 characters used</small>
+
+            <span asp-validation-for="Input.Bio" class="text-danger"></span>
+
+            <label asp-for="Input.ProfileImage" class="mt-3">Upload New Profile Icon</label>
+            <label for="avatarUpload" class="custom-file-label" onclick="startRuneAnimationAndPlayClock()">
+                <i class="fa-solid fa-scroll me-1"></i> Choose Your Artifact
+            </label>
+            <input id="avatarUpload" asp-for="Input.ProfileImage" type="file" class="hidden-file" accept="image/*" />
+            <span asp-validation-for="Input.ProfileImage" class="text-danger"></span>
+
+            <input type="hidden" asp-for="Input.CoverUrl" id="selectedCoverUrl" />
+            <input type="hidden" asp-for="Input.CurrentImagePath" />
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn magic-btn">
+                    <img src="~/images/icons/tied-scroll.png"
+                         alt="Scroll Icon"
+                         class="icon-fantasy" />
+                    Update Profile
+                </button>
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="button" class="btn btn-warning" onclick="openCoverModal()">
+                    <img src="~/images/icons/cover.png"
+                         alt="Cover Icon"
+                         class="icon-fantasy" />
+                    Choose Cover
+                </button>
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="button" class="btn btn-outline-warning" onclick="openPasswordModal()">
+                    <img src="~/images/icons/secret-book.png"
+                         alt="Password Icon"
+                         class="icon-fantasy" />
+                    Change Password
+                </button>
+            </div>
+        </form>
+
+        <h3 class="text-warning mb-3" style="font-family: 'Cinzel Decorative', serif; text-shadow: 0 0 6px crimson;">
+             Your Characters
+        </h3>
+        <hr style="border-top: 2px dashed crimson; width: 200px; margin-bottom: 1rem;" />
+
+        @foreach (var c in Model.UserCharacters)
+        {
+            <div class="col-12 mb-3">
+                <div class="card bounty-card p-2">
+                    <!-- Clickable Character Name -->
+                    <div class="character-toggle" onclick="toggleSheet('@c.Id')">
+                        <i class="fa-solid fa-scroll me-2"></i> @c.Name
+                    </div>
+
+                    <!-- Expandable Character Sheet -->
+                    <div id="sheet-@c.Id" class="character-sheet" style="display: none;">
+                        <hr />
+                        <p><strong>Class:</strong> @c.Class @(!string.IsNullOrEmpty(c.Subclass) ? $"({c.Subclass})" : "")</p>
+                        <p><strong>Race:</strong> @c.Race @(!string.IsNullOrEmpty(c.Subrace) ? $"({c.Subrace})" : "")</p>
+                        <p><strong>Level:</strong> @c.Level</p>
+                        <p><strong>Background:</strong> @c.Background</p>
+                        <div class="text-center my-2">
+                            <img src="@c.ImageUrl" class="img-fluid rounded" style="max-height: 220px;" alt="@c.Name portrait" />
+                        </div>
+                        <div class="row text-center">
+                            <div class="col"><strong>STR:</strong><br />@c.Strength</div>
+                            <div class="col"><strong>DEX:</strong><br />@c.Dexterity</div>
+                            <div class="col"><strong>CON:</strong><br />@c.Constitution</div>
+                            <div class="col"><strong>INT:</strong><br />@c.Intelligence</div>
+                            <div class="col"><strong>WIS:</strong><br />@c.Wisdom</div>
+                            <div class="col"><strong>CHA:</strong><br />@c.Charisma</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // --- Avatar Preview Functionality ---
+        const avatarInput = document.getElementById("avatarUpload");
+        const avatarWrapper = document.getElementById("avatarWrapper");
+        const modal = document.getElementById("avatarModal");
+        const modalImg = document.getElementById("modalAvatarImage");
+        const fileLabel = document.querySelector('.custom-file-label');
+
+        avatarInput.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    avatarWrapper.innerHTML = "";
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.alt = "New Avatar";
+                    img.classList.add("clickable-avatar", "avatar-image");
+                    img.id = "avatarPreview"; // reference for modal preview
+                    img.onclick = openAvatarModal;
+                    avatarWrapper.appendChild(img);
+                    modalImg.src = e.target.result; // update preview in modal
+                };
+                reader.readAsDataURL(this.files[0]);
+                const fileName = this.files[0]?.name || "Using Chronomancy Rewrite What You Once Were";
+                fileLabel.innerHTML = `<i class="fa-solid fa-scroll me-1"></i> ${fileName}`;
+                // Stop dynamic runes and clocktick audio once an image is selected.
+                stopRuneAnimation();
+                const clockTick = document.getElementById("clockTickSound");
+                clockTick.pause();
+                clockTick.currentTime = 0;
+            }
+        });
+
+        function openAvatarModal() {
+            const preview = document.getElementById("avatarPreview");
+            if (preview) {
+                modalImg.src = preview.src;
+            }
+            document.getElementById("avatarModal").style.display = "block";
+            // Do not start runes here.
+        }
+                function closeAvatarModal(event) {
+                    // Only close if background was clicked, not the image
+                    if (event && event.target.id === "modalAvatarImage") return;
+
+                    document.getElementById("avatarModal").style.display = "none";
+                    stopRuneAnimation();
+
+                    const clockTick = document.getElementById("clockTickSound");
+                    clockTick.pause();
+                    clockTick.currentTime = 0;
+                }
+
+
+        // --- Password Modal Functions ---
+        function openPasswordModal() {
+            const passwordModal = document.getElementById("passwordModal");
+            passwordModal.style.display = "block";
+
+            // Play magic sound
+            const sound = document.getElementById("magicSound");
+            sound.currentTime = 0;
+            sound.play().catch(e => console.warn("Magic sound failed to play:", e));
+
+            // Also play clock tick sound on loop
+            const clockTick = document.getElementById("clockTickSound");
+            clockTick.currentTime = 0;
+            clockTick.play().catch(e => console.warn("Clock tick failed to play:", e));
+
+            // Start dynamic rune animation
+            startRuneAnimation();
+        }
+
+        function closePasswordModal() {
+            const passwordModal = document.getElementById("passwordModal");
+            if (passwordModal) {
+                passwordModal.style.display = "none";
+            }
+            stopRuneAnimation();
+            // Stop clock tick audio when password modal is manually exited.
+            const clockTick = document.getElementById("clockTickSound");
+            clockTick.pause();
+            clockTick.currentTime = 0;
+        }
+
+        // --- Cover Modal Functions ---
+        function openCoverModal() {
+            document.getElementById("coverModal").classList.add("active");
+        }
+        function closeCoverModal() {
+            document.getElementById("coverModal").classList.remove("active");
+        }
+              function selectCover(imagePath) {
+            // Set background
+            document.body.style.background = `linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(92, 0, 0, 0.7)), url('${imagePath}') no-repeat center center fixed`;
+            document.body.style.backgroundSize = "cover";
+
+            // ✅ Set the hidden input value so it posts with the form
+            const hiddenCoverInput = document.getElementById("selectedCoverUrl");
+            if (hiddenCoverInput) {
+                hiddenCoverInput.value = imagePath;
+            }
+
+            // Close modal
+            closeCoverModal();
+        }
+
+        function saveUserCoverChoice(imagePath) {
+            fetch('/Profile?handler=SaveCoverChoice', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ coverUrl: imagePath })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to save cover choice.");
+                }
+                return response.json();
+            })
+            .then(data => console.log("Cover saved:", data))
+            .catch(err => console.error(err));
+        }
+
+        // --- Dynamic Runes Effect ---
+        let runeInterval;
+        function startRuneAnimation() {
+            // Spawn two runes every 300 ms for increased density.
+            runeInterval = setInterval(() => {
+                spawnRune();
+                spawnRune();
+            }, 300);
+        }
+        function spawnRune() {
+            const runes = ["ᚠ", "ᛞ", "ᛃ", "ᚨ", "ᚱ", "ᚾ"];
+            const colors = ["#4B0082", "#191970", "silver", "gold"];
+            const runeElement = document.createElement("div");
+            runeElement.classList.add("rune");
+            const randomRune = runes[Math.floor(Math.random() * runes.length)];
+            runeElement.textContent = randomRune;
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            runeElement.style.color = randomColor;
+            runeElement.style.left = Math.floor(Math.random() * 95) + "%";
+            document.getElementById("runeContainer").appendChild(runeElement);
+            setTimeout(() => {
+                if (runeElement.parentNode) {
+                    runeElement.parentNode.removeChild(runeElement);
+                }
+            }, 5500);
+        }
+        function stopRuneAnimation() {
+            clearInterval(runeInterval);
+            document.getElementById("runeContainer").innerHTML = "";
+        }
+        function startRuneAnimationAndPlayClock() {
+            startRuneAnimation();
+            const clockTick = document.getElementById("clockTickSound");
+            clockTick.currentTime = 0;
+            clockTick.play().catch(e => console.warn("Clocktick failed to play:", e));
+        }
+
+        function updateCharCount(textarea) {
+       const count = textarea.value.length;
+        const max = textarea.maxLength;
+         document.getElementById("bioCharCount").textContent = `${count} / ${max} characters used`;
+                }
+
+      document.addEventListener("DOMContentLoaded", function () {
+          const bioTextarea = document.querySelector("textarea[asp-for='Input.Bio']");
+              if (bioTextarea) {
+         updateCharCount(bioTextarea);
+             }
+           });
+                 function updateCharCount(textarea) {
+                    const count = textarea.value.length;
+                    const max = textarea.maxLength;
+                    const counter = document.getElementById("bioCharCount");
+
+                    counter.textContent = `${count} / ${max} characters used`;
+
+                    // Reset any previous colors
+                    counter.style.color = "";
+
+                    // Apply color logic
+                    if (count >= 200) {
+                        counter.style.color = "crimson";
+                    } else if (count >= 190) {
+                        counter.style.color = "orange";
+                    } else if (count >= 150) {
+                        counter.style.color = "gold";
+                    } else {
+                        counter.style.color = "lightgreen";
+                    }
+                }
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    const bioTextarea = document.querySelector("textarea[asp-for='Input.Bio']");
+                    if (bioTextarea) {
+                        updateCharCount(bioTextarea);
+                    }
+                });
+                            function toggleSheet(id) {
+                    const sheet = document.getElementById(`sheet-${id}`);
+                    if (sheet) {
+                        const isVisible = sheet.style.display === 'block';
+                        sheet.style.display = isVisible ? 'none' : 'block';
+                    }
+                }
+
+                             document.addEventListener('DOMContentLoaded', function () {
+                    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+                    dropdownElementList.map(function (dropdownToggleEl) {
+                        new bootstrap.Dropdown(dropdownToggleEl);
+                    });
+                });
+    </script>
+
+    <!-- Audio Elements -->
+    <audio id="magicSound" src="/sounds/magic-sound-effect.mp3" preload="auto"></audio>
+    <audio id="clockTickSound" src="/sounds/clocktick.mp3" preload="auto" loop></audio>
+}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+

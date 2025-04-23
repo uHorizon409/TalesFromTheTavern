@@ -1,0 +1,918 @@
+﻿@inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using DnDWebpage.Models
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "D20 Encounter Game";
+
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var currentUser = await UserManager.FindByIdAsync(userId);
+
+    // Load from database: Use uploaded avatar if available
+    ViewBag.NavAvatar = !string.IsNullOrEmpty(currentUser?.ProfileImagePath)
+        ? currentUser.ProfileImagePath
+        : "/images/icons/user.png"; // Default fallback
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D20 Encounter Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="view-page">
+    <!-- 👈 Added class for CSS targeting -->
+    <!-- 🎲 D20 Encounter Game -->
+    <div class="container mt-5 text-center" id="battle-game">
+        <!-- 🏠 Home Screen -->
+        <div id="homeScreen" class="game-home-screen">
+            <h1 class="home-title">Inferno of The Crimson Wyrm</h1>
+            <div class="bounty-notice">
+                <p>
+                    By Order of the Council of Emberfall
+                </p>
+                <p>
+                    A ferocious Red Dragon, known as the <strong>Crimson Wyrm</strong>, has descended from the volcanic peaks.
+                    The beast lays waste to our lands, burning fields and homes, sowing terror among our people.
+                </p>
+                <p>
+                    A bounty of <strong>1,000 Gold Pieces</strong> shall be awarded to the brave soul who slays the monster and restores peace to our town.
+                </p>
+                <p>
+                    Will you rise, adventurer, and accept this perilous quest?
+                </p>
+            </div>
+            <button id="enterCoverBtn" class="btn dnd-btn home-start-btn">Accept The Bounty</button>
+        </div>
+
+
+        <!-- COVER SCREEN -->
+        <div id="coverScreen" class="cover-screen" style="display: none;">
+            <img src="/images/dndgamecover.jpg" alt="Game Cover" class="cover-img mb-4">
+            <h1 class="cover-title">Inferno of the Crimson Wyrm</h1>
+            <p class="intro-text" style="
+        font-family: 'Cinzel', serif;
+        font-size: 1rem;
+        color: #ffcc66;
+        text-shadow: 1px 1px 3px #000;
+        max-width: 500px;
+        margin: 10px auto 20px auto;
+    ">
+                Brave adventurer, the townsfolk of Emberfall need you. Take up your arms and face the Red Dragon terrorizing the land. Fame and gold await, should you survive the flames.
+            </p>
+            <button id="startBtn" class="btn start-btn">Begin the Hunt</button>
+        </div>
+
+
+        <!-- 🧙 Class Select -->
+        <div id="classSelect" class="cover-screen" style="display: none;">
+            <h2 class="select-title">Choose Your Class</h2>
+            <div class="class-options">
+                <div id="paladinSelect" class="class-card">
+                    <img src="/images/knight.png" alt="Paladin" class="class-img">
+                    <div class="class-label">Paladin</div>
+                </div>
+                <div id="wizardSelect" class="class-card">
+                    <img src="/images/wizard.png" alt="Wizard" class="class-img">
+                    <div class="class-label">Wizard</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🧱 Main Game -->
+        <div id="encounterGame" style="display:none;">
+            <h2 class="book-title blood-font red-header">D20 Encounter</h2>
+            <p class="book-subtext blood-font">Roll the die and survive each encounter. Defeat them all... or fall!</p>
+
+            <!-- 🎲 Dice -->
+            <div class="mb-3">
+                <img id="dice-image" src="/images/d20.png" alt="D20 Dice" class="dice-image">
+            </div>
+
+            <!-- 🛒 Manual Shop Button -->
+            <div class="mt-3">
+                <button id="openShopBtn" class="btn dnd-btn">Visit Shop</button>
+            </div>
+
+
+          <!-- 🧍 Sprites Side-by-Side -->
+<div class="sprite-container mb-3">
+    <div class="player-container">
+        <img id="player-sprite" src="/images/knight.png" alt="Player" class="sprite">
+        <div class="hp-bar bg-danger mt-2">
+            <div id="player-hp" class="bg-success text-white text-center" style="width: 100%;">20 HP</div>
+        </div>
+    </div>
+    <div class="enemy-container">
+        <img id="monster-sprite" src="/images/goblin.gif" alt="Monster" class="sprite">
+        <div class="hp-bar bg-danger mt-2">
+            <div id="monster-hp" class="bg-success text-white text-center" style="width: 100%;">HP</div>
+        </div>
+    </div>
+</div>
+
+            <!-- 🏪 Shop Screen -->
+            <div id="shopScreen" class="branch-screen" style="display: none;">
+                <div class="shop-overlay">
+                    <p class="branch-description">I've got wares... if you’ve got gold.</p>
+                    <p id="gold-display" class="branch-description">💰 Gold: 0</p>
+
+                    <!-- 🛡️ 1-Time Shield (10g) -->
+                    <div class="tooltip-wrapper">
+                        <button class="branch-btn" onclick="buyShield()">1-Time Shield (10 gold)</button>
+                        <span class="tooltip-text">"Blocks the next hit. Great for dodging dragons... or taxes."</span>
+                    </div>
+
+                    <!-- ❤️ +2 Max HP (15g) -->
+                    <div class="tooltip-wrapper">
+                        <button class="branch-btn" onclick="buyMaxHP()">+2 Max HP (15 gold)</button>
+                        <span class="tooltip-text">"Two extra HP! Because who needs ribs anyway?"</span>
+                    </div>
+
+                    <!-- 🪖 +1 AC (20g) -->
+                    <div class="tooltip-wrapper">
+                        <button class="branch-btn" onclick="buyAC()">+1 AC (20 gold)</button>
+                        <span class="tooltip-text">"Add some armor! Now 15% less likely to get stabbed."</span>
+                    </div>
+
+                    <!-- 🚪 Exit -->
+                    <div class="tooltip-wrapper">
+                        <button class="branch-btn" onclick="closeShop()">Leave Shop</button>
+                        <span class="tooltip-text">"Come again! Or don’t. I already got your gold."</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 💉 Blood Effect -->
+            <div id="blood-effect" class="blood-effect"></div>
+
+            <!-- 🧾 Game Log -->
+            <div id="game-log" class="text-start text-white p-3 mb-3 rounded bg-battle-log">
+                <p>Click "Roll D20" to begin your adventure...</p>
+            </div>
+
+<!-- 🎮 Triangle Button Layout -->
+<div class="button-triangle mb-3">
+    <!-- Top: Roll -->
+    <button id="rollBtn" class="btn dnd-btn">Roll D20</button>
+
+    <!-- Bottom: Heal + Ability Side-by-Side -->
+    <div class="triangle-bottom">
+        <div class="heal-container text-center">
+            <button id="healBtn" class="btn dnd-btn heal-btn">Heal</button>
+            <img src="/images/potion.png" alt="Healing Potion" style="width:25px;" />
+            <span id="heal-uses" class="text-warning ms-1">(3)</span>
+        </div>
+
+        <button id="classAbilityBtn" class="btn dnd-btn ability-btn" style="display:none;">Smite!</button>
+    </div>
+</div>
+
+
+
+
+            <!-- 🔊 Audio -->
+            <audio id="sword-hit" src="/sounds/sword-hit.mp3" preload="auto"></audio>
+            <audio id="sword-miss" src="/sounds/sword-miss.mp3" preload="auto"></audio>
+            <audio id="potion-sound" src="/sounds/drink-potion.mp3" preload="auto"></audio>
+        </div>
+
+        <!-- ☠️ You Died Overlay -->
+        <div id="youDiedOverlay" class="you-died-overlay" style="display: none;">
+            <div>YOU DIED</div>
+            <button id="resetBtn" class="btn dnd-btn restart-btn">Try Again, Brave Soul</button>
+            <button id="homeBtn" class="btn dnd-btn home-btn">Return Home</button>
+        </div>
+
+
+        <!-- 🏆 Victory Overlay -->
+        <div id="victoryOverlay" class="victory-overlay" style="display: none;">
+            <div class="victory-content text-center">
+                <div class="victory-text mb-4">Against all odds, you have slain all the beasts.</div>
+                <img src="/images/tavern.gif" alt="Tavern" class="tavern-image mb-4" />
+                <button id="retireBtn" class="btn dnd-btn retire-btn">Retire to the Tavern</button>
+            </div>
+        </div>
+
+        <!-- 🌲 Branching Forest Screen -->
+        <div id="branchScreen" class="branch-screen" style="display:none;">
+            <div class="branch-content">
+                <h2 class="branch-title">You come to a forest clearing...</h2>
+                <p class="branch-description">
+                    <span class="left-text">Down the trodden path you hear a sinister cackling in the distance...</span>
+                    <span class="right-text">Down the cragged path you see a mysterious glint beneath the trees.</span>
+                </p>
+                <div class="branch-buttons">
+                    <button id="pathToGnoll" class="branch-btn">Follow the Trodden Path</button>
+                    <button id="pathToSword" class="branch-btn">Take the Cragged Path</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🗡️ Sword Reward Screen -->
+        <div id="swordRewardScreen" class="branch-screen" style="display:none;">
+            <div class="branch-content">
+                <h2 class="branch-title">You discover a gleaming enchanted sword!</h2>
+                <img src="/images/new-sword.png" alt="Enchanted Sword" class="sword-icon" style="margin: 20px auto; display: block;" />
+                <p class="branch-description">The sword glows with magic. +2 bonus damage added to your strikes!</p>
+                <button id="stashSwordBtn" class="branch-btn">Stash the Sword and Continue</button>
+            </div>
+        </div>
+
+        <!-- Background Track -->
+        <audio id="background-track" src="/sounds/fantasy-song.mp3" preload="auto" loop></audio>
+
+        <!-- Mute/Unmute Button -->
+        <button id="muteBtn" class="mute-btn">Mute</button>
+    </div>
+
+
+    <!-- ✅ JavaScript -->
+    <script>
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // -------------------------------
+            // DOM ELEMENTS
+            // -------------------------------
+            const homeScreen = document.getElementById("homeScreen");
+            const coverScreen = document.getElementById("coverScreen");
+            const classSelect = document.getElementById("classSelect");
+            const encounterGame = document.getElementById("encounterGame");
+            const enterCoverBtn = document.getElementById("enterCoverBtn");
+            const startBtn = document.getElementById("startBtn");
+            const paladinSelect = document.getElementById("paladinSelect");
+            const wizardSelect = document.getElementById("wizardSelect");
+            const playerSprite = document.getElementById("player-sprite");
+            const classAbilityBtn = document.getElementById("classAbilityBtn");
+
+            const log = document.getElementById("game-log");
+            const rollBtn = document.getElementById("rollBtn");
+            const resetBtn = document.getElementById("resetBtn");
+            const diceImage = document.getElementById("dice-image");
+            const youDiedOverlay = document.getElementById("youDiedOverlay");
+            const victoryOverlay = document.getElementById("victoryOverlay");
+
+            const playerHpBar = document.getElementById("player-hp");
+            const monsterHpBar = document.getElementById("monster-hp");
+            const monsterSprite = document.getElementById("monster-sprite");
+            const bloodEffect = document.getElementById("blood-effect");
+
+            const hitSound = document.getElementById("sword-hit");
+            const missSound = document.getElementById("sword-miss");
+            const potionSound = document.getElementById("potion-sound");
+
+            const healBtn = document.getElementById("healBtn");
+            const healText = document.getElementById("heal-uses");
+            const tooltip = document.getElementById("heal-tooltip");
+
+            const backgroundTrack = document.getElementById("background-track");
+            const muteBtn = document.getElementById("muteBtn");
+
+            let playerAC = 10;
+            let playerMaxHP = 20;
+            let shieldAvailable = false;
+            let shopAfterVictory = false;
+        window.buyMaxHP = buyMaxHP;
+        window.buyShield = buyShield;
+        window.buyAC = buyAC;
+        window.closeShop = closeShop;
+
+
+
+                 // Don't play on load. Wait for user interaction.
+        backgroundTrack.volume = 0.2;
+        backgroundTrack.muted = true; // Still mute by default, just in case
+
+        muteBtn.addEventListener("click", () => {
+            if (backgroundTrack.paused) {
+                backgroundTrack.play();
+            }
+            backgroundTrack.muted = !backgroundTrack.muted;
+            muteBtn.textContent = backgroundTrack.muted ? "Unmute" : "Mute";
+        });
+
+
+            // -------------------------------
+            // INITIAL SETTINGS
+            // -------------------------------
+            hitSound.volume = 0.3;
+            missSound.volume = 0.2;
+
+            // -------------------------------
+            // GAME VARIABLES
+            // -------------------------------
+            let selectedClass = "";
+            let playerHP, level, monster, monsterMaxHP, gold, healCount;
+            let swordBonus = 0;  // Global variable for sword bonus
+            const monsters = [
+                { name: "Goblin Grunt", hp: 10, ac: 11, damage: 4, sprite: "/images/goblin.gif" },
+                { name: "Deranged Gnoll", hp: 20, ac: 13, damage: 6, sprite: "/images/gnoll.png" },
+                { name: "Shadow Dragon", hp: 30, ac: 15, damage: 8, sprite: "/images/dragon.png" }
+            ];
+
+                    const openShopBtn = document.getElementById("openShopBtn");
+
+        openShopBtn.addEventListener("click", () => {
+            shopAfterVictory = false;
+          document.getElementById("shopScreen").style.display = "flex";
+        });
+
+            // -------------------------------
+            // BRANCHING EVENT LISTENERS
+            // -------------------------------
+            const pathToGnoll = document.getElementById("pathToGnoll");
+            const pathToSword = document.getElementById("pathToSword");
+            const stashSwordBtn = document.getElementById("stashSwordBtn");
+            const branchScreen = document.getElementById("branchScreen");
+            const swordRewardScreen = document.getElementById("swordRewardScreen");
+
+            pathToGnoll.addEventListener("click", () => {
+                swordBonus = 0;
+                branchScreen.style.display = "none";
+                level = 2;
+                monster = { ...monsters[level - 1] };
+                monsterMaxHP = monster.hp;
+                monsterSprite.src = monster.sprite;
+                logMessage(`You head deeper into the woods and face a ${monster.name}.`);
+                updateBars();
+            });
+
+            pathToSword.addEventListener("click", () => {
+                swordBonus = 2;
+                branchScreen.style.display = "none";
+                swordRewardScreen.style.display = "flex";
+            });
+
+            stashSwordBtn.addEventListener("click", () => {
+                swordRewardScreen.style.display = "none";
+                level = 3; // Go to dragon
+                monster = { ...monsters[level - 1] };
+                monsterMaxHP = monster.hp;
+                monsterSprite.src = monster.sprite;
+                logMessage("With your new enchanted sword, you are ready to face the mighty dragon!");
+                updateBars();
+            });
+
+            // -------------------------------
+            // RETIRE BUTTON EVENT LISTENER
+            // -------------------------------
+            const retireBtn = document.getElementById("retireBtn");
+
+            retireBtn.addEventListener("click", () => {
+                // (Optional: These variables are declared but not used further. If they're needed elsewhere, ensure they're declared in the right scope.)
+                const branchForest = document.getElementById("branchForest");
+                const branchSword = document.getElementById("branchSword");
+
+                // Hide the victory overlay and game screen
+                victoryOverlay.style.display = "none";
+                encounterGame.style.display = "none";
+
+                // Show the home screen
+                homeScreen.style.display = "flex";
+
+                // Reset the game state
+                resetGame();
+            });
+
+            // -------------------------------
+            // UTILITY FUNCTIONS
+            // -------------------------------
+            function logMessage(msg) {
+                log.innerHTML += `<div>> ${msg}</div>`;
+                log.scrollTop = log.scrollHeight;
+            }
+
+            function floatText(target, text, type = "") {
+                const float = document.createElement("div");
+                float.className = `floating-damage ${type}`;
+                float.textContent = text;
+                target.parentNode.appendChild(float);
+                setTimeout(() => float.remove(), 1000);
+            }
+
+            function rollD20() {
+                return Math.floor(Math.random() * 20) + 1;
+            }
+
+
+
+            function updateBars() {
+                playerHpBar.style.width = `${Math.max(0, (playerHP / 20) * 100)}%`;
+                playerHpBar.innerText = `${Math.max(0, playerHP)} HP`;
+                monsterHpBar.style.width = `${Math.max(0, (monster.hp / monsterMaxHP) * 100)}%`;
+                monsterHpBar.innerText = `${Math.max(0, monster.hp)} HP`;
+            }
+
+            function nextMonster() {
+                level++; // Increment level
+                if (level > monsters.length) {
+                    rollBtn.disabled = true;
+                    victoryOverlay.style.display = "flex";
+                    return;
+                }
+                monster = { ...monsters[level - 1] };
+                monsterMaxHP = monster.hp;
+                monsterSprite.src = monster.sprite;
+                log.innerHTML = `<div>> A new foe appears: ${monster.name} (HP: ${monster.hp}, AC: ${monster.ac})</div>`;
+                updateBars();
+            }
+                       // Shop logic functions
+         function buyMaxHP() {
+          if (gold >= 15) {
+            gold -= 15;
+            playerMaxHP += 2;
+            playerHP += 2;
+            playerHP = Math.min(playerHP, playerMaxHP);
+            logMessage("You feel sturdier. Max HP increased by 2 and you healed 2 HP!");
+            updateBars();
+            updateGoldDisplay();
+          } else {
+            logMessage("Not enough gold for Max HP upgrade.");
+          }
+        }
+
+        function buyShield() {
+          if (gold >= 10) {
+            gold -= 10;
+            shieldAvailable = true;
+            logMessage("You equip a magical shield. It will block the next hit!");
+            updateGoldDisplay();
+          } else {
+            logMessage("Not enough gold for shield.");
+          }
+        }
+
+        function buyAC() {
+          if (gold >= 20) {
+            gold -= 20;
+            playerAC += 2;
+            logMessage("You reinforce your armor. AC increased!");
+            updateGoldDisplay();
+          } else {
+            logMessage("Not enough gold for armor upgrade.");
+          }
+        }
+
+
+                function closeShop() {
+          document.getElementById("shopScreen").style.display = "none";
+
+          if (shopAfterVictory) {
+            nextMonster();
+          } else {
+            logMessage("You leave the shop and return to battle...");
+            updateBars();
+          }
+                }
+
+
+            function resetGame() {
+            playerMaxHP = 20;
+            playerHP = 20;
+            level = 1;
+            gold = 0;
+            healCount = 3;
+            swordBonus = 0;
+            playerAC = 10;
+            shieldAvailable = false;
+
+            healText.innerText = `(3 potions left)`;
+            monster = { ...monsters[0] };
+            monsterMaxHP = monster.hp;
+            monsterSprite.src = monster.sprite;
+            rollBtn.disabled = false;
+            youDiedOverlay.style.display = "none";
+            victoryOverlay.style.display = "none";
+            log.innerHTML = `<div>> You encounter a ${monster.name} (HP: ${monster.hp}, AC: ${monster.ac})</div>`;
+            updateBars();
+
+            // Reset the class ability button based on the selected class
+            if (selectedClass === "wizard") {
+                classAbilityBtn.textContent = "Firebolt!";
+                classAbilityBtn.style.display = "inline-block";
+            } else if (selectedClass === "paladin") {
+                classAbilityBtn.textContent = "Smite!";
+                classAbilityBtn.style.display = "inline-block";
+            }
+
+            classAbilityBtn.disabled = false; // Ensure it's usable again
+        }
+
+                // updateBars() should now reflect current/max HP correctly:
+        function updateBars() {
+          playerHpBar.style.width = `${Math.max(0, (playerHP / playerMaxHP) * 100)}%`;
+          playerHpBar.innerText = `${Math.max(0, playerHP)} HP`;
+          monsterHpBar.style.width = `${Math.max(0, (monster.hp / monsterMaxHP) * 100)}%`;
+          monsterHpBar.innerText = `${Math.max(0, monster.hp)} HP`;
+        }
+
+            // -------------------------------
+            // OTHER EVENT LISTENERS
+            // -------------------------------
+            enterCoverBtn.addEventListener("click", () => {
+                homeScreen.style.display = "none";
+                classSelect.style.display = "flex";
+                backgroundTrack.volume = 0.5;
+                backgroundTrack.play().catch(err => console.log("Audio play prevented:", err));
+            });
+
+            const homeBtn = document.getElementById("homeBtn");
+            homeBtn.addEventListener("click", () => {
+                youDiedOverlay.style.display = "none";
+                encounterGame.style.display = "none";
+                homeScreen.style.display = "flex";
+            });
+
+            startBtn.addEventListener("click", () => {
+                coverScreen.style.display = "none";
+                classSelect.style.display = "flex";
+            });
+
+            paladinSelect.addEventListener("click", () => {
+                selectedClass = "paladin";
+                playerSprite.src = "/images/knight.png";
+                classAbilityBtn.textContent = "Smite!";
+                classAbilityBtn.style.display = "inline-block";
+                classSelect.style.display = "none";
+                encounterGame.style.display = "block";
+                resetGame();
+            });
+
+            wizardSelect.addEventListener("click", () => {
+                selectedClass = "wizard";
+                playerSprite.src = "/images/wizard.png";
+                classAbilityBtn.textContent = "Firebolt!";
+                classAbilityBtn.style.display = "inline-block";
+                classSelect.style.display = "none";
+                encounterGame.style.display = "block";
+                resetGame();
+            });
+
+            rollBtn.addEventListener("click", () => {
+                diceImage.style.transform = "rotate(" + (Math.random() * 360) + "deg)";
+                log.innerHTML = "";
+
+                const playerRoll = rollD20();
+                const monsterRoll = rollD20();
+                logMessage(`You roll: ${playerRoll}`);
+
+                if (playerRoll === 20) {
+                    const dmg = 10;
+                    monster.hp -= dmg;
+                    logMessage(`Critical Hit! You hit ${monster.name} for ${dmg} damage!`);
+                    floatText(monsterSprite, `CRIT ${dmg}!`, "crit");
+                    monsterSprite.classList.add("shake");
+                    setTimeout(() => monsterSprite.classList.remove("shake"), 300);
+                    playHitSound();
+                } else if (playerRoll === 1) {
+                    logMessage(`Critical Miss! You slip and miss badly!`);
+                    floatText(playerSprite, "MISS!", "miss");
+                    playMissSound();
+                } else if (playerRoll >= monster.ac) {
+                    const dmg = Math.floor(Math.random() * 6) + 1 + swordBonus;
+                    monster.hp -= dmg;
+                    logMessage(`You hit ${monster.name} for ${dmg} damage!`);
+                    floatText(monsterSprite, `-${dmg}`, "");
+                    monsterSprite.classList.add("shake");
+                    setTimeout(() => monsterSprite.classList.remove("shake"), 300);
+                    playHitSound();
+                } else {
+                    logMessage("You missed!");
+                    floatText(playerSprite, "MISS", "miss");
+                    playMissSound();
+                }
+
+                if (monster.hp <= 0) {
+                    const reward = Math.floor(Math.random() * 10) + 5;
+                    gold += reward;
+                    updateGoldDisplay(); // ✅ Show updated gold immediately in the shop
+                    logMessage(`${monster.name} defeated! You earn ${reward} gold.`);
+                    console.log("Current level:", level);
+                    if (level === 1) {
+                        document.getElementById("branchScreen").style.display = "flex";
+                        return;
+                    } else {
+                        nextMonster();
+                        return;
+                    }
+                }
+
+        if (monster.isBurned) {
+            logMessage(`${monster.name} takes ${monster.burnDamage} burn damage!`);
+            monster.hp -= monster.burnDamage;
+            floatText(monsterSprite, `Burn: -${monster.burnDamage}`, "");
+
+            // Reset the burn effect so it only applies once
+            monster.isBurned = false;
+            updateBars();
+
+            // If the burn damage defeats the monster, handle that here
+            if (monster.hp <= 0) {
+                const reward = Math.floor(Math.random() * 10) + 5;
+                gold += reward;
+                updateGoldDisplay(); // ✅ Show updated gold immediately in the shop
+                logMessage(`${monster.name} defeated! You earn ${reward} gold.`);
+
+                // Continue to next encounter or branch
+                if (level === 1) {
+                    document.getElementById("branchScreen").style.display = "flex";
+                } else {
+                    nextMonster();
+                }
+                return;
+            }
+        }
+
+
+                logMessage(`${monster.name} rolls: ${monsterRoll}`);
+                  if (monsterRoll >= 12) {
+          if (shieldAvailable) {
+            logMessage("Your shield absorbs the blow!");
+            shieldAvailable = false;
+          } else {
+            const dmg = monster.damage;
+            playerHP -= dmg;
+            logMessage(`${monster.name} hits you for ${dmg} damage!`);
+            floatText(playerSprite, `-${dmg}`, "");
+            playerSprite.classList.add("shake");
+            setTimeout(() => playerSprite.classList.remove("shake"), 300);
+            bloodEffect.style.display = "block";
+            setTimeout(() => bloodEffect.style.display = "none", 300);
+            playHitSound();
+          }
+        } else {
+          logMessage(`${monster.name} missed!`);
+          floatText(monsterSprite, "MISS", "miss");
+          playMissSound();
+        }
+
+                updateBars();
+
+                if (playerHP <= 0) {
+                    const saveRoll = rollD20();
+                    logMessage("You fall... but fate gives you a chance...");
+                    logMessage(`You roll a death saving throw: ${saveRoll}`);
+                    if (saveRoll >= 10) {
+                        playerHP = 1;
+                        logMessage("Against all odds, you rise again at 1 HP!");
+                        updateBars();
+                        floatText(playerSprite, "SAVED!", "crit");
+                    } else {
+                        logMessage("Your soul drifts beyond the veil...");
+                        rollBtn.disabled = true;
+                        youDiedOverlay.style.display = "flex";
+                    }
+                }
+            });
+
+            healBtn.addEventListener("click", () => {
+                if (healCount <= 0) {
+                    logMessage("You're out of healing potions!");
+                    return;
+                }
+                const healAmount = Math.floor(Math.random() * 6) + 1;
+                playerHP = Math.min(20, playerHP + healAmount);
+                logMessage(`You drink a healing potion and recover ${healAmount} HP!`);
+                floatText(playerSprite, `+${healAmount}`, "heal");
+                playerSprite.classList.add("sparkle");
+                setTimeout(() => playerSprite.classList.remove("sparkle"), 1000);
+                potionSound.currentTime = 0;
+                potionSound.play();
+                healCount--;
+                healText.innerText = `(${healCount} potion${healCount !== 1 ? "s" : ""} left)`;
+                updateBars();
+            });
+
+            healBtn.addEventListener("mouseover", () => {
+                tooltip.style.display = "block";
+            });
+
+            healBtn.addEventListener("mouseout", () => {
+                tooltip.style.display = "none";
+            });
+
+            resetBtn.addEventListener("click", resetGame);
+
+                    function updateGoldDisplay() {
+          const goldDisplay = document.getElementById("gold-display");
+          if (goldDisplay) {
+            goldDisplay.textContent = `💰 Gold: ${gold}`;
+          }
+        }
+
+
+
+          // 1) Projectile animation function (wizard & monster shake)
+          function showSpecialEffect(playerEl, monsterEl, imageUrl, soundUrl) {
+          const playerRect = playerEl.getBoundingClientRect();
+          const monsterRect = monsterEl.getBoundingClientRect();
+
+          const startX = playerRect.left + playerRect.width / 2;
+          const startY = playerRect.top  + playerRect.height / 2;
+          const endX   = monsterRect.left + monsterRect.width / 2;
+          const endY   = monsterRect.top  + monsterRect.height / 2;
+
+          const proj = document.createElement("img");
+          proj.src = imageUrl;
+          proj.style.position = "fixed";
+          proj.style.left     = `${startX}px`;
+          proj.style.top      = `${startY}px`;
+          proj.style.width    = `${playerRect.height * 0.5}px`;
+          proj.style.height   = "auto";
+          proj.style.pointerEvents = "none";
+          proj.style.zIndex   = "10000";
+          document.body.appendChild(proj);
+
+          new Audio(soundUrl).play();
+
+          proj.animate([
+            { transform: "translate(0, 0)" },
+            { transform: `translate(${endX - startX}px, ${endY - startY}px)` }
+          ], {
+            duration: 2000,
+            easing: "ease-in-out"
+          }).onfinish = () => {
+            proj.remove();
+            // Shake the monster on impact
+            monsterEl.classList.add("shake");
+            setTimeout(() => monsterEl.classList.remove("shake"), 300);
+          };
+        }
+
+        // 2) Ability button handler
+        classAbilityBtn.addEventListener("click", () => {
+          // Prevent spamming
+          classAbilityBtn.disabled = true;
+          classAbilityBtn.style.display = "none";
+
+          let abilityDamage;
+          const playerEl  = document.getElementById("player-sprite");
+          const monsterEl = document.getElementById("monster-sprite");
+
+          if (selectedClass === "wizard") {
+            // Wizard Firebolt
+            abilityDamage = Math.floor(Math.random() * 12) + 1;
+            logMessage(`Firebolt! You hit ${monster.name} for ${abilityDamage} damage!`);
+            floatText(monsterSprite, `Firebolt: -${abilityDamage}`, "crit");
+            if (Math.random() < 0.4) {
+              logMessage("The flames scorch your foe! They will take extra burn damage next turn.");
+              monster.isBurned = true;
+              monster.burnDamage = 3;
+            }
+            showSpecialEffect(playerEl, monsterEl, "/images/fireball.png", "/sounds/fireball-hit.mp3");
+
+          }
+        else if (selectedClass === "paladin") { 
+  abilityDamage = 10;
+  logMessage(`Smite! You strike ${monster.name} for ${abilityDamage} damage!`);
+  floatText(monsterSprite, `Smite: -${abilityDamage}`, "crit");
+
+  const container = document.getElementById("battle-game");
+  if (getComputedStyle(container).position === "static") {
+    container.style.position = "relative";
+  }
+
+  const origParent = playerEl.parentNode;
+  const origNext = playerEl.nextSibling;
+
+  const pRect = playerEl.getBoundingClientRect();
+  const mRect = monsterEl.getBoundingClientRect();
+  const cRect = container.getBoundingClientRect();
+  const relStartX = pRect.left - cRect.left;
+  const relStartY = pRect.top - cRect.top;
+  const dx = (mRect.left + mRect.width / 2) - (pRect.left + pRect.width / 2);
+  const dy = (mRect.top + mRect.height / 2) - (pRect.top + pRect.height / 2);
+
+  // Inject keyframes dynamically
+  const styleTag = document.createElement("style");
+  styleTag.innerHTML = `
+        @@keyframes lungeForwardDynamic {
+      to { transform: translate(${dx}px, ${dy}px); }
+    }
+        @@keyframes lungeBack {
+      to { transform: translate(0, 0); }
+    }
+  `;
+  document.head.appendChild(styleTag);
+
+  const origStyles = {
+    position: playerEl.style.position,
+    left: playerEl.style.left,
+    top: playerEl.style.top,
+    zIndex: playerEl.style.zIndex,
+    transform: playerEl.style.transform,
+    width: playerEl.style.width,
+    height: playerEl.style.height
+  };
+
+  // Mobile fix: lock size during absolute positioning
+  if (window.innerWidth <= 768) {
+    playerEl.style.width = `${pRect.width}px`;
+    playerEl.style.height = `${pRect.height}px`;
+  }
+
+  Object.assign(playerEl.style, {
+    position: "absolute",
+    left: `${relStartX}px`,
+    top: `${relStartY}px`,
+    zIndex: "10002",
+    transform: "translate(0,0)"
+  });
+  container.appendChild(playerEl);
+
+  playerEl.style.animation = "lungeForwardDynamic 1s ease-in-out forwards";
+
+  setTimeout(() => {
+    const smiteImg = document.createElement("img");
+    smiteImg.src = "/images/divine-smite.png";
+    Object.assign(smiteImg.style, {
+      position: "absolute",
+      left: `${mRect.left - cRect.left + mRect.width * 0.1}px`,
+      top: `${mRect.top - cRect.top + mRect.height * 0.1}px`,
+      width: `${mRect.width * 0.8}px`,
+      zIndex: "10003"
+    });
+    container.appendChild(smiteImg);
+
+    new Audio("/sounds/divine-smite-hit.mp3").play();
+    monsterEl.classList.add("shake");
+    setTimeout(() => monsterEl.classList.remove("shake"), 300);
+    setTimeout(() => smiteImg.remove(), 800);
+
+    playerEl.style.animation = "lungeBack 1s ease-in-out forwards";
+  }, 1000);
+
+  setTimeout(() => {
+    document.head.removeChild(styleTag);
+    playerEl.style.animation = "";
+    Object.assign(playerEl.style, origStyles);
+
+    // ✅ Fully clear mobile lock after lunge
+    if (window.innerWidth <= 768) {
+        playerEl.style.width = "";
+        playerEl.style.height = "";
+        playerEl.style.maxWidth = "";
+        playerEl.style.maxHeight = "";
+        playerEl.style.flex = "";
+    }
+
+    // Restore sprite to its original parent
+    if (origNext) origParent.insertBefore(playerEl, origNext);
+    else origParent.appendChild(playerEl);
+
+    // Show branch if required
+    if (monster.hp <= 0 && level === 1) {
+        document.getElementById("branchScreen").style.display = "flex";
+    }
+}, 3000);
+}
+
+
+
+
+                // Apply damage & update
+        monster.hp -= abilityDamage;
+        updateBars();
+        playHitSound();
+
+                if (monster.hp <= 0) {
+          const reward = Math.floor(Math.random() * 10) + 5;
+          gold += reward;
+          updateGoldDisplay(); // ✅ Show updated gold immediately in the shop
+          logMessage(`${monster.name} defeated! You earn ${reward} gold.`);
+
+          if (level > 1) {
+            nextMonster();
+          }
+          return;
+        }
+
+        });
+
+            // -------------------------------
+            // SOUND FUNCTIONS
+            // -------------------------------
+            function playHitSound() {
+                hitSound.currentTime = 0;
+                hitSound.play();
+            }
+
+            function playMissSound() {
+                missSound.currentTime = 0;
+                missSound.play();
+            }
+
+            // -------------------------------
+            // INITIALIZE GAME
+            // -------------------------------
+            resetGame();
+        });
+
+    </script>
+</body>
+</html>

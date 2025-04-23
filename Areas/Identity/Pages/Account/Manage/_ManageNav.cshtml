@@ -1,0 +1,19 @@
+﻿@using DnDWebpage.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    // We aren’t using external logins for our site, so we can remove that logic.
+}
+<ul class="nav nav-pills flex-column">
+    <!-- Custom Profile Page -->
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Profile">
+            <i class="fa-solid fa-dragon me-1"></i> Profile
+        </a>
+    </li>
+    <!-- Change Password -->
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">
+            <i class="fa-solid fa-lock me-1"></i> Change Password
+        </a>
+    </li>
+</ul>

@@ -1,0 +1,226 @@
+﻿@{
+    Layout = null;
+}
+
+@model DnDWebpage.Models.CharacterViewModel
+@{
+    ViewData["Title"] = "Delete Character";
+    var returnUrl = Context.Request.Query["returnUrl"].ToString();
+}
+
+<!-- 🔥 Background Styling & Soul Animation -->
+<style>
+    body {
+        background: url('/images/shadowfell.jpg') no-repeat center center fixed;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+        font-family: 'Cinzel Decorative', serif;
+    }
+
+    .delete-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 2rem;
+    }
+
+    .delete-container {
+        position: relative; /* for soul positioning */
+        background-color: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(6px);
+        border: 2px solid crimson;
+        box-shadow: 0 0 40px crimson;
+        color: #f0e6d2;
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        padding: 2rem;
+        border-radius: 12px;
+        overflow: hidden; /* hide offscreen souls */
+    }
+
+    /* soul orb */
+    /* soul orb now much larger */
+    .soul {
+        position: absolute;
+        left: 50%;
+        bottom: 8%;
+        width: 60px;
+        height: 60px;
+        background: radial-gradient( circle at center, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70% );
+        border-radius: 50%;
+        filter: blur(6px);
+        opacity: 0;
+        animation: soulRise 4s ease-out infinite;
+    }
+        /* stagger three wisps */
+        .soul:nth-of-type(1) {
+            animation-delay: 0s;
+        }
+
+        .soul:nth-of-type(2) {
+            animation-delay: 1.2s;
+        }
+
+        .soul:nth-of-type(3) {
+            animation-delay: 2.4s;
+        }
+
+    @@keyframes soulRise {
+        0%
+
+    {
+        transform: translateX(-50%) translateY(0) scale(0.4);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(-180px) scale(1.2);
+        opacity: 0;
+    }
+
+    }
+
+    .delete-container h2 {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+    }
+
+        .delete-container h2 svg {
+            background: none;
+            vertical-align: middle;
+        }
+
+    .btn-danger, .btn-outline-light {
+        font-family: 'Cinzel Decorative', serif;
+        padding: 0.6rem 1.4rem;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    .btn-danger {
+        background-color: #5a0000;
+        border: 2px solid crimson;
+        color: #fff;
+    }
+
+        .btn-danger:hover {
+            background-color: #7a0000;
+            border-color: #ff4444;
+            box-shadow: 0 0 10px red;
+        }
+
+    .btn-outline-light {
+        border: 2px solid #ccc;
+        color: #eee;
+    }
+
+        .btn-outline-light:hover {
+            background-color: #333;
+            color: white;
+            box-shadow: 0 0 8px #aaa;
+        }
+
+    .toast-sorrow {
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #2c0000;
+        color: #f8e1e1;
+        padding: 1.5rem 2rem;
+        border: 2px solid crimson;
+        border-radius: 10px;
+        font-family: 'Cinzel Decorative', serif;
+        font-size: 1.2rem;
+        box-shadow: 0 0 20px crimson;
+        z-index: 9999;
+        display: none;
+        text-align: center;
+    }
+</style>
+
+<div class="delete-wrapper">
+    <div class="delete-container">
+        <!-- three drifting soul wisps -->
+        <div class="soul"></div>
+        <div class="soul"></div>
+        <div class="soul"></div>
+
+        <h2 class="text-warning">
+            <i data-lucide="skull"></i>
+            Wander Into The ShadowFell?
+        </h2>
+
+        <p class="mt-3">
+            Are you sure you wish to send
+            <strong class="text-danger">@Model.Name</strong>
+            to the Shadow Realm?<br />
+            This action is
+            <span class="text-danger fw-bold">permanent</span>.
+        </p>
+
+        <form asp-action="Delete" method="post" id="deleteForm">
+            <input type="hidden" asp-for="Id" />
+            @if (!string.IsNullOrEmpty(returnUrl))
+            {
+                <input type="hidden" name="returnUrl" value="@returnUrl" />
+            }
+
+            <div class="mt-4 d-flex justify-content-center gap-3">
+                <button type="button"
+                        class="btn btn-danger d-flex align-items-center gap-2"
+                        id="confirmDelete">
+                    <i data-lucide="trash-2"></i>
+                    @Model.Name wanders off…
+                </button>
+                <a href="@(!string.IsNullOrEmpty(returnUrl)
+                              ? returnUrl
+                              : Url.Action("Index","Character"))"
+                   class="btn btn-outline-light d-flex align-items-center gap-2">
+                    <i data-lucide="corner-up-left"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="sorrowToast" class="toast-sorrow">
+    <i data-lucide="alert-triangle" class="me-2"></i>
+    A Sorrowsworn has claimed <strong>@Model.Name</strong> in the Shadowfell…
+</div>
+
+<audio id="sorrowAudio"
+       src="/sounds/shadowfell-laugh.mp3"
+       preload="auto"></audio>
+
+<audio id="bgMusic" src="/sounds/shadowfell-eery.mp3" autoplay loop hidden></audio>
+
+<script>
+    const form  = document.getElementById('deleteForm');
+    const btn   = document.getElementById('confirmDelete');
+    const toast = document.getElementById('sorrowToast');
+    const audio = document.getElementById('sorrowAudio');
+
+    btn.addEventListener('click', () => {
+      toast.style.display = 'block';
+      audio.currentTime = 0;
+      audio.play().catch(_=>{});
+
+      // hide after 4s
+      setTimeout(() => toast.style.display = 'none', 4000);
+      // submit after 3.1s
+      setTimeout(() => form.submit(), 3100);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+</script>

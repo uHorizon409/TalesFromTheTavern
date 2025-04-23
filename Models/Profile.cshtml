@@ -1,0 +1,141 @@
+﻿@page
+@model DnDWebpage.Areas.Identity.Pages.Account.Manage.ProfileModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Your Heroic Profile";
+}
+
+<!-- Fantasy Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=MedievalSharp&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: url('/images/dndlogin.jpeg') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Cinzel Decorative', serif;
+    }
+
+    .profile-wrapper {
+        max-width: 600px;
+        margin: 5rem auto;
+        background-color: rgba(0, 0, 0, 0.88);
+        padding: 2.5rem;
+        border: 4px double #a52a2a;
+        border-radius: 1rem;
+        box-shadow: 0 0 60px rgba(255, 0, 0, 0.5), inset 0 0 40px rgba(255, 255, 0, 0.2);
+        color: #f9f3e9;
+        text-shadow: 1px 1px 2px #000;
+    }
+
+        .profile-wrapper h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-family: 'MedievalSharp', cursive;
+            color: gold;
+            text-shadow: 0 0 6px #a52a2a;
+        }
+
+        .profile-wrapper label {
+            font-family: 'MedievalSharp', cursive;
+            font-weight: bold;
+            color: #ff4b4b;
+            margin-top: 1rem;
+        }
+
+        .profile-wrapper input,
+        .profile-wrapper textarea {
+            background-color: #1c1c1c;
+            border: 2px solid crimson;
+            color: #f9f3e9;
+            border-radius: 6px;
+            width: 100%;
+            padding: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+            .profile-wrapper input::placeholder,
+            .profile-wrapper textarea::placeholder {
+                color: #aaa;
+                font-style: italic;
+            }
+
+        .profile-wrapper img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid gold;
+            box-shadow: 0 0 12px gold;
+            margin-top: 1rem;
+        }
+
+        .profile-wrapper button {
+            background-color: #8b0000;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            padding: 0.6rem 1.5rem;
+            border-radius: 10px;
+            transition: 0.3s ease-in-out;
+            font-family: 'Cinzel Decorative', serif;
+        }
+
+            .profile-wrapper button:hover {
+                background-color: gold;
+                color: #000;
+                box-shadow: 0 0 12px #ffd700;
+            }
+
+        .profile-wrapper .text-danger {
+            font-size: 0.9rem;
+            color: #ff9999;
+        }
+
+        .profile-wrapper .current-icon-label {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #f2d98d;
+            font-family: 'MedievalSharp', cursive;
+        }
+</style>
+
+<div class="profile-wrapper">
+    <h2><i class="fa-solid fa-dragon me-2"></i>Your Heroic Profile</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        <label asp-for="Input.Username">Username</label>
+        <input asp-for="Input.Username" placeholder="Your heroic name..." />
+        <span asp-validation-for="Input.Username" class="text-danger"></span>
+
+        <label asp-for="Input.Bio">Bio</label>
+        <textarea asp-for="Input.Bio" placeholder="Tell your tale (max 50 words)" rows="3"></textarea>
+        <span asp-validation-for="Input.Bio" class="text-danger"></span>
+
+        <label asp-for="Input.ProfileImage">Profile Icon</label>
+        <input asp-for="Input.ProfileImage" type="file" />
+        <span asp-validation-for="Input.ProfileImage" class="text-danger"></span>
+
+        @if (!string.IsNullOrEmpty(Model.Input.CurrentImagePath))
+        {
+            <div class="text-center">
+                <label class="current-icon-label">Current Icon:</label>
+                <br />
+                <img src="@Model.Input.CurrentImagePath" alt="Profile Icon" />
+            </div>
+        }
+
+        <div class="text-center mt-4">
+            <button type="submit">
+                <i class="fa-solid fa-scroll me-2"></i>Update Profile
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,405 @@
+﻿@{
+    ViewData["Title"] = "Campaign Journal";
+    Layout = null;
+    bool isAdmin = User.IsInRole("Admin");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=MedievalSharp&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            font-family: 'Uncial Antiqua', cursive;
+            background: url('/images/Questbook-shelf.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .cover-screen, .leather-book {
+            width: 600px;
+            height: 900px;
+            margin: 2rem auto;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+        }
+
+        .cover-screen {
+            background: url('/images/Questbook-close.jpg') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .cover-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2.5rem;
+            color: #f5deb3;
+            text-shadow: 2px 2px 4px #000;
+            margin-bottom: 2rem;
+        }
+
+        .enter-btn {
+            font-family: 'Cinzel Decorative', serif;
+            background: #5e3a1e;
+            color: #f5deb3;
+            border: 2px solid #cfa62b;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+            font-size: 1.5rem;
+        }
+
+        .leather-book {
+            background: url('/images/Questbook-cover.jpg') no-repeat center center;
+            background-size: cover;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .parchment-page {
+            background: url('/images/Questbook-paper.jpg') repeat;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            padding: 1rem;
+            border: 4px double #8B4513;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+
+            .parchment-page.active {
+                display: block;
+            }
+
+        .page-nav {
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+
+            .page-nav button {
+                font-family: 'Cinzel Decorative', serif;
+                background: #5e3a1e;
+                color: #f5deb3;
+                border: 2px solid #cfa62b;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                margin: 0 0.5rem;
+                cursor: pointer;
+            }
+
+        #pageIndicator {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1rem;
+            color: #f8f1dc;
+        }
+
+        .admin-edit-panel {
+            background: rgba(20,20,20,0.8);
+            padding: 1rem;
+            border: 1px solid #cfa62b;
+            border-radius: 10px;
+            width: 600px;
+            margin: 1rem auto;
+            color: #f5deb3;
+            font-family: 'Cinzel Decorative', serif;
+            display: none;
+        }
+
+            .admin-edit-panel label, .admin-edit-panel input, .admin-edit-panel select, .admin-edit-panel textarea {
+                display: block;
+                width: 100%;
+                margin-bottom: 0.5rem;
+                font-family: inherit;
+            }
+
+            .admin-edit-panel input, .admin-edit-panel textarea, .admin-edit-panel select {
+                padding: 0.5rem;
+                border-radius: 5px;
+                border: none;
+            }
+
+            .admin-edit-panel button {
+                margin-top: 0.5rem;
+                background: #5e3a1e;
+                color: #f5deb3;
+                border: 2px solid #cfa62b;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                cursor: pointer;
+            }
+
+        .draggable-item {
+            position: absolute;
+            cursor: move;
+        }
+
+            .draggable-item:hover::after {
+                content: "✖";
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                background: #8B0000;
+                color: white;
+                font-size: 12px;
+                padding: 2px 5px;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+    </style>
+</head>
+<body>
+
+    <div id="coverScreen" class="cover-screen">
+        <h1 class="cover-title">The Adventurer's Chronicle</h1>
+        <button class="enter-btn" onclick="startAdventure()">Open the Chronicle</button>
+    </div>
+
+    <div id="leatherBook" class="leather-book"></div>
+
+    <div class="page-nav">
+        <button onclick="prevPage()">Previous</button>
+        <span id="pageIndicator">Page 1 of <span id="totalPages"></span></span>
+        <button onclick="nextPage()">Next</button>
+    </div>
+
+    @if (isAdmin)
+    {
+        <div class="admin-edit-panel" id="adminPanel">
+            <h3>Edit This Page</h3>
+            <label>Header:</label>
+            <input type="text" id="adminHeader" />
+            <label>Text:</label>
+            <textarea id="adminText" rows="3"></textarea>
+            <label>Font:</label>
+            <select id="adminFont">
+                <option value="'Uncial Antiqua', cursive">Uncial Antiqua</option>
+                <option value="'Cinzel Decorative', serif">Cinzel Decorative</option>
+                <option value="'MedievalSharp', cursive">MedievalSharp</option>
+            </select>
+            <label>Font Size:</label>
+            <input type="number" id="adminFontSize" value="16" />
+            <label>Text Color:</label>
+            <input type="color" id="adminColor" />
+            <label>Insert Image:</label>
+            <input type="file" id="adminImage" accept="image/*" />
+            <label>Image Width (%):</label>
+            <input type="range" id="adminImageWidth" min="10" max="100" value="50" />
+            <button onclick="addToPage()">Add to Page</button>
+            <div class="page-actions" style="text-align:center; margin: 1rem;">
+                <div style="margin-top: 0.5rem;">
+                    <button onclick="insertTag('<ul><li>Item 1</li><li>Item 2</li></ul>')">➤ Bullet List</button>
+                    <button onclick="insertTag('<strong>Your Bold Text</strong>')">B</button>
+                    <button onclick="insertTag('<em>Your Italic Text</em>')"><em>I</em></button>
+                    <button onclick="insertTag('<u>Your Underline</u>')"><u>U</u></button>
+                    <button onclick="insertTag('&nbsp;&nbsp;&nbsp;')">Indent</button>
+                </div>
+
+                <button onclick="savePage()" style="background:#3e8e41;color:#fff;border:none;padding:0.5rem 1rem;border-radius:6px;margin:0 0.5rem;cursor:pointer;">Save Page</button>
+                <button onclick="deleteCurrentPage()" style="background:#8b0000;color:#fff;border:none;padding:0.5rem 1rem;border-radius:6px;margin:0 0.5rem;cursor:pointer;">Delete Page</button>
+            </div>
+        </div>
+
+
+    }
+
+    <script>
+        const leatherBook = document.getElementById('leatherBook');
+        const pageNav = document.querySelector('.page-nav');
+        const adminPanel = document.getElementById('adminPanel');
+        let currentPage = 1;
+        const pageContent = [""];
+
+        function startAdventure() {
+            document.getElementById('coverScreen').style.display = 'none';
+            leatherBook.style.display = 'flex';
+            pageNav.style.display = 'block';
+            if (adminPanel) adminPanel.style.display = 'block';
+            generatePages();
+            showPage(currentPage);
+        }
+
+        function generatePages() {
+            leatherBook.innerHTML = '';
+            pageContent.forEach((_, index) => {
+                const page = document.createElement('div');
+                page.classList.add('parchment-page');
+                if (index === 0) page.classList.add('active');
+                leatherBook.appendChild(page);
+            });
+            updatePageCount();
+        }
+
+        function showPage(pageNum) {
+            const pages = document.querySelectorAll('.parchment-page');
+            pages.forEach((page, index) => {
+                page.classList.toggle('active', index + 1 === pageNum);
+            });
+            document.getElementById('pageIndicator').innerText = `Page ${pageNum} of ${pageContent.length}`;
+        }
+
+        function nextPage() {
+            if (currentPage < pageContent.length) { currentPage++; showPage(currentPage); }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) { currentPage--; showPage(currentPage); }
+        }
+
+        function updatePageCount() {
+            document.getElementById('totalPages').innerText = pageContent.length;
+        }
+
+        function addToPage() {
+            const header = document.getElementById('adminHeader').value.trim();
+            const text = document.getElementById('adminText').value.trim();
+            const font = document.getElementById('adminFont').value;
+            const fontSize = document.getElementById('adminFontSize').value + 'px';
+            const color = document.getElementById('adminColor').value;
+            const imageInput = document.getElementById('adminImage').files[0];
+            const imageWidth = document.getElementById('adminImageWidth').value;
+            const currentPageEl = document.querySelector('.parchment-page.active');
+
+            if (header) {
+                const h2 = createElement('h2', header, font, fontSize, color);
+                currentPageEl.appendChild(h2);
+            }
+
+            if (text) {
+                const p = createElement('p', text, font, fontSize, color);
+                currentPageEl.appendChild(p);
+            }
+
+            if (imageInput) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = imageWidth + '%';
+                    setupDraggable(img);
+                    currentPageEl.appendChild(img);
+                };
+                reader.readAsDataURL(imageInput);
+            }
+
+            clearInputs();
+
+            if (currentPage === document.querySelectorAll('.parchment-page').length) {
+                pageContent.push("");
+                generatePages();
+                showPage(currentPage);
+            }
+        }
+
+        function clearInputs() {
+            document.getElementById('adminHeader').value = '';
+            document.getElementById('adminText').value = '';
+            document.getElementById('adminImage').value = '';
+        }
+
+        function createElement(tag, content, font, size, color) {
+            const el = document.createElement(tag);
+            el.innerText = content;
+            el.style.fontFamily = font;
+            el.style.fontSize = size;
+            el.style.color = color;
+            setupDraggable(el);
+            return el;
+        }
+
+         function setupDraggable(el) {
+            el.classList.add('draggable-item');
+            el.style.left = '10px';
+            el.style.top = '10px';
+
+            let isDragging = false;
+            let shiftX, shiftY;
+
+            el.addEventListener('mousedown', function (e) {
+                const parchment = el.closest('.parchment-page');
+                shiftX = e.clientX - el.getBoundingClientRect().left;
+                shiftY = e.clientY - el.getBoundingClientRect().top;
+
+                isDragging = true;
+
+                function moveAt(pageX, pageY) {
+                    const bounds = parchment.getBoundingClientRect();
+                    let x = pageX - bounds.left - shiftX;
+                    let y = pageY - bounds.top - shiftY;
+
+                    x = Math.max(0, Math.min(x, parchment.clientWidth - el.clientWidth));
+                    y = Math.max(0, Math.min(y, parchment.clientHeight - el.clientHeight));
+
+                    el.style.left = x + 'px';
+                    el.style.top = y + 'px';
+                }
+
+                function onMouseMove(e) {
+                    if (isDragging) moveAt(e.clientX, e.clientY);
+                }
+
+                document.addEventListener('mousemove', onMouseMove);
+
+                function onKeyPress(event) {
+                    if (event.key === 'Enter') {
+                        isDragging = false;
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('keydown', onKeyPress);
+                    }
+                    if (event.key === 'd' || event.key === 'D') {
+                        el.remove();
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('keydown', onKeyPress);
+                    }
+                }
+
+                document.addEventListener('keydown', onKeyPress);
+
+                el.onmouseup = () => {
+                    // Ignore mouseup, we control with Enter
+                };
+            });
+
+            el.ondragstart = () => false;
+        }
+
+                function savePage() {
+            alert("Save functionality will be added later!");
+        }
+
+        function deleteCurrentPage() {
+            const pages = document.querySelectorAll('.parchment-page');
+            if (pages.length > 1) {
+                pages[currentPage - 1].remove();
+                pageContent.splice(currentPage - 1, 1);
+                currentPage = Math.max(1, currentPage - 1);
+                showPage(currentPage);
+                updatePageCount();
+            } else {
+                alert("You must keep at least one page.");
+            }
+        }
+                function insertTag(tag) {
+            const textarea = document.getElementById('adminText');
+            textarea.value += tag;
+        }
+
+
+    </script>
+
+</body>
+</html>

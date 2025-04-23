@@ -1,0 +1,259 @@
+﻿@page
+@model DnDWebpage.Areas.Identity.Pages.Account.RetireModel
+@{
+    ViewData["Title"] = "Retire at the Tavern";
+    ViewData["IsRetirePage"] = true; // hide top avatar from layout
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="retro-retire-screen">
+    <!-- 🖼️ Tavern Background (fullscreen) -->
+    <div class="retire-art-full"></div>
+    <!-- ❄️ Snow Canvas -->
+    <canvas id="snowCanvas"></canvas>
+
+
+    <!-- 📜 Dialogue Box + Buttons -->
+    <div class="retire-overlay-content">
+        <div class="retire-dialogue-box">
+            <p class="retire-text">
+                “It’s getting cold...<br>
+                a drink wouldn’t hurt.<br>
+                Head to the tavern?”
+            </p>
+
+            <!-- 🧭 Choice Buttons -->
+            <!-- 🧭 Choice Buttons -->
+            <form method="post" class="retire-buttons d-flex justify-content-center gap-4" onsubmit="playDrinkSound()">
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="lucide" data-lucide="goblet" style="margin-right: 6px;"></i> Rest a while
+                </button>
+                <a asp-page="/Index" class="btn btn-outline-light px-4">
+                    <i class="lucide" data-lucide="swords" style="margin-right: 6px;"></i> Keep trudging along
+                </a>
+            </form>
+
+            <!-- 🎭 Character Portrait under buttons -->
+            <img src="@Url.Content(Model.ProfileImageUrl)" alt="Character Portrait" class="retire-avatar-bottom" />
+        </div>
+    </div>
+</div>
+
+<!-- 🔊 Audio: Tavern music & laughter loop -->
+<audio id="tavernMusic" src="/sounds/retire-to-tavern-music.mp3" autoplay loop preload="auto"></audio>
+<audio id="tavernLaughter" src="/sounds/retire-to-tavern-laughter.mp3" autoplay loop preload="auto"></audio>
+<audio id="drinkSound" src="/sounds/drink-pour.mp3" preload="auto"></audio>
+
+<script>
+    // Volume levels for ambiance
+    const music = document.getElementById("tavernMusic");
+    const laughter = document.getElementById("tavernLaughter");
+    music.volume = 0.2;
+    laughter.volume = 0.1;
+
+    // Play when "Rest a while" is clicked
+    function playDrinkSound() {
+        document.getElementById("drinkSound").play();
+    }
+
+    const snowCanvas = document.getElementById("snowCanvas");
+    const ctx = snowCanvas.getContext("2d");
+
+    snowCanvas.width = window.innerWidth;
+    snowCanvas.height = window.innerHeight;
+
+    let snowflakes = [];
+
+    function createSnowflakes() {
+        for (let i = 0; i < 100; i++) {
+            snowflakes.push({
+                x: Math.random() * snowCanvas.width,
+                y: Math.random() * snowCanvas.height,
+                radius: Math.random() * 3 + 1,
+                speed: Math.random() * 1 + 0.5
+            });
+        }
+    }
+
+    function drawSnowflakes() {
+        ctx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        snowflakes.forEach(flake => {
+            ctx.moveTo(flake.x, flake.y);
+            ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        });
+        ctx.fill();
+        moveSnowflakes();
+    }
+
+    function moveSnowflakes() {
+        snowflakes.forEach(flake => {
+            flake.y += flake.speed;
+            if (flake.y > snowCanvas.height) {
+                flake.y = 0;
+                flake.x = Math.random() * snowCanvas.width;
+            }
+        });
+    }
+
+    function updateSnow() {
+        drawSnowflakes();
+        requestAnimationFrame(updateSnow);
+    }
+
+    createSnowflakes();
+    updateSnow();
+
+    window.addEventListener("resize", () => {
+        snowCanvas.width = window.innerWidth;
+        snowCanvas.height = window.innerHeight;
+    });
+    const music = document.getElementById("tavernMusic");
+    const laughter = document.getElementById("tavernLaughter");
+    const drinkSound = document.getElementById("drinkSound");
+
+    music.volume = 0.2;
+    laughter.volume = 0.1;
+
+    lucide.createIcons();
+
+    function handleRetire() {
+        drinkSound.play();
+        setTimeout(() => {
+            document.querySelector("form").submit(); // manually submit after sound
+        }, 2000); // wait 1 second for the drink sound
+        return false; // cancel default submit for now
+    }
+
+
+    // Lucide icon rendering
+    lucide.createIcons();
+</script>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: none;
+    }
+
+    html {
+        overflow-x: hidden;
+    }
+
+
+    .retro-retire-screen {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        font-family: 'Cinzel Decorative', serif;
+    }
+
+    .retire-art-full {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('/images/retire-to-tavern.jpg');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.85;
+        z-index: 1;
+        animation: fadeInTavern 2s ease-in;
+    }
+
+    .retire-overlay-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end; /* Push it lower */
+        height: 100%;
+        padding-bottom: 6rem; /* Increase if needed */
+        color: #f0e6d2;
+    }
+
+
+    .retire-dialogue-box {
+        background-color: rgba(26, 12, 5, 0.88);
+        border: 3px double #cba96b;
+        padding: 1.5rem; /* was 2rem */
+        max-width: 420px; /* was 600px */
+        text-align: center;
+        box-shadow: 0 0 25px black;
+    }
+
+
+    .retire-text {
+        font-size: 1.2rem; /* was 1.4rem */
+        line-height: 1.8rem; /* was 2rem */
+        margin-bottom: 1.5rem;
+    }
+
+
+    .retire-buttons .btn {
+        font-size: 1rem;
+        margin: 0 0.5rem;
+        padding: 0.6rem 1.4rem;
+        font-family: 'MedievalSharp', cursive;
+        border-radius: 8px;
+    }
+
+    .btn-primary {
+        background-color: #654321;
+        border-color: #cba96b;
+    }
+
+        .btn-primary:hover {
+            background-color: #7a5230;
+            color: #fff;
+        }
+
+    .btn-outline-light {
+        color: #f0e6d2;
+        border-color: #cba96b;
+    }
+
+        .btn-outline-light:hover {
+            background-color: #cba96b;
+            color: #1a0c05;
+        }
+
+    .retire-avatar-bottom {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        border: 2px solid #cba96b;
+        object-fit: cover;
+        margin-top: 1.5rem;
+        box-shadow: 0 0 20px black;
+    }
+
+    @@keyframes fadeInTavern {
+        from
+
+    {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+    }
+
+    #snowCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+</style>
