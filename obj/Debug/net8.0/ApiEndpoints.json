@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "ContainingType": "BookPagesController",
+    "Method": "GetAllPages",
+    "RelativePath": "api/BookPages",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BookPagesController",
+    "Method": "SavePage",
+    "RelativePath": "api/BookPages",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "BookPage",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BookPagesController",
+    "Method": "DeletePage",
+    "RelativePath": "api/BookPages/{pageNumber}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

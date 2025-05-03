@@ -396,12 +396,24 @@
             margin-bottom: 0.3rem;
         }
 
+        @@media (max-width: 576px) {
+            #portraitPreview
+
+        {
+            display: block !important;
+            max-width: 100%;
+            height: auto;
+        }
+
+        }
     </style>
 </head>
 <body>
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <form asp-action="Create" method="post" id="characterForm" onsubmit="return populateForm()">
+    <form asp-action="Create" method="post" enctype="multipart/form-data" id="characterForm" onsubmit="return populateForm()">
+
+
 
 
 
@@ -426,9 +438,36 @@
             <small id="wordCountNotice">Words remaining: 50</small>
             <span asp-validation-for="Background" class="text-danger"></span>
 
-            <label for="characterImageUrl">Portrait Image URL:</label>
-            <input type="url" id="characterImageUrl" name="ImageUrl" placeholder="http://example.com/portrait.png">
-            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            <!-- Portrait Image Section -->
+            <!-- Portrait Image Section -->
+            <label for="characterImageUrl">Portrait Image URL (optional):</label>
+            <input type="url"
+                   id="characterImageUrl"
+                   name="ImageUrl"
+                   placeholder="http://example.com/portrait.png"
+                   class="form-control mb-2" />
+
+            <label for="portraitUpload">Or Upload an Image:</label>
+            <input type="file"
+                   id="portraitUpload"
+                   name="ImageUpload"
+                   accept="image/*"
+                   class="form-control mb-2" />
+
+            <small class="form-text text-muted">
+                Only one will be used. Uploaded image overrides the URL.
+            </small>
+
+            <!-- NEW: preview container -->
+            <div class="text-center mt-3">
+                <img id="portraitPreview"
+                     src=""
+                     alt="Portrait Preview"
+                     class="img-fluid rounded"
+                     style="display:none; max-height:250px; width:auto;" />
+            </div>
+
+
         </div>
 
         <!-- Multi-Step Character Creator -->
@@ -1668,6 +1707,10 @@
 
             <!-- STEP 3: Ability Score Allocation -->
             <section id="step3" class="creator-step">
+                <a id="changeHalfElfLink" href="#" style="display: none;">
+                    Change Half-Elf Stat Bonuses
+                </a>
+
                 <h2>Roll for Your Ability Scores</h2>
                 <p>For each ability, click "Roll Dice." Four six-sided dice will roll. The lowest die (red) is dropped; the remaining three dice determine your final score. You may also manually enter a score.</p>
                 <!-- Audio for rolling sound -->
@@ -1685,6 +1728,7 @@
                             <div class="die-box" id="die-str-3">0</div>
                         </div>
                         <div class="sum-box" id="sum-str">Sum: 0</div>
+                        <div class="bonus-display" id="bonus-str"></div>
                         <div class="input-group">
                             <input type="number" id="input-str" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('str')">
                             <button type="button" onclick="rollDice('str')">Roll Dice</button>
@@ -1701,6 +1745,7 @@
                             <div class="die-box" id="die-dex-3">0</div>
                         </div>
                         <div class="sum-box" id="sum-dex">Sum: 0</div>
+                        <div class="bonus-display" id="bonus-dex"></div>
                         <div class="input-group">
                             <input type="number" id="input-dex" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('dex')">
                             <button type="button" onclick="rollDice('dex')">Roll Dice</button>
@@ -1717,6 +1762,7 @@
                             <div class="die-box" id="die-con-3">0</div>
                         </div>
                         <div class="sum-box" id="sum-con">Sum: 0</div>
+                        <div class="bonus-display" id="bonus-con"></div>
                         <div class="input-group">
                             <input type="number" id="input-con" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('con')">
                             <button type="button" onclick="rollDice('con')">Roll Dice</button>
@@ -1733,6 +1779,7 @@
                             <div class="die-box" id="die-int-3">0</div>
                         </div>
                         <div class="sum-box" id="sum-int">Sum: 0</div>
+                        <div class="bonus-display" id="bonus-int"></div>
                         <div class="input-group">
                             <input type="number" id="input-int" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('int')">
                             <button type="button" onclick="rollDice('int')">Roll Dice</button>
@@ -1749,6 +1796,7 @@
                             <div class="die-box" id="die-wis-3">0</div>
                         </div>
                         <div class="sum-box" id="sum-wis">Sum: 0</div>
+                        <div class="bonus-display" id="bonus-wis"></div>
                         <div class="input-group">
                             <input type="number" id="input-wis" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('wis')">
                             <button type="button" onclick="rollDice('wis')">Roll Dice</button>
@@ -1765,6 +1813,7 @@
                             <div class="die-box" id="die-cha-3">0</div>
                         </div>
                         <div class="sum-box" id="sum-cha">Sum: 0</div>
+                        <div class="bonus-display" id="bonus-cha"></div>
                         <div class="input-group">
                             <input type="number" id="input-cha" placeholder="Or type score" min="3" max="18" onchange="setScoreManually('cha')">
                             <button type="button" onclick="rollDice('cha')">Roll Dice</button>
@@ -1863,243 +1912,648 @@
         <input type="hidden" name="Intelligence" id="inputInt" />
         <input type="hidden" name="Wisdom" id="inputWis" />
         <input type="hidden" name="Charisma" id="inputCha" />
+        <input type="hidden" id="inputHP" name="HitPoints" />
+
     </form>
 
+    <div id="halfElfModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Half-Elf Ability Score Bonuses</h2>
+            <p>Select two different abilities to receive +1 bonuses:</p>
+            <div class="stat-options">
+                <label><input type="checkbox" value="STR"> Strength</label>
+                <label><input type="checkbox" value="DEX"> Dexterity</label>
+                <label><input type="checkbox" value="CON"> Constitution</label>
+                <label><input type="checkbox" value="INT"> Intelligence</label>
+                <label><input type="checkbox" value="WIS"> Wisdom</label>
+                <label><input type="checkbox" value="CHA" disabled> Charisma (+2 by default)</label>
+            </div>
+            <button id="halfElfConfirmBtn" type="button">Confirm</button>
+
+
+        </div>
+    </div>
+
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #fefae0;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            font-family: 'Cinzel Decorative', serif;
+        }
+
+        .stat-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .bonus-note {
+            color: #4caf50; /* or whatever highlight color you like */
+            font-weight: bold;
+            margin-left: 0.25em; /* a little breathing room */
+            font-size: 0.9em; /* slightly smaller, so it reads like a note */
+        }
+
+        .bonus-display {
+            color: #4caf50; /* highlight color */
+            font-weight: bold;
+            margin: 0.25rem 0;
+            font-size: 0.9em;
+        }
+
+        .subrace-display {
+            color: #2196F3;
+            font-weight: bold;
+            margin: 0.25rem 0;
+            font-size: 0.9em;
+        }
+
+        .subrace-note {
+            color: #2196F3;
+            font-weight: bold;
+            margin-left: 0.25em;
+            font-size: 0.9em;
+        }
+        /* Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        /* Content “Parchment” Card */
+        .modal-content {
+            background: url('/images/parchment-texture.jpg') #fff8e1;
+            background-size: cover;
+            border: 3px solid #6b4f1d;
+            border-radius: 8px;
+            padding: 1.5rem 2rem;
+            width: 90%;
+            max-width: 360px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            font-family: 'IM Fell English', serif;
+            color: #3b2e1a;
+            text-align: center;
+            position: relative;
+        }
+
+            /* Heading */
+            .modal-content h2 {
+                margin-top: 0;
+                font-size: 1.4rem;
+                text-shadow: 1px 1px 0 #fff;
+            }
+
+            /* Instruction Text */
+            .modal-content p {
+                margin-bottom: 1rem;
+                font-size: 1rem;
+            }
+
+        /* Checkbox Grid */
+        .stat-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+            .stat-options label {
+                display: flex;
+                align-items: center;
+                font-size: 0.95rem;
+            }
+
+            .stat-options input[type="checkbox"] {
+                margin-right: 0.5rem;
+                width: 1.1em;
+                height: 1.1em;
+                accent-color: #6b4f1d;
+            }
+
+                .stat-options input[type="checkbox"]:disabled + span,
+                .stat-options input[type="checkbox"]:disabled + label {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                }
+
+        /* Confirm Button */
+        #halfElfConfirmBtn {
+            background-color: #6b4f1d;
+            color: #f5e1a4;
+            border: 2px solid #3b2e1a;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+            #halfElfConfirmBtn:hover {
+                background-color: #8c6b29;
+            }
+
+        /* Hide/show via utility class */
+        .hidden {
+            display: none !important;
+        }
+
+
+    </style>
+
+
     <script>
-        let stats = { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 };
-        let currentStep = 1;
+        let selectedRace    = "";
+        let selectedSubrace = "";
+        let halfElfBonus    = [];
+        let stats           = { str:0, dex:0, con:0, int:0, wis:0, cha:0 };
 
-        function showStep(step) {
-            document.querySelectorAll('.creator-step').forEach(section => {
-                section.classList.remove('active');
-            });
-            const target = document.getElementById('step' + step);
-            target.classList.add('active');
-            currentStep = step;
-        }
+        document.addEventListener("DOMContentLoaded", () => {
+          const racialBonuses = {
+            human:      { STR:1, DEX:1, CON:1, INT:1, WIS:1, CHA:1 },
+            elf:        { DEX:2 },
+            dwarf:      { CON:2 },
+            halfling:   { DEX:2 },
+            gnome:      { INT:2 },
+            dragonborn: { STR:2, CHA:1 },
+            "half-elf": { CHA:2, FLEX:2 },
+            "half-orc": { STR:2, CON:1 },
+            tiefling:   { CHA:2, INT:1 },
+            dhampir:    { DEX:2, CON:1 }
+          };
 
-        function nextStep() {
-            if (currentStep === 1) {
-                const selectedRace = document.querySelector('input[name="race"]:checked');
-                if (!selectedRace) {
-                    alert('Please select a race.');
-                    return;
-                }
+          const subraceBonuses = {
+            "high-elf":       { INT:1 },
+            "wood-elf":       { WIS:1 },
+            "drow":           { CHA:1 },
+            "hill-dwarf":     { WIS:1 },
+            "mountain-dwarf": { STR:2 },
+            "forest-gnome":   { INT:1 },
+            "rock-gnome":     { CON:1 }
+          };
 
-                const raceValue = selectedRace.value;
-                const subraceContainer = document.getElementById('subrace-container');
-                const subraceOptions = document.querySelectorAll('.subrace-option');
-                subraceOptions.forEach(div => div.style.display = 'none');
+          const baseHPByClass = {
+            barbarian:12, fighter:10, paladin:10, ranger:10,
+            bard:8, cleric:8, druid:8, monk:8, rogue:8,
+            warlock:8, sorcerer:6, wizard:6
+          };
 
-                if (['elf', 'dwarf', 'gnome'].includes(raceValue)) {
-                    subraceContainer.style.display = 'block';
-                    let shown = false;
-                    subraceOptions.forEach(div => {
-                        if (div.getAttribute('data-parent') === raceValue) {
-                            div.style.display = 'flex';
-                            shown = true;
-                        }
-                    });
-                    const subraceSelected = document.querySelector('input[name="subrace"]:checked');
-                    if (!subraceSelected) {
-                        alert('Please select a subrace for your ' + raceValue + '.');
-                        return;
-                    }
-                } else {
-                    subraceContainer.style.display = 'none';
-                }
-            }
-
-            if (currentStep < 4) {
-                showStep(currentStep + 1);
-            }
-
-            updateSummary();
-        }
-
-        function prevStep() {
-            if (currentStep > 1) {
-                showStep(currentStep - 1);
-            }
-        }
-
-        function showSubclassOptions() {
-            const selectedClass = document.querySelector('input[name="class"]:checked')?.value;
-            if (!selectedClass) {
-                document.getElementById("subclass-container").style.display = "none";
-                return;
-            }
-
-            document.querySelectorAll('input[name="subclass"]').forEach(input => {
-                input.checked = false;
-            });
-
-            const level = parseInt(document.getElementById("characterLevel").value, 10) || 1;
-            const allGroups = document.querySelectorAll('#subclass-options .subclass-group');
-            allGroups.forEach(group => group.style.display = "none");
-
-            const groups = document.querySelectorAll(`#subclass-options .subclass-group[data-parent="${selectedClass}"]`);
-            let anyVisible = false;
-
-            groups.forEach(group => {
-                const requiredLevel = parseInt(group.getAttribute("data-required-level"), 10);
-                if (level >= requiredLevel) {
-                    group.style.display = "flex";
-                    anyVisible = true;
-                }
-            });
-
-            document.getElementById("subclass-container").style.display = anyVisible ? "block" : "none";
-        }
-
-        document.getElementById("characterLevel").addEventListener("change", showSubclassOptions);
-        document.querySelectorAll('input[name="class"]').forEach(input => {
-            input.addEventListener("change", showSubclassOptions);
-        });
-
+              // ── rollDice & manual set ──
         function rollDice(ability) {
-            const diceAudio = document.getElementById("diceSound");
-            if (diceAudio) {
-                diceAudio.currentTime = 0;
-                diceAudio.play().catch(error => console.error("Error playing sound:", error));
+          const diceAudio = document.getElementById("diceSound");
+          if (diceAudio) diceAudio.play().catch(console.error);
+
+          // grab button & disable it permanently
+          const btn = document.querySelector(`#ability-${ability} button`);
+          btn.disabled = true;
+
+          const boxes = Array.from(document.querySelectorAll(`#ability-${ability} .die-box`));
+          const intervals = boxes.map(b => {
+            b.classList.add("rolling");
+            return setInterval(() => b.textContent = Math.ceil(Math.random()*6), 80);
+          });
+
+          setTimeout(() => {
+            if (diceAudio) diceAudio.pause();
+            intervals.forEach(clearInterval);
+            boxes.forEach(b => b.classList.remove("rolling"));
+
+            // roll 4d6, drop lowest
+            const rolls = boxes.map(() => Math.ceil(Math.random()*6));
+            const minVal = Math.min(...rolls);
+            let sum = 0, dropped = false;
+            rolls.forEach((r,i) => {
+              boxes[i].textContent = r;
+              if (!dropped && r === minVal) {
+                boxes[i].classList.add("die-discard");
+                dropped = true;
+              } else {
+                boxes[i].classList.add("die-used");
+                sum += r;
+              }
+            });
+            stats[ability] = sum;
+
+            // compute bonuses
+            const U     = ability.toUpperCase();
+            const raceB = racialBonuses[selectedRace]?.[U]    || 0;
+            const subB  = subraceBonuses[selectedSubrace]?.[U] || 0;
+            const halfB = (selectedRace==="half-elf" && halfElfBonus.includes(U)) ? 1 : 0;
+            const total = sum + raceB + subB + halfB;
+            const mod   = Math.floor((total - 10)/2);
+
+            // update Step 3
+            document.getElementById(`sum-${ability}`).textContent =
+              `Sum: ${total} (Modifier: ${mod >= 0 ? "+" : ""}${mod})`;
+
+            // show bonus tags
+            const bonusEl = document.getElementById(`bonus-${ability}`);
+            if (bonusEl) {
+              bonusEl.innerHTML =
+                (raceB ? `<span class="bonus-display">+${raceB} race</span>` : "") +
+                (subB  ? `<span class="subrace-display">+${subB} subrace</span>` : "") +
+                (halfB ? `<span class="bonus-display">+1 half-elf</span>` : "");
             }
 
-            const abilityCard = document.getElementById("ability-" + ability);
-            const button = abilityCard.querySelector("button");
-            button.disabled = true;
-            const duration = 2000, intervalTime = 80;
-            let intervals = [];
-
-            for (let i = 0; i < 4; i++) {
-                let dieBox = document.getElementById(`die-${ability}-${i}`);
-                dieBox.classList.remove("die-used", "die-discard");
-                dieBox.classList.add("rolling");
-                let anim = setInterval(() => {
-                    dieBox.textContent = Math.floor(Math.random() * 6) + 1;
-                }, intervalTime);
-                intervals.push(anim);
-            }
-
-            setTimeout(() => {
-                if (diceAudio) {
-                    diceAudio.pause();
-                    diceAudio.currentTime = 0;
-                }
-                for (let i = 0; i < intervals.length; i++) {
-                    clearInterval(intervals[i]);
-                    let dieBox = document.getElementById(`die-${ability}-${i}`);
-                    dieBox.classList.remove("rolling");
-                }
-
-                let finalRolls = [];
-                for (let i = 0; i < 4; i++) {
-                    finalRolls.push(Math.floor(Math.random() * 6) + 1);
-                }
-                let minValue = Math.min(...finalRolls);
-                let dropIndex = finalRolls.indexOf(minValue);
-                let sum = 0;
-                for (let i = 0; i < 4; i++) {
-                    let dieBox = document.getElementById(`die-${ability}-${i}`);
-                    dieBox.textContent = finalRolls[i];
-                    if (i === dropIndex) {
-                        dieBox.classList.add("die-discard");
-                    } else {
-                        dieBox.classList.add("die-used");
-                        sum += finalRolls[i];
-                    }
-                }
-                let mod = Math.floor((sum - 10) / 2);
-                let modDisplay = (mod >= 0 ? "+" : "") + mod;
-                document.getElementById("sum-" + ability).textContent = "Sum: " + sum + " (Modifier: " + modDisplay + ")";
-                stats[ability] = sum;
-            }, duration);
+            // no re-enable → only one roll allowed
+            applyRacialBonuses();
+          }, 2000);
         }
 
         function setScoreManually(stat) {
-            const input = document.getElementById(`input-${stat}`);
-            const value = parseInt(input.value);
-            if (!isNaN(value) && value >= 3 && value <= 18) {
-                document.getElementById(`sum-${stat}`).textContent = `Sum: ${value}`;
-                for (let i = 0; i < 4; i++) {
-                    document.getElementById(`die-${stat}-${i}`).textContent = "-";
-                }
-                stats[stat] = value; // Update global stats
-            } else {
-                alert("Enter a valid number between 3 and 18.");
-            }
+          const input = document.getElementById(`input-${stat}`);
+          const btn   = document.querySelector(`#ability-${stat} button`);
+
+          const v = parseInt(input.value, 10);
+          if (isNaN(v) || v < 3 || v > 18) {
+            return alert("Enter a value between 3 and 18.");
+          }
+
+          // store and disable further changes
+          stats[stat] = v;
+          input.disabled = true;
+          btn.disabled   = true;
+
+          const U     = stat.toUpperCase();
+          const raceB = racialBonuses[selectedRace]?.[U]    || 0;
+          const subB  = subraceBonuses[selectedSubrace]?.[U] || 0;
+          const halfB = (selectedRace==="half-elf" && halfElfBonus.includes(U)) ? 1 : 0;
+          const total = v + raceB + subB + halfB;
+          const mod   = Math.floor((total - 10)/2);
+
+          document.getElementById(`sum-${stat}`).textContent =
+            `Sum: ${total} (Modifier: ${mod >= 0 ? "+" : ""}${mod})`;
+          const bonusEl = document.getElementById(`bonus-${stat}`);
+          if (bonusEl) {
+            bonusEl.innerHTML =
+              (raceB ? `<span class="bonus-display">+${raceB} race</span>` : "") +
+              (subB  ? `<span class="subrace-display">+${subB} subrace</span>` : "") +
+              (halfB ? `<span class="bonus-display">+1 half-elf</span>` : "");
+          }
+
+          applyRacialBonuses();
         }
 
+
+          // ── applyRacialBonuses ──
+          function applyRacialBonuses() {
+            const raceMap = racialBonuses[selectedRace]    || {};
+            const subMap  = subraceBonuses[selectedSubrace]|| {};
+
+            ["str","dex","con","int","wis","cha"].forEach(stat => {
+              const base   = stats[stat] || 0;
+              const U      = stat.toUpperCase();
+              const raceB  = raceMap[U]   || 0;
+              const subB   = subMap[U]    || 0;
+              const halfB  = (selectedRace==="half-elf" && halfElfBonus.includes(U)) ? 1 : 0;
+              const total  = base + raceB + subB + halfB;
+              const mod    = Math.floor((total - 10)/2);
+
+              document.getElementById(`sheet-${stat}-score`).textContent = total;
+              document.getElementById(`sheet-${stat}-mod`).innerHTML =
+                `${mod >= 0 ? "+" : ""}${mod}` +
+                ((raceB||subB||halfB)
+                  ? ` <span class="bonus-note">` +
+                    (raceB ? `+${raceB} race`     : "") +
+                    (subB  ? `, +${subB} subrace` : "") +
+                    (halfB ? `, +1 half-elf`      : "") +
+                    `</span>`
+                  : "");
+            });
+          }
+
+          // ── half-elf modal & race/subrace wiring ──
+          function confirmHalfElfBonus() {
+            const picks = Array.from(
+              document.querySelectorAll('#halfElfModal input[type="checkbox"]:checked')
+            ).map(cb => cb.value);
+            if (picks.length !== 2) return alert("Select exactly two stats.");
+            halfElfBonus = picks;
+            document.getElementById('halfElfModal').style.display = 'none';
+            applyRacialBonuses();
+          }
+          document.getElementById("halfElfConfirmBtn")
+            .addEventListener("click", confirmHalfElfBonus);
+          document.getElementById("changeHalfElfLink")
+            .addEventListener("click", e => {
+              e.preventDefault();
+              halfElfBonus = [];
+              document.querySelectorAll('#halfElfModal input[type="checkbox"]')
+                .forEach(cb => cb.checked = false);
+              document.getElementById('halfElfModal').style.display = 'flex';
+            });
+                  // ── wire up race radios ──
+        document.querySelectorAll('input[name="race"]').forEach(radio => {
+          radio.addEventListener('change', () => {
+            selectedRace = radio.value;
+            document.getElementById("inputRace").value = selectedRace;
+            document.getElementById("sheet-race").textContent =
+              selectedRace.charAt(0).toUpperCase() + selectedRace.slice(1);
+
+            // toggle the “Change Half-Elf” link
+            const halfElfLink = document.getElementById("changeHalfElfLink");
+            halfElfLink.style.display = selectedRace === "half-elf" ? "inline-block" : "none";
+
+            if (selectedRace === "half-elf") {
+              // clear any previous picks
+              halfElfBonus = [];
+              document
+                .querySelectorAll('#halfElfModal input[type="checkbox"]')
+                .forEach(cb => cb.checked = false);
+
+              // **open** the modal immediately
+              document.getElementById('halfElfModal').style.display = 'flex';
+            } else {
+              // non–half-elf: just reapply bonuses
+              applyRacialBonuses();
+            }
+          });
+        });
+
+          // ── step navigation & summary ──
+          function showStep(step) {
+            document.querySelectorAll('.creator-step').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('step'+step).classList.add('active');
+            currentStep = step;
+          }
+
+                    function nextStep() {
+            if (currentStep === 1) {
+              const selectedRace = document.querySelector('input[name="race"]:checked');
+              if (!selectedRace) {
+                alert('Please select a race.');
+                return;
+              }
+
+              const raceValue = selectedRace.value;
+              const subraceContainer = document.getElementById('subrace-container');
+              const subraceOptions = document.querySelectorAll('.subrace-option');
+              subraceOptions.forEach(div => div.style.display = 'none');
+
+              if (['elf', 'dwarf', 'gnome'].includes(raceValue)) {
+                subraceContainer.style.display = 'block';
+                let shown = false;
+                subraceOptions.forEach(div => {
+                  if (div.getAttribute('data-parent') === raceValue) {
+                    div.style.display = 'flex';
+                    shown = true;
+                  }
+                });
+                const subraceSelected = document.querySelector('input[name="subrace"]:checked');
+                if (!subraceSelected) {
+                  alert('Please select a subrace for your ' + raceValue + '.');
+                  return;
+                }
+              } else {
+                subraceContainer.style.display = 'none';
+              }
+            }
+
+            // Move to next step
+            if (currentStep < 4) {
+              showStep(currentStep + 1);
+
+              // Apply racial bonuses on step 4
+              if (currentStep === 4) {
+                applyRacialBonuses();
+              }
+            }
+
+            updateSummary();
+          }
+
+          function prevStep() {
+            if (currentStep > 1) {
+              showStep(currentStep - 1);
+            }
+          }
+
+          function showSubclassOptions() {
+            const selectedClass = document.querySelector('input[name="class"]:checked')?.value;
+            const container = document.getElementById("subclass-container");
+            if (!selectedClass) {
+              container.style.display = "none";
+              return;
+            }
+
+            document.querySelectorAll('input[name="subclass"]').forEach(input => input.checked = false);
+            document.querySelectorAll('#subclass-options .subclass-group')
+              .forEach(g => g.style.display = 'none');
+
+            const level = parseInt(document.getElementById("characterLevel").value, 10) || 1;
+            document.querySelectorAll(`#subclass-options .subclass-group[data-parent="${selectedClass}"]`)
+              .forEach(group => {
+                const req = parseInt(group.getAttribute("data-required-level"), 10);
+                if (level >= req) group.style.display = 'flex';
+              });
+
+            // Show container only if any group is visible
+            const any = Array.from(document.querySelectorAll('#subclass-options .subclass-group'))
+              .some(g => g.style.display === 'flex');
+            container.style.display = any ? 'block' : 'none';
+          }
+
+          // wire up listeners
+          document.getElementById("characterLevel")
+            .addEventListener("change", showSubclassOptions);
+          document.querySelectorAll('input[name="class"]')
+            .forEach(i => i.addEventListener("change", showSubclassOptions));
+
+          // expose step functions for your buttons
+          window.nextStep = nextStep;
+          window.prevStep = prevStep;
+         window.updateSummary    = updateSummary;
+        window.rollDice         = rollDice;
+        window.setScoreManually = setScoreManually;
+
+          // initialize first step
+          showStep(1);
+        });
+
         function calculateModifier(score) {
-            return Math.floor((score - 10) / 2);
+          return Math.floor((score - 10) / 2);
         }
 
         function capitalize(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
 
+                     // ── Summary updater ──
         function updateSummary() {
-            const name = document.getElementById("characterName").value;
-            const background = document.getElementById("characterBackground").value;
-            const imageUrl = document.getElementById("characterImageUrl").value;
-            const raceRadio = document.querySelector('input[name="race"]:checked');
-            const subraceRadio = document.querySelector('input[name="subrace"]:checked');
-            const classRadio = document.querySelector('input[name="class"]:checked');
-            const subclassRadio = document.querySelector('input[name="subclass"]:checked');
-            const level = parseInt(document.getElementById("characterLevel")?.value, 10) || 1;
+          const name          = document.getElementById("characterName").value;
+          const background    = document.getElementById("characterBackground").value;
+          const imageUrl      = document.getElementById("characterImageUrl").value;
+          const raceRadio     = document.querySelector('input[name="race"]:checked');
+          const subraceRadio  = document.querySelector('input[name="subrace"]:checked');
+          const classRadio    = document.querySelector('input[name="class"]:checked');
+          const subclassRadio = document.querySelector('input[name="subclass"]:checked');
+          const level         = parseInt(document.getElementById("characterLevel")?.value, 10) || 1;
 
-            document.getElementById("sheet-charname").textContent = name || "";
+          // Name, Race & Subrace
+          document.getElementById("sheet-charname").textContent = name;
+          let raceText = raceRadio ? capitalize(raceRadio.value) : "";
+          if (subraceRadio) raceText += ` (${capitalize(subraceRadio.value)})`;
+          document.getElementById("sheet-race").textContent = raceText;
 
-            let raceText = raceRadio ? capitalize(raceRadio.value) : "";
-            if (subraceRadio) raceText += " (" + subraceRadio.value + ")";
-            document.getElementById("sheet-race").textContent = raceText;
+          // Class & Subclass
+          let classText = classRadio ? capitalize(classRadio.value) : "";
+          if (subclassRadio) classText += ` (${capitalize(subclassRadio.value)})`;
+          document.getElementById("sheet-classlevel").textContent = `${classText} (${level})`;
 
-            let classText = classRadio ? capitalize(classRadio.value) : "";
-            if (subclassRadio) classText += " (" + subclassRadio.value + ")";
-            document.getElementById("sheet-classlevel").textContent = classText + " (" + level + ")";
-            document.getElementById("sheet-background").textContent = background || "";
+          // Background
+          document.getElementById("sheet-background").textContent = background;
 
-            const portraitImg = document.getElementById("sheet-portrait-img");
+          // Portrait
+          const portraitImg = document.getElementById("sheet-portrait-img");
+          const uploadInput = document.getElementById("portraitUpload");
+          if (uploadInput?.files?.length) {
+            const reader = new FileReader();
+            reader.onload = e => portraitImg.src = e.target.result;
+            reader.readAsDataURL(uploadInput.files[0]);
+          } else {
             portraitImg.src = imageUrl || "";
+          }
 
-            const abilities = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
-            abilities.forEach(stat => {
-                const inputField = document.getElementById(`input-${stat}`);
-                const sumField = document.getElementById(`sum-${stat}`);
-                const sheetScore = document.getElementById(`sheet-${stat}-score`);
-                const sheetMod = document.getElementById(`sheet-${stat}-mod`);
-                const hiddenField = document.getElementById(`input${capitalize(stat)}`);
+          // Abilities
+          const abilities = ['str','dex','con','int','wis','cha'];
+          abilities.forEach(stat => {
+            const inputField  = document.getElementById(`input-${stat}`);
+            const sumField    = document.getElementById(`sum-${stat}`);
+            const sheetScore  = document.getElementById(`sheet-${stat}-score`);
+            const sheetMod    = document.getElementById(`sheet-${stat}-mod`);
+            const hiddenField = document.getElementById(`input${capitalize(stat)}`);
 
-                const score = parseInt(inputField?.value) || parseInt(sumField?.textContent.replace("Sum: ", "")) || 0;
-                const mod = calculateModifier(score);
-                const modText = mod >= 0 ? `(+${mod})` : `(${mod})`;
+            // parse either manual or rolled+bonused value
+            const score = parseInt(inputField?.value, 10)
+                        || parseInt(sumField?.textContent.replace(/^Sum:\s*/, ""), 10)
+                        || 0;
 
-                if (sheetScore) sheetScore.textContent = score;
-                if (sheetMod) sheetMod.textContent = modText;
-                if (hiddenField) hiddenField.value = score;
+            const mod = calculateModifier(score);
+            const modText = (mod >= 0 ? `(+${mod})` : `(${mod})`);
 
-                stats[stat] = score; // keep global stats accurate
-            });
+            if (sheetScore)  sheetScore.textContent = score;
+            if (sheetMod)    sheetMod.textContent = modText;
+            if (hiddenField) hiddenField.value = score;
 
-            // Set hidden form values
-            document.getElementById("inputRace").value = raceRadio?.value || "";
-            document.getElementById("inputSubrace").value = subraceRadio?.value || "";
-            document.getElementById("inputClass").value = classRadio?.value || "";
+            // keep global in sync
+            stats[stat] = score;
+          });
+
+          // Re-apply bonuses on the sheet
+          applyRacialBonuses();
+
+          // HP Calculation
+          const conMod    = calculateModifier(stats.con);
+          const className = classRadio?.value.toLowerCase() || "fighter";
+          const hitDie    = getHitDie(className);
+          const avgHp     = Math.floor(hitDie / 2) + 1 + conMod;
+          const totalHp   = Math.max(1, avgHp * level);
+          document.getElementById("sheet-hp").textContent = `HP: ${totalHp}`;
+          document.getElementById("inputHP").value       = totalHp;
+
+          // Hidden fields: Race/Subrace/Class
+          document.getElementById("inputRace").value    = raceRadio?.value    || "";
+          document.getElementById("inputSubrace").value = subraceRadio?.value || "";
+          document.getElementById("inputClass").value   = classRadio?.value   || "";
+
+            // 🛡️ Special: clear ImageUrl if file uploaded
+            const hiddenImageUrl = document.getElementById("characterImageUrl");
+            if (uploadInput?.files?.length > 0) {
+                hiddenImageUrl.value = "";
+            }
+        }
+ 
+
+               function populateForm() {
+          // 1️⃣ Make sure the displayed sheet has the correct final values
+          applyRacialBonuses();
+
+          // 2️⃣ Race / subrace / class hidden fields
+          document.getElementById('inputRace').value    =
+            document.querySelector('input[name="race"]:checked')?.value || "";
+          document.getElementById('inputSubrace').value =
+            document.querySelector('input[name="subrace"]:checked')?.value || "None";
+          document.getElementById('inputClass').value   =
+            document.querySelector('input[name="class"]:checked')?.value || "";
+
+          // 3️⃣ Stats: read the final ‘sheet-*-score’ values
+          ['str','dex','con','int','wis','cha'].forEach(stat => {
+            const finalVal = parseInt(
+              document.getElementById(`sheet-${stat}-score`).textContent, 10
+            ) || 0;
+            // write into your existing hidden inputs (inputStr, inputDex, …)
+            document.getElementById(`input${capitalize(stat)}`).value = finalVal;
+          });
+
+          // 4️⃣ HP: recalc or read from sheet
+          const hpHidden = document.getElementById("inputHP");
+          // If you have a displayed sheet-hp span, you can read it, otherwise recalc:
+          const displayedHp = parseInt(
+            document.getElementById("sheet-hp")?.textContent.replace(/\D/g, ""), 10
+          );
+          if (!isNaN(displayedHp)) {
+            hpHidden.value = displayedHp;
+          } else {
+            // fallback to recalculation
+            const conFinal = parseInt(
+              document.getElementById(`sheet-con-score`).textContent, 10
+            );
+            const conMod = calculateModifier(conFinal);
+            const level  = parseInt(document.getElementById("characterLevel")?.value, 10) || 1;
+            const className = document.querySelector('input[name="class"]:checked')?.value.toLowerCase() || "fighter";
+            const hitDie = getHitDie(className);
+            const avgHp = Math.floor(hitDie/2) + 1 + conMod;
+            hpHidden.value = Math.max(1, avgHp * level);
+          }
+
+          return true;
         }
 
-        function populateForm() {
-            document.getElementById('inputRace').value    = document.querySelector('input[name="race"]:checked')?.value || "";
-            document.getElementById('inputSubrace').value = document.querySelector('input[name="subrace"]:checked')?.value || "None";
-            document.getElementById('inputClass').value   = document.querySelector('input[name="class"]:checked')?.value || "";
 
-            document.getElementById('inputStr').value = stats.str;
-            document.getElementById('inputDex').value = stats.dex;
-            document.getElementById('inputCon').value = stats.con;
-            document.getElementById('inputInt').value = stats.int;
-            document.getElementById('inputWis').value = stats.wis;
-            document.getElementById('inputCha').value = stats.cha;
-
-            return true;
+        function getHitDie(className) {
+            switch (className) {
+                case "barbarian": return 12;
+                case "fighter":
+                case "paladin":
+                case "ranger": return 10;
+                case "cleric":
+                case "bard":
+                case "druid":
+                case "monk":
+                case "rogue":
+                case "warlock": return 8;
+                case "sorcerer":
+                case "wizard": return 6;
+                default: return 8;
+            }
         }
+
 
         // Clear subrace selections when race changes
         document.querySelectorAll('input[name="race"]').forEach(input => {
@@ -2113,6 +2567,41 @@
 
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
-                     }
+
+        <script>
+            // grab the URL & file inputs + the preview <img> you added
+            const urlInput  = document.getElementById('characterImageUrl');
+            const fileInput = document.getElementById('portraitUpload');
+            const preview   = document.getElementById('portraitPreview');
+
+            // Preview from URL
+            urlInput.addEventListener('input', () => {
+              const url = urlInput.value.trim();
+              if (!url) {
+                preview.style.display = 'none';
+                preview.src = '';
+              } else {
+                preview.src = url;
+                preview.style.display = 'block';
+              }
+            });
+
+            // Preview from local file
+            fileInput.addEventListener('change', () => {
+              const file = fileInput.files[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = e => {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+              };
+              reader.readAsDataURL(file);
+            });
+
+                            
+
+
+        </script>
+    }
 </body>
 </html>

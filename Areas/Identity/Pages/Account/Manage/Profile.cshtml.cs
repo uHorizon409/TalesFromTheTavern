@@ -1,17 +1,11 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using DnDWebpage.Models;
 using DnDWebpage.Data;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using DnDWebpage.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace DnDWebpage.Areas.Identity.Pages.Account.Manage
@@ -43,6 +37,9 @@ namespace DnDWebpage.Areas.Identity.Pages.Account.Manage
 
         [TempData]
         public string? StatusMessage { get; set; }
+
+        // ? Add this property to manage Crimson Wyrm Cover unlock status
+        public bool HasCrimsonWyrmCover { get; set; }
 
         public class InputModel
         {
@@ -93,16 +90,34 @@ namespace DnDWebpage.Areas.Identity.Pages.Account.Manage
             Input.CurrentImagePath = user.ProfileImagePath ?? "/uploads/default-avatar.png";
             Input.CoverUrl = user.CoverUrl;
 
-            // ?? Load this user's characters
+            // ? Set this from user entity
+            HasCrimsonWyrmCover = user.HasCrimsonWyrmCover;
+
             UserCharacters = await _context.Characters
-                .Where(c => c.UserId == user.Id)
-                .ToListAsync();
+     .Where(c => c.ApplicationUserId == user.Id)
+     .Select(c => new CharacterViewModel
+     {
+         Id = c.Id,
+         Name = c.Name,
+         Background = c.Background,
+         ImageUrl = c.ImageUrl,
+         Level = c.Level,
+         Race = c.Race,
+         Subrace = c.Subrace,
+         Class = c.Class,
+         Subclass = c.Subclass,
+         Strength = c.Strength,
+         Dexterity = c.Dexterity,
+         Constitution = c.Constitution,
+         Intelligence = c.Intelligence,
+         Wisdom = c.Wisdom,
+         Charisma = c.Charisma
+     })
+     .ToListAsync();
 
-            // Pass avatar image path to layout using ViewData
+
             ViewData["NavAvatar"] = Input.CurrentImagePath;
-
-            // Set the active page for the navbar
-            ViewData["ActivePage"] = "Profile";  // Set this for Profile page
+            ViewData["ActivePage"] = "Profile";
 
             return Page();
         }
@@ -141,6 +156,12 @@ namespace DnDWebpage.Areas.Identity.Pages.Account.Manage
             if (!string.IsNullOrWhiteSpace(Input.CoverUrl))
             {
                 user.CoverUrl = Input.CoverUrl;
+
+                // ? Unlock Wyrm Cover if selected
+                if (Input.CoverUrl == "/images/covers/profilebanner-option16.jpg" && !user.HasCrimsonWyrmCover)
+                {
+                    user.HasCrimsonWyrmCover = true;
+                }
             }
 
             if (Input.ProfileImage != null)

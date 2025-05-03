@@ -15,9 +15,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="~/images/dndiconhome.png" />
+
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
 
     <!-- Retro Styling -->
     <link rel="stylesheet" href="~/css/retro.css" />
@@ -240,58 +243,65 @@
         }
 
         }
+
+        /* Custom Mobile Nav Enhancements */
+        @@media (max-width: 767px) {
+            .navbar-collapse
+
+        {
+            background: #8b0000;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .navbar-toggler {
+            border-color: #ffcc00;
+        }
+
+        .nav-item a {
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-bottom: 1px solid #b22222;
+        }
+
+        .nav-link {
+            font-size: 1rem;
+        }
+
+        }
     </style>
     @RenderSection("Styles", required: false)
 
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-md navbar-dark">
             <div class="container-fluid">
-                <div class="navbar-brand d-flex align-items-center gap-2">
+                <a class="navbar-brand d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
                     <span style="font-family: 'Cinzel Decorative', serif; font-size: 1.5rem; color: white;">TFTT</span>
                     <img src="~/images/dndiconhome.png" alt="TFTT Logo" style="height: 32px; vertical-align: middle;" />
-                </div>
+                </a>
 
-
-
-
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "fw-bold" : "")"
                                asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-
-                        <!-- Top‑level Characters link -->
                         <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Character"
-                                      && ViewContext.RouteData.Values["action"]?.ToString() == "Index"
-                                        ? "fw-bold" : "")"
-                               asp-controller="Character"
-                               asp-action="Index">
-                                Bounty Board
-                            </a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Character" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "fw-bold" : "")"
+                               asp-controller="Character" asp-action="Index">Bounty Board</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Character" && ViewContext.RouteData.Values["action"]?.ToString() == "Create" ? "fw-bold" : "")"
+                               asp-controller="Character" asp-action="Create">Create Character</a>
                         </li>
 
-                        <!-- Top‑level Create Character link -->
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Character"
-                                      && ViewContext.RouteData.Values["action"]?.ToString() == "Create"
-                                        ? "fw-bold" : "")"
-                               asp-controller="Character"
-                               asp-action="Create">
-                                Create Character
-                            </a>
-                        </li>
-
-                        <!-- ✅ Admin-only tab -->
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
@@ -303,29 +313,19 @@
                         }
                     </ul>
 
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <!-- Profile link -->
                             <li class="nav-item">
                                 <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" ? "fw-bold" : "")"
-                                   asp-area="Identity"
-                                   asp-page="/Account/Manage/Profile">
-                                    <img src="@ViewBag.NavAvatar"
-                                         alt="Avatar"
-                                         class="avatar-topnav me-1"
+                                   asp-area="Identity" asp-page="/Account/Manage/Profile">
+                                    <img src="@ViewBag.NavAvatar" alt="Avatar" class="avatar-topnav me-1"
                                          onerror="this.src='/images/icons/user.png'" />
-                                    My Hero Profile
+                                    My Hero Profile
                                 </a>
                             </li>
-
-                            <!-- Retire / Logout button as a regular nav button -->
                             <li class="nav-item">
-                                <a class="nav-link btn-no-highlight"
-                                   asp-area="Identity"
-                                   asp-page="/Account/Retire">
-                                    Retire
-                                </a>
+                                <a class="nav-link btn-no-highlight" asp-area="Identity" asp-page="/Account/Retire">Retire</a>
                             </li>
                         }
                         else
@@ -345,9 +345,8 @@
                 </div>
             </div>
         </nav>
+
     </header>
-
-
     <main role="main">
         @RenderBody()
     </main>
@@ -359,13 +358,12 @@
         </p>
     </footer>
 
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-  
-    @RenderBody()
 
-    @* ─── FLASH TOAST ─── *@
+    <!-- Flash Toast -->
     @if (TempData["LogoutMessage"] is string msg)
     {
         <div class="logout-toast" id="logoutToast">
@@ -376,32 +374,49 @@
             </div>
         </div>
         <script>
-            // Optional: Play logout sound effect
             const pourSound = new Audio('/sounds/drink-pour.mp3');
             pourSound.play();
 
-            // Fade out after 3 seconds
             setTimeout(() => {
                 const t = document.getElementById('logoutToast');
                 if (t) t.style.opacity = '0';
             }, 3000);
 
-            // Remove from DOM after fade
             setTimeout(() => {
                 const t = document.getElementById('logoutToast');
                 if (t) t.remove();
             }, 3800);
 
-            // Render icons
             lucide.createIcons();
         </script>
     }
-    }
 
-    <footer>…</footer>
+    <!-- Navbar Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const customToggle = document.getElementById('customToggle');
+            const navbarCollapse = document.getElementById('mainNavbar');
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            if (customToggle && navbarCollapse) {
+                customToggle.addEventListener('click', function () {
+                    const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: true });
+                });
+            }
+
+            const navLinks = document.querySelectorAll('.navbar-collapse .nav-link');
+            navLinks.forEach(function (link) {
+                link.addEventListener('click', function () {
+                    const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                    bsCollapse.hide();
+                });
+            });
+        });
+    </script>
+
+    <script src="~/js/profile.js"></script>
+    <script src="~/js/character-creator.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

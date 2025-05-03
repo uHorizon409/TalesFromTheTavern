@@ -81,8 +81,13 @@
                     <img src="/images/wizard.png" alt="Wizard" class="class-img">
                     <div class="class-label">Wizard</div>
                 </div>
+                <div id="rogueSelect" class="class-card">
+                    <img src="/images/rogue-player.png" alt="Rogue" class="class-img">
+                    <div class="class-label">Rogue</div>
+                </div>
             </div>
         </div>
+
 
         <!-- 🧱 Main Game -->
         <div id="encounterGame" style="display:none;">
@@ -188,15 +193,20 @@
             <button id="homeBtn" class="btn dnd-btn home-btn">Return Home</button>
         </div>
 
-
         <!-- 🏆 Victory Overlay -->
         <div id="victoryOverlay" class="victory-overlay" style="display: none;">
             <div class="victory-content text-center">
-                <div class="victory-text mb-4">Against all odds, you have slain all the beasts.</div>
-                <img src="/images/tavern.gif" alt="Tavern" class="tavern-image mb-4" />
+                <div class="victory-text mb-4">
+                    Against all odds, you have slain all the beasts.
+                </div>
+                <img src="/images/tavern.gif" alt="Tavern" class="tavern-image mb-4 victory-art" />
                 <button id="retireBtn" class="btn dnd-btn retire-btn">Retire to the Tavern</button>
+                <button id="unlockCoverBtn" class="btn dnd-btn unlock-cover-btn" style="display:none;">Unlock This Cover Art for Your Profile</button>
             </div>
         </div>
+
+
+
 
         <!-- 🌲 Branching Forest Screen -->
         <div id="branchScreen" class="branch-screen" style="display:none;">
@@ -247,6 +257,7 @@
             const startBtn = document.getElementById("startBtn");
             const paladinSelect = document.getElementById("paladinSelect");
             const wizardSelect = document.getElementById("wizardSelect");
+            const rogueSelect = document.getElementById("rogueSelect");
             const playerSprite = document.getElementById("player-sprite");
             const classAbilityBtn = document.getElementById("classAbilityBtn");
 
@@ -357,28 +368,81 @@
                 logMessage("With your new enchanted sword, you are ready to face the mighty dragon!");
                 updateBars();
             });
+// -------------------------------
+// RETIRE BUTTON EVENT LISTENER
+// -------------------------------
+const retireBtn = document.getElementById("retireBtn");
 
-            // -------------------------------
-            // RETIRE BUTTON EVENT LISTENER
-            // -------------------------------
-            const retireBtn = document.getElementById("retireBtn");
+retireBtn.addEventListener("click", () => {
+    const userConfirmation = confirm("Are you sure you want to retire to the tavern and finish your adventure?");
 
-            retireBtn.addEventListener("click", () => {
-                // (Optional: These variables are declared but not used further. If they're needed elsewhere, ensure they're declared in the right scope.)
-                const branchForest = document.getElementById("branchForest");
-                const branchSword = document.getElementById("branchSword");
+    if (userConfirmation) {
+        console.log("🏁 Retirement confirmed. Unlocking cover...");
 
-                // Hide the victory overlay and game screen
-                victoryOverlay.style.display = "none";
-                encounterGame.style.display = "none";
+        // Hide the victory overlay and game screen
+        victoryOverlay.style.display = "none";
+        encounterGame.style.display = "none";
 
-                // Show the home screen
-                homeScreen.style.display = "flex";
+        // Show the home screen
+        homeScreen.style.display = "flex";
 
-                // Reset the game state
-                resetGame();
-            });
+        // Unlock cover art visually
+        unlockCoverArt();
 
+        // 🔥 Call server to save Crimson Wyrm Cover unlock
+        const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+        const token = tokenElement ? tokenElement.value : '';
+
+        fetch('/Game/UnlockCrimsonWyrmCover', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { 'RequestVerificationToken': token })
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("❌ Failed to unlock on server.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                console.log("✅ Crimson Wyrm cover unlocked and saved to DB!");
+            } else {
+                console.warn("⚠️ Server responded, but cover not saved:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("🚨 Error saving cover unlock:", error);
+        });
+
+        // Reset the game state
+        resetGame();
+    } else {
+        console.log("User canceled the retirement.");
+    }
+});
+
+        function logMessage(message, type = "normal") {
+            const log = document.getElementById('game-log'); // your battle log ID
+
+            const p = document.createElement('p');
+            p.textContent = message;
+
+            // Optional: color code based on type
+            if (type === "heal") p.style.color = "lightgreen";
+            else if (type === "damage") p.style.color = "lightcoral";
+            else if (type === "critical") p.style.color = "gold";
+
+            log.appendChild(p);
+            log.scrollTop = log.scrollHeight; // Always scroll to latest
+
+            const maxEntries = 20;
+            if (log.children.length > maxEntries) {
+                log.removeChild(log.firstChild); // Remove oldest message
+            }
+        }
             // -------------------------------
             // UTILITY FUNCTIONS
             // -------------------------------
@@ -499,6 +563,10 @@
                 classAbilityBtn.textContent = "Smite!";
                 classAbilityBtn.style.display = "inline-block";
             }
+             else if (selectedClass === "rogue") {
+            classAbilityBtn.textContent = "Sneak Attack!";
+            classAbilityBtn.style.display = "inline-block";
+        }
 
             classAbilityBtn.disabled = false; // Ensure it's usable again
         }
@@ -553,6 +621,18 @@
                 resetGame();
             });
 
+                    // 🎯 ROGUE SELECT EVENT
+
+        rogueSelect.addEventListener("click", () => {
+            selectedClass = "rogue";
+            playerSprite.src = "/images/rogue-player.png";
+            classAbilityBtn.textContent = "Sneak Attack!";
+            classAbilityBtn.style.display = "inline-block";
+            classSelect.style.display = "none";
+            encounterGame.style.display = "block";
+            resetGame();
+        });
+
             rollBtn.addEventListener("click", () => {
                 diceImage.style.transform = "rotate(" + (Math.random() * 360) + "deg)";
                 log.innerHTML = "";
@@ -602,10 +682,29 @@
                     }
                 }
 
-        if (monster.isBurned) {
+               if (monster.isBurned) {
             logMessage(`${monster.name} takes ${monster.burnDamage} burn damage!`);
             monster.hp -= monster.burnDamage;
             floatText(monsterSprite, `Burn: -${monster.burnDamage}`, "");
+
+            // 🔥 Create and overlay the burn effect GIF on top of the monster
+            const burnEffect = document.createElement("img");
+            burnEffect.src = "/images/wizard-burn-effect.gif"; // path to your gif
+            burnEffect.style.position = "absolute";
+            burnEffect.style.zIndex = "10003";
+            burnEffect.style.pointerEvents = "none";
+            burnEffect.style.width = `${monsterSprite.offsetWidth}px`;
+            burnEffect.style.height = `${monsterSprite.offsetHeight}px`;
+            burnEffect.style.left = `${monsterSprite.offsetLeft}px`;
+            burnEffect.style.top = `${monsterSprite.offsetTop}px`;
+
+            // Append burn effect to the same parent as monster
+            monsterSprite.parentElement.appendChild(burnEffect);
+
+            // Remove the burn effect after it's shown (e.g., 800ms)
+            setTimeout(() => {
+                burnEffect.remove();
+            }, 800);
 
             // Reset the burn effect so it only applies once
             monster.isBurned = false;
@@ -615,10 +714,9 @@
             if (monster.hp <= 0) {
                 const reward = Math.floor(Math.random() * 10) + 5;
                 gold += reward;
-                updateGoldDisplay(); // ✅ Show updated gold immediately in the shop
+                updateGoldDisplay();
                 logMessage(`${monster.name} defeated! You earn ${reward} gold.`);
 
-                // Continue to next encounter or branch
                 if (level === 1) {
                     document.getElementById("branchScreen").style.display = "flex";
                 } else {
@@ -627,6 +725,7 @@
                 return;
             }
         }
+
 
 
                 logMessage(`${monster.name} rolls: ${monsterRoll}`);
@@ -698,6 +797,7 @@
 
             resetBtn.addEventListener("click", resetGame);
 
+
                     function updateGoldDisplay() {
           const goldDisplay = document.getElementById("gold-display");
           if (goldDisplay) {
@@ -767,111 +867,119 @@
             showSpecialEffect(playerEl, monsterEl, "/images/fireball.png", "/sounds/fireball-hit.mp3");
 
           }
-        else if (selectedClass === "paladin") { 
-  abilityDamage = 10;
-  logMessage(`Smite! You strike ${monster.name} for ${abilityDamage} damage!`);
-  floatText(monsterSprite, `Smite: -${abilityDamage}`, "crit");
+        else if (selectedClass === "paladin") {
+            abilityDamage = 10;
+            logMessage(`Smite! You strike ${monster.name} for ${abilityDamage} damage!`);
+            floatText(monsterSprite, `Smite: -${abilityDamage}`, "crit");
 
-  const container = document.getElementById("battle-game");
-  if (getComputedStyle(container).position === "static") {
-    container.style.position = "relative";
-  }
+            // Simple Smite effect without lunge
+            const smiteImg = document.createElement("img");
+            smiteImg.src = "/images/divine-smite.png";
+            Object.assign(smiteImg.style, {
+                position: "absolute",
+                left: `${monsterSprite.offsetLeft}px`,
+                top: `${monsterSprite.offsetTop}px`,
+                width: `${monsterSprite.offsetWidth}px`,
+                zIndex: "10003"
+            });
+            monsterSprite.parentNode.appendChild(smiteImg);
 
-  const origParent = playerEl.parentNode;
-  const origNext = playerEl.nextSibling;
+            new Audio("/sounds/divine-smite-hit.mp3").play();
+            monsterSprite.classList.add("shake");
+            setTimeout(() => monsterSprite.classList.remove("shake"), 300);
+            setTimeout(() => smiteImg.remove(), 800);
 
-  const pRect = playerEl.getBoundingClientRect();
-  const mRect = monsterEl.getBoundingClientRect();
-  const cRect = container.getBoundingClientRect();
-  const relStartX = pRect.left - cRect.left;
-  const relStartY = pRect.top - cRect.top;
-  const dx = (mRect.left + mRect.width / 2) - (pRect.left + pRect.width / 2);
-  const dy = (mRect.top + mRect.height / 2) - (pRect.top + pRect.height / 2);
+            // Apply damage & update
+            monster.hp -= abilityDamage;
+            updateBars();
+            playHitSound();
 
-  // Inject keyframes dynamically
-  const styleTag = document.createElement("style");
-  styleTag.innerHTML = `
-        @@keyframes lungeForwardDynamic {
-      to { transform: translate(${dx}px, ${dy}px); }
-    }
-        @@keyframes lungeBack {
-      to { transform: translate(0, 0); }
-    }
-  `;
-  document.head.appendChild(styleTag);
+            if (monster.hp <= 0) {
+                const reward = Math.floor(Math.random() * 10) + 5;
+                gold += reward;
+                updateGoldDisplay();
+                logMessage(`${monster.name} defeated! You earn ${reward} gold.`);
 
-  const origStyles = {
-    position: playerEl.style.position,
-    left: playerEl.style.left,
-    top: playerEl.style.top,
-    zIndex: playerEl.style.zIndex,
-    transform: playerEl.style.transform,
-    width: playerEl.style.width,
-    height: playerEl.style.height
-  };
+                if (level === 1) {
+                    document.getElementById("branchScreen").style.display = "flex";
+                } else {
+                    nextMonster();
+                }
+            }
+        }
 
-  // Mobile fix: lock size during absolute positioning
-  if (window.innerWidth <= 768) {
-    playerEl.style.width = `${pRect.width}px`;
-    playerEl.style.height = `${pRect.height}px`;
-  }
+                 else if (selectedClass === "rogue") {
+            abilityDamage = Math.floor(Math.random() * 8) + 4; // 4-11 damage upfront
+            logMessage(`Sneak Attack! You deal ${abilityDamage} damage and prepare for a follow-up strike!`);
+            floatText(monsterSprite, `Sneak: -${abilityDamage}`, "crit");
 
-  Object.assign(playerEl.style, {
-    position: "absolute",
-    left: `${relStartX}px`,
-    top: `${relStartY}px`,
-    zIndex: "10002",
-    transform: "translate(0,0)"
-  });
-  container.appendChild(playerEl);
+            monster.isMarkedForSneak = true;
 
-  playerEl.style.animation = "lungeForwardDynamic 1s ease-in-out forwards";
+            const audio = new Audio("/sounds/sneak-attack.mp3");
+            audio.play();
 
-  setTimeout(() => {
-    const smiteImg = document.createElement("img");
-    smiteImg.src = "/images/divine-smite.png";
-    Object.assign(smiteImg.style, {
-      position: "absolute",
-      left: `${mRect.left - cRect.left + mRect.width * 0.1}px`,
-      top: `${mRect.top - cRect.top + mRect.height * 0.1}px`,
-      width: `${mRect.width * 0.8}px`,
-      zIndex: "10003"
-    });
-    container.appendChild(smiteImg);
+            const targetImg = document.createElement("img");
+            targetImg.src = "/images/sneak-attack-target.png";
+            targetImg.style.position = "absolute";
+            targetImg.style.zIndex = "10003";
 
-    new Audio("/sounds/divine-smite-hit.mp3").play();
-    monsterEl.classList.add("shake");
-    setTimeout(() => monsterEl.classList.remove("shake"), 300);
-    setTimeout(() => smiteImg.remove(), 800);
+            const monsterParent = monsterSprite.parentElement;
 
-    playerEl.style.animation = "lungeBack 1s ease-in-out forwards";
-  }, 1000);
+            targetImg.style.width = `${monsterSprite.offsetWidth}px`;
+            targetImg.style.height = `${monsterSprite.offsetHeight}px`;
 
-  setTimeout(() => {
-    document.head.removeChild(styleTag);
-    playerEl.style.animation = "";
-    Object.assign(playerEl.style, origStyles);
+            monsterParent.appendChild(targetImg);
 
-    // ✅ Fully clear mobile lock after lunge
-    if (window.innerWidth <= 768) {
-        playerEl.style.width = "";
-        playerEl.style.height = "";
-        playerEl.style.maxWidth = "";
-        playerEl.style.maxHeight = "";
-        playerEl.style.flex = "";
-    }
+            // Scanning movement: Starts further, narrows in
+            let aimTime = 1000; // total aim time
+            let intervalTime = 100; // update frequency
+            let range = 100; // initial wide range
 
-    // Restore sprite to its original parent
-    if (origNext) origParent.insertBefore(playerEl, origNext);
-    else origParent.appendChild(playerEl);
+            const aimInterval = setInterval(() => {
+                // Wider range at first, narrows each move
+                const randomX = monsterSprite.offsetLeft + (Math.random() * range - range / 2);
+                const randomY = monsterSprite.offsetTop + (Math.random() * range - range / 2);
 
-    // Show branch if required
-    if (monster.hp <= 0 && level === 1) {
-        document.getElementById("branchScreen").style.display = "flex";
-    }
-}, 3000);
-}
+                targetImg.style.left = `${randomX}px`;
+                targetImg.style.top = `${randomY}px`;
 
+                // Gradually reduce the range each time to simulate locating
+                if (range > 30) {
+                    range -= 10; // gets tighter each step
+                }
+            }, intervalTime);
+
+            setTimeout(() => {
+                clearInterval(aimInterval);
+
+                // Snap perfectly onto monster
+                targetImg.style.left = `${monsterSprite.offsetLeft}px`;
+                targetImg.style.top = `${monsterSprite.offsetTop}px`;
+                targetImg.style.transition = "all 0.3s ease";
+                targetImg.style.transform = "scale(1.2)";
+
+                setTimeout(() => {
+                    targetImg.remove();
+
+                    // Apply initial damage AFTER snap
+                    monster.hp -= abilityDamage;
+                    updateBars();
+
+                    if (monster.hp <= 0) {
+                        const reward = Math.floor(Math.random() * 10) + 5;
+                        gold += reward;
+                        updateGoldDisplay();
+                        logMessage(`${monster.name} defeated! You earn ${reward} gold.`);
+
+                        if (level === 1) {
+                            document.getElementById("branchScreen").style.display = "flex";
+                        } else {
+                            nextMonster();
+                        }
+                    }
+                }, 400); // brief pause on center
+            }, aimTime);
+        }
 
 
 
@@ -912,6 +1020,31 @@
             // -------------------------------
             resetGame();
         });
+
+        function unlockCoverArt() {
+    console.log("🔓 Sending unlock request...");
+
+    fetch('/Account/UnlockWyrmCover', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log("🎯 Response status:", response.status);
+        if (!response.ok) {
+            throw new Error("❌ Unlock failed.");
+        }
+        return response.text();
+    })
+    .then(data => {
+        console.log("✅ Crimson Wyrm Cover unlocked!", data);
+    })
+    .catch(error => {
+        console.error("⚠️ Fetch failed:", error);
+    });
+}
+
 
     </script>
 </body>

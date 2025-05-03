@@ -14,11 +14,18 @@ namespace DnDWebpage.Data
         // Characters created by users
         public DbSet<CharacterViewModel> Characters { get; set; }
 
+        public DbSet<Spell> Spells { get; set; }
+
         // Tavern Bulletin Posts
         public DbSet<BulletinPost> BulletinPosts { get; set; }
 
         // ✅ Votes cast by users on bulletin posts
         public DbSet<BulletinVote> BulletinVotes { get; set; }
+
+        // ✅ Book Pages for the leather-bound book
+        public DbSet<BookPage> BookPages { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,11 +36,18 @@ namespace DnDWebpage.Data
                 entity
                     .HasOne(c => c.User)
                     .WithMany(u => u.Characters)
-                    .HasForeignKey(c => c.UserId)
+                    .HasForeignKey(c => c.ApplicationUserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // (Optional) future configs for BulletinPost and BulletinVote can go here
+            // Optional: Additional configuration for BookPages (if needed)
+            modelBuilder.Entity<BookPage>(entity =>
+            {
+                entity.HasKey(e => e.PageId);
+                entity.Property(e => e.Title).HasMaxLength(200).IsRequired(false);
+                entity.Property(e => e.ContentHTML).IsRequired(false);
+                entity.Property(e => e.PageNumber).IsRequired();
+            });
         }
     }
 }

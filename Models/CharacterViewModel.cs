@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace DnDWebpage.Models
 {
@@ -9,35 +10,40 @@ namespace DnDWebpage.Models
     {
         public int Id { get; set; }
 
-        // Basic Character Information
+        // Basic Information
         [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; } = "";
 
         [Required(ErrorMessage = "Background is required.")]
         public string Background { get; set; } = "";
 
-        [Required(ErrorMessage = "Image URL is required.")]
-        public string ImageUrl { get; set; } = "";
+        [NotMapped]
+        public IFormFile? ImageUpload { get; set; }
+
+        public string? ImageUrl { get; set; } 
+
 
         [Required(ErrorMessage = "Level is required.")]
         [Range(1, 20, ErrorMessage = "Level must be between 1 and 20.")]
         public int Level { get; set; } = 1;
 
-        // Race Information
+        // Race and Subrace
         [Required(ErrorMessage = "Race is required.")]
         public string Race { get; set; } = "";
 
-        // Subrace is conditionally required via custom validation
-        public string Subrace { get; set; } = "";
+        public string? Subrace { get; set; }
 
-        // Class Information
+        // Class and Subclass
         [Required(ErrorMessage = "Class is required.")]
         public string Class { get; set; } = "";
 
-        // Subclass is conditionally required based on class and level
         public string Subclass { get; set; } = "";
 
-        // Ability Scores
+        public string LevelLog { get; set; } = "";
+
+
+        // Combat Stats
+        public int? HitPoints { get; set; }
         public int Strength { get; set; } = 10;
         public int Dexterity { get; set; } = 10;
         public int Constitution { get; set; } = 10;
@@ -45,62 +51,78 @@ namespace DnDWebpage.Models
         public int Wisdom { get; set; } = 10;
         public int Charisma { get; set; } = 10;
 
-        // Relationship to the user who created this character
-        public string? UserId { get; set; }
+        // Relationship to User
+        public string? ApplicationUserId { get; set; }
 
-        [ForeignKey("UserId")]
+        [ForeignKey("ApplicationUserId")]
         public ApplicationUser? User { get; set; }
 
-        // Custom validation for conditional Subrace and Subclass requirements
+        // Custom Validation
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            // Races that require a subrace selection
+            foreach (var result in ValidateSubraceRequirement())
+                yield return result;
+
+            foreach (var result in ValidateSubclassRequirement())
+                yield return result;
+
+            foreach (var result in ValidateImageRequirement())
+                yield return result;
+        }
+
+
+        private IEnumerable<ValidationResult> ValidateSubraceRequirement()
+        {
             var racesNeedingSubrace = new[] { "elf", "dwarf", "gnome" };
-            if (!string.IsNullOrWhiteSpace(Race)
-                && Array.Exists(racesNeedingSubrace, r => r.Equals(Race, StringComparison.OrdinalIgnoreCase))
-                && string.IsNullOrWhiteSpace(Subrace))
+            if (!string.IsNullOrWhiteSpace(Race) &&
+                Array.Exists(racesNeedingSubrace, r => r.Equals(Race, StringComparison.OrdinalIgnoreCase)) &&
+                string.IsNullOrWhiteSpace(Subrace))
             {
                 yield return new ValidationResult(
-                    $"Subrace is required for {Race}.",
-                    new[] { nameof(Subrace) }
-                );
+                    $"The race '{Race}' requires you to select a subrace.",
+                    new[] { nameof(Subrace) });
             }
+        }
 
-            // Classes and their level thresholds for subclass selection
+        private IEnumerable<ValidationResult> ValidateSubclassRequirement()
+        {
             var subclassThresholds = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
             {
-                { "barbarian", 3 },
-                { "bard", 3 },
-                { "cleric", 1 },   // Domain at level 1
-                { "druid", 2 },    // Circle at level 2
-                { "fighter", 3 },  // Martial Archetype at level 3
-                { "monk", 3 },     // Tradition at level 3
-                { "paladin", 3 },  // Oath at level 3
-                { "ranger", 2 },   // Archetype at level 2
-                { "rogue", 3 },    // Archetype at level 3
-                { "sorcerer", 1 }, // Sorcerous Origin at level 1
-                { "warlock", 1 },  // Otherworldly Patron at level 1
-                { "wizard", 2 }    // Arcane Tradition at level 2
+                { "barbarian", 3 }, { "bard", 3 }, { "cleric", 1 },
+                { "druid", 2 }, { "fighter", 3 }, { "monk", 3 },
+                { "paladin", 3 }, { "ranger", 2 }, { "rogue", 3 },
+                { "sorcerer", 1 }, { "warlock", 1 }, { "wizard", 2 }
             };
 
-            if (!string.IsNullOrWhiteSpace(Class)
-                && subclassThresholds.TryGetValue(Class, out int threshold))
+            if (!string.IsNullOrWhiteSpace(Class) &&
+                subclassThresholds.TryGetValue(Class, out int requiredLevel))
             {
-                if (Level < threshold && !string.IsNullOrWhiteSpace(Subclass))
+                if (Level < requiredLevel && !string.IsNullOrWhiteSpace(Subclass))
                 {
                     yield return new ValidationResult(
-                        $"{Class} subclasses cannot be chosen until level {threshold}.",
-                        new[] { nameof(Class), nameof(Level), nameof(Subclass) }
-                    );
+                        $"{Class} subclasses cannot be chosen before level {requiredLevel}.",
+                        new[] { nameof(Subclass) });
                 }
-                else if (Level >= threshold && string.IsNullOrWhiteSpace(Subclass))
+                else if (Level >= requiredLevel && string.IsNullOrWhiteSpace(Subclass))
                 {
                     yield return new ValidationResult(
-                        $"Please select a subclass for {Class} (available at level {threshold}).",
-                        new[] { nameof(Subclass) }
-                    );
+                        $"Please select a subclass for {Class} (unlocked at level {requiredLevel}).",
+                        new[] { nameof(Subclass) });
                 }
             }
         }
+
+        private IEnumerable<ValidationResult> ValidateImageRequirement()
+        {
+            if ((ImageUpload == null || ImageUpload.Length == 0) && string.IsNullOrWhiteSpace(ImageUrl))
+            {
+                yield return new ValidationResult(
+                    "Please upload an image OR provide a URL.",
+                    new[] { nameof(ImageUpload), nameof(ImageUrl) });
+            }
+        }
+
+
+
     }
 }

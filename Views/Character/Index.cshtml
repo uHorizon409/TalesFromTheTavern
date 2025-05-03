@@ -29,20 +29,23 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Sanctuary Bounty Board</title>
+    <title>Forgotten Realm's' Bounty Board</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Bootstrap 5 & Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=MedievalSharp&display=swap" rel="stylesheet" />
-
+    <!-- 1) Add this CSS somewhere in your <head> (or a linked stylesheet) -->
     <style>
-        /* Fullscreen background */
+        /* ====================
+                       Global Styles
+                    ==================== */
+
         html, body {
             margin: 0;
             padding: 0;
-            overflow: hidden;
             height: 100vh;
+            overflow-x: auto; /* Allow horizontal scroll if needed */
             background-color: #000;
             background-image: url('/images/bountyboard.jpg');
             background-repeat: no-repeat;
@@ -50,6 +53,10 @@
             background-position: center;
             background-attachment: fixed;
         }
+
+        /* ====================
+                       Board Layout
+                    ==================== */
 
         .board-wrapper {
             width: 100%;
@@ -60,10 +67,9 @@
             align-items: center;
         }
 
-        /* Top banner */
         .board-banner {
             position: absolute;
-            top: 0px;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
             background: linear-gradient(to bottom, #6b4226, #4a2e1a);
@@ -71,27 +77,455 @@
             padding: 0.6rem 1.4rem;
             border: 3px double #2d1408;
             border-radius: 12px;
-            font-size: 1.6rem;
             font-family: 'Cinzel Decorative', serif;
+            font-size: 1.6rem;
             letter-spacing: 1px;
             text-shadow: 1px 1px 2px #000;
-            box-shadow: inset 0 0 8px #3e1f0c, 0 0 6px rgba(0, 0, 0, 0.6);
+            box-shadow: inset 0 0 8px #3e1f0c, 0 0 6px rgba(0,0,0,0.6);
             z-index: 20;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        @@media (max-width: 768px) {
-            .board-banner
+        /* ====================
+                       Bounty Cards
+                    ==================== */
 
-        {
-            font-size: 1rem;
-            padding: 0.4rem 1rem;
-            border-width: 2px;
+        .bounty-card {
+            width: 120px;
+            height: 150px;
+            background: url('/images/aged-paper.jpg') center/cover no-repeat;
+            border: 2px solid #5a2c0a;
             border-radius: 8px;
+            box-shadow: 2px 2px 10px #000;
+            position: absolute;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.2s ease;
         }
 
+            .bounty-card:hover {
+                z-index: 10;
+                transform: scale(1.05);
+            }
+
+            .bounty-card .wanted-label,
+            .bounty-card .name-label,
+            .bounty-card .bounty-label {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+                pointer-events: none;
+            }
+
+            .bounty-card .wanted-label {
+                top: -10px;
+                font-family: 'MedievalSharp', cursive;
+                font-size: 1rem;
+                color: #8b0000;
+                text-shadow: 1px 1px 2px #000;
+            }
+
+            .bounty-card .portrait {
+                top: 46px;
+                width: 60px;
+                height: 60px;
+                object-fit: cover;
+                border: 2px solid #5a2c0a;
+                border-radius: 4px;
+            }
+
+            .bounty-card .name-label {
+                top: 102px;
+                font-family: 'MedievalSharp', cursive;
+                font-size: 1.2rem;
+                color: #3b1f0e;
+            }
+
+            .bounty-card .bounty-label {
+                top: 124px;
+                font-family: 'Cinzel Decorative', serif;
+                font-size: 0.85rem;
+                color: #5a2c0a;
+            }
+
+            .bounty-card .expand-btn {
+                display: none !important;
+            }
+
+        /* ====================
+                       Modal Styles (Wanted Poster)
+                    ==================== */
+
+        .wanted-poster {
+            background: url('/images/parchment-bg.jpg') center/cover no-repeat;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .modal-dialog {
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            max-width: 90vw;
+        }
+
+            .modal-dialog.modal-md {
+                max-width: 360px;
+                width: 90%;
+                margin: 1.5rem auto;
+                position: relative;
+                top: 0;
+                transform: none;
+            }
+
+        .modal-content {
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: url('/images/parchment-bg.jpg') center/cover no-repeat;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 20px black;
+            box-sizing: border-box;
+        }
+
+            .modal-content.wanted-poster {
+                background: url('/images/aged-paper.jpg') center/cover no-repeat;
+                border: 4px solid #5a2c0a;
+                color: #3b1f0e;
+                font-family: 'MedievalSharp', cursive;
+                max-height: calc(100vh - 2rem);
+                overflow-y: auto;
+                margin: 1rem auto;
+            }
+
+        body.modal-open {
+            overflow-y: scroll !important;
+        }
+
+        /* ====================
+                       Wanted Poster Content
+                    ==================== */
+
+        .wanted-header {
+            font-size: 4rem;
+            letter-spacing: 0.1em;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .wanted-subheader {
+            text-align: center;
+            color: #5a2c0a;
+            margin-bottom: 1rem;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.1rem;
+        }
+
+        .wanted-body img {
+            display: block;
+            width: 200px;
+            max-height: 200px;
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            border: 3px double #5a2c0a;
+            border-radius: 4px;
+        }
+
+        .wanted-body {
+            color: #2e1f0f;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .wanted-details > div {
+            margin-bottom: 0.5rem;
+        }
+
+        /* ====================
+                       Buttons
+                    ==================== */
+
+        .wanted-footer .btn-banish {
+            border-color: #d45a5a;
+            color: #d45a5a;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1rem;
+        }
+
+            .wanted-footer .btn-banish:hover {
+                background: #d45a5a;
+                color: #1b1f23;
+            }
+
+        .btn-payoff {
+            background: linear-gradient(to bottom, #fff3d0, #dca27d);
+            border: 2px solid #5a2c0a;
+            color: #3b1f0e;
+            font-family: 'Cinzel Decorative', serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 0 6px rgba(90, 44, 10, 0.6);
+            transition: all 0.3s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+            .btn-payoff:hover {
+                background: #3b1f0e;
+                color: #fff8e6;
+                border-color: #8b0000;
+                box-shadow: 0 0 10px #8b0000;
+                transform: scale(1.05);
+            }
+
+            .btn-payoff .lucide {
+                width: 20px;
+                height: 20px;
+            }
+
+        /* ====================
+                       Tooltips
+                    ==================== */
+
+        .tooltip-inner {
+            background-color: #3b1f0e;
+            color: #fefae0;
+            font-size: 0.8rem;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        /* ====================
+                       Scrollbar Styling (WebKit and Firefox)
+                    ==================== */
+
+        .modal-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .modal-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .modal-container::-webkit-scrollbar-thumb {
+            background: rgba(90,44,10,0.8);
+            border-radius: 4px;
+        }
+
+        .modal-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px;
+        }
+
+        /* ====================
+                       Responsive Mobile Adjustments
+                    ==================== */
+
+        @@media (max-width: 768px) {
+            .board-banner {
+                font-size: 1rem;
+                padding: 0.4rem 1rem;
+                border-width: 2px;
+                border-radius: 8px;
+            }
+
+            .bounty-card {
+                width: 100px;
+                height: 130px;
+            }
+
+                .bounty-card .wanted-label {
+                    font-size: 0.85rem;
+                }
+
+                .bounty-card .name-label {
+                    font-size: 1rem;
+                }
+
+                .bounty-card .bounty-label {
+                    font-size: 0.75rem;
+                }
+
+            .modal-content {
+                padding: 1rem;
+            }
+        }
+
+        /* ================================
+                       Modal Container (Scroll on Mobile)
+                    ================================ */
+
+        .modal-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px;
+        }
+
+            .modal-container::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            .modal-container::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .modal-container::-webkit-scrollbar-thumb {
+                background: rgba(90,44,10,0.8);
+                border-radius: 4px;
+            }
+
+        /* ================================
+                       Modal Core Structure
+                    ================================ */
+
+        .modal-dialog {
+            width: 360px;
+            max-width: 90vw;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: url('/images/parchment-bg.jpg') center/cover no-repeat;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 20px black;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        /* ================================
+                       Wanted Poster (inside modal)
+                    ================================ */
+
+        .wanted-poster {
+            background: url('/images/aged-paper.jpg') center/cover no-repeat;
+            border: 4px solid #5a2c0a;
+            border-radius: 8px;
+            padding: 2rem;
+            max-height: calc(100vh - 2rem);
+            width: 100%;
+            box-sizing: border-box;
+            font-family: 'MedievalSharp', cursive;
+            color: #3b1f0e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ================================
+                       Poster Elements
+                    ================================ */
+
+        /* Header */
+        .wanted-header {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 4rem;
+            color: #8b0000;
+            letter-spacing: 0.1em;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* Subheader (reason, bounty) */
+        .wanted-subheader {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.2rem;
+            color: #5a2c0a;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Portrait image */
+        .wanted-body img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border: 3px double #5a2c0a;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Body text */
+        .wanted-body {
+            font-size: 1.1rem;
+            color: #2e1f0f;
+            text-align: center;
+            line-height: 1.4;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        /* Details blocks (can stack info) */
+        .wanted-details > div {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer payoff button */
+        .wanted-footer .btn-banish {
+            font-family: 'Cinzel Decorative', serif;
+            border-color: #d45a5a;
+            color: #d45a5a;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+            .wanted-footer .btn-banish:hover {
+                background: #d45a5a;
+                color: #1b1f23;
+            }
+
+        /* ================================
+                       Responsive Mobile Adjustments
+                    ================================ */
+
+        @@media (max-width: 768px) {
+
+            .modal-content {
+                padding: 1rem;
+            }
+
+            .wanted-header {
+                font-size: 2.5rem;
+            }
+
+            .wanted-body img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .wanted-body {
+                font-size: 1rem;
+            }
+
+            .wanted-subheader {
+                font-size: 1rem;
+            }
         }
 
         /* Bounty cards */
@@ -170,143 +604,13 @@
                 display: none !important;
             }
 
-        /* Responsive bounty card tweaks */
-        @@media (max-width: 768px) {
-            .bounty-card
 
-        {
-            width: 100px;
-            height: 130px;
-        }
-
-        .bounty-card .wanted-label {
-            font-size: 0.85rem;
-        }
-
-        .bounty-card .name-label {
-            font-size: 1rem;
-        }
-
-        .bounty-card .bounty-label {
-            font-size: 0.75rem;
-        }
-
-        }
-
-        /* Modal portrait style */
-        .modal-dialog.modal-md {
-            max-width: 360px;
-            width: 90%;
-            margin: 1.5rem auto;
-        }
-
-        .modal-content.wanted-poster {
-            background: url('/images/aged-paper.jpg') center/cover no-repeat;
-            border: 4px solid #5a2c0a;
-            border-radius: 8px;
-            padding: 1rem;
-            max-height: 90vh;
-            overflow-y: auto;
-            font-family: 'MedievalSharp', cursive;
-            color: #3b1f0e;
-        }
-
-        /* WANTED header */
-        .wanted-header {
-            font-size: 4rem !important;
-            letter-spacing: .1em;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        /* Subheader for reason & bounty */
-        .wanted-subheader {
-            text-align: center;
-            color: #5a2c0a;
-            margin-bottom: 1rem;
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1.1rem;
-        }
-
-        /* Modal portrait */
-        .wanted-body img {
-            display: block;
-            width: 200px;
-            max-height: 200px;
-            object-fit: cover;
-            margin: 0 auto 1.5rem;
-            border: 3px double #5a2c0a;
-            border-radius: 4px;
-        }
-
-        /* Details text */
-        .wanted-body {
-            color: #2e1f0f;
-            font-size: 1.1rem;
-            line-height: 1.4;
-        }
-
-        .wanted-details {
-            display: block;
-            margin-bottom: 2rem;
-        }
-
-            .wanted-details > div {
-                margin-bottom: .5rem;
+            /* Hide expand button if unused */
+            .bounty-card .expand-btn {
+                display: none;
             }
-
-        /* Single payoff button */
-        .wanted-footer .btn-banish {
-            border-color: #d45a5a;
-            color: #d45a5a;
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 1rem;
-        }
-
-            .wanted-footer .btn-banish:hover {
-                background: #d45a5a;
-                color: #1b1f23;
-            }
-
-        /* Tooltips */
-        .tooltip-inner {
-            background-color: #3b1f0e;
-            color: #fefae0;
-            font-size: .8rem;
-            font-family: 'MedievalSharp', cursive;
-        }
-
-        .btn-payoff {
-            background: linear-gradient(to bottom, #fff3d0, #dca27d);
-            border: 2px solid #5a2c0a;
-            color: #3b1f0e;
-            font-family: 'Cinzel Decorative', serif;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 0.5rem 1rem;
-            box-shadow: 0 0 6px rgba(90, 44, 10, 0.6);
-            transition: all 0.3s ease-in-out;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-            .btn-payoff:hover {
-                background: #3b1f0e;
-                color: #fff8e6;
-                border-color: #8b0000;
-                box-shadow: 0 0 10px #8b0000;
-                transform: scale(1.05);
-            }
-
-            .btn-payoff .lucide {
-                width: 20px;
-                height: 20px;
-            }
-
-
     </style>
+
 
 </head>
 
@@ -318,19 +622,83 @@
         </div>
 
         <audio id="checkSound" src="/sounds/checkingpost.mp3" preload="auto"></audio>
+        @{
+            var isMobile = ViewContext.HttpContext.Request.Headers["User-Agent"]
+                .ToString().ToLower().Contains("mobi");
 
-        @foreach (var c in Model)
+            var rng = new Random();
+            var slotIndex = 0;
+
+            // Pick visible cards based on device
+            var visibleCards = isMobile && Model.Count > 6
+                ? Model.OrderBy(x => rng.Next()).Take(6).ToList()
+                : Model;
+
+            List<(int top, int left)> gridSlots = new();
+            List<int> mobileRotations = new(); // New: store subtle tilts for mobile
+
+            if (isMobile)
+            {
+                var totalCards = visibleCards.Count;
+                var columns = 2; // Fewer columns on mobile
+                var rows = (int)Math.Ceiling((double)totalCards / columns);
+
+                var slotWidth = 140;
+                var slotHeight = 180;
+                var horizontalSpacing = 20;
+                var verticalSpacing = 20;
+
+                for (int row = 0; row < rows; row++)
+                {
+                    for (int col = 0; col < columns; col++)
+                    {
+                        var bannerOffset = 120; // Approximate banner height + margin
+                        var top = bannerOffset + row * (slotHeight + verticalSpacing);
+                        var left = col * (slotWidth + horizontalSpacing);
+                        gridSlots.Add((top, left));
+
+                        // New: add a small random rotation for mobile (e.g. -5° to +5°)
+                        mobileRotations.Add(rng.Next(-5, 6));
+                    }
+                }
+
+                // Shuffle grid slots and rotation together
+                var shuffled = gridSlots.Zip(mobileRotations, (pos, rot) => new { pos, rot })
+                                        .OrderBy(x => rng.Next())
+                                        .ToList();
+
+                gridSlots = shuffled.Select(x => x.pos).ToList();
+                mobileRotations = shuffled.Select(x => x.rot).ToList();
+            }
+        }
+
+
+
+        @foreach (var c in visibleCards)
         {
-            // once-per-character
-            var wantedFor = reasons[random.Next(reasons.Length)];
-            var gold = random.Next(50, 501);
-            var silver = random.Next(0, 10);
-            var bounty = $"{gold} gp" + (silver > 0 ? $", {silver} sp" : "");
+            var wantedFor = reasons[rng.Next(reasons.Length)];
+            var gold = rng.Next(50, 501);
+            var silver = rng.Next(0, 10);
+            var bounty = $"{gold} gp" + (silver > 0 ? $", {silver} " : "");
 
-            var rotation = random.Next(-8, 8);
-            var top = random.Next(60, 500);
-            var left = random.Next(50, 1100);
-            var tooltip = $"{c.Race}{(string.IsNullOrEmpty(c.Subrace) ? "" : $" ({c.Subrace})")} • {c.Class}";
+            var rotation = isMobile && slotIndex < mobileRotations.Count
+        ? mobileRotations[slotIndex]
+        : rng.Next(-8, 8); // Original for desktop
+            int top, left;
+
+            if (isMobile && gridSlots.Count > slotIndex)
+            {
+                (top, left) = gridSlots[slotIndex++];
+            }
+            else
+            {
+                top = rng.Next(60, 500);
+                left = rng.Next(50, 1100);
+            }
+
+            var tooltip = $"{c.Race}{(string.IsNullOrEmpty(c.Subrace) ? "" : $" ({c.Subrace})")} • {c.Class}";
+
+
 
             <!-- Poster card -->
             <div class="bounty-card"
@@ -357,9 +725,11 @@
             </div>
 
 
+
             <!-- Modal (unchanged apart from payoff button) -->
-            <div class="modal fade" id="charModal@(c.Id)" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="charModal@(c.Id)" tabindex="-1" aria-hidden="true" style="overflow-y: auto;">
                 <div class="modal-dialog modal-dialog-centered modal-md">
+
                     <div class="modal-content wanted-poster">
                         <button type="button" class="btn position-absolute end-0 top-0 m-2"
                                 data-bs-dismiss="modal" aria-label="Close" style="background: none; border: none;">
@@ -377,12 +747,17 @@
                                 <div><strong>Level:</strong> @c.Level</div>
                                 <div><strong>Class:</strong> @c.Class@(string.IsNullOrEmpty(c.Subclass) ? "" : $"({c.Subclass})")</div>
                                 <div><strong>Race:</strong> @c.Race@(string.IsNullOrEmpty(c.Subrace) ? "" : $"({c.Subrace})")</div>
-                                <div><strong>Background:</strong> @c.Background</div>
-                                <div><strong>Posted by:</strong> @(c.UserId == currentUserId ? "You" : c.User?.UserName)</div>
+                                @{
+                                    var lines = c.Background.Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).ToList();
+                                    var firstLine = lines.FirstOrDefault() ?? "No background provided.";
+                                }
+                                <div><strong>Background:</strong> @firstLine</div>
+
+                                <div><strong>Posted by:</strong> @(c.ApplicationUserId == currentUserId ? "You" : c.User?.UserName)</div>
                             </div>
                         </div>
                         <div class="wanted-footer text-center">
-                            @if (c.UserId == currentUserId)
+                            @if (c.ApplicationUserId == currentUserId)
                             {
                                 <a class="btn btn-payoff" href="/Character/Delete/@c.Id">
                                     <i class="lucide" data-lucide="coins"></i> Payoff Bounty
@@ -394,65 +769,67 @@
                             }
                         </div>
 
-                        </div>
                     </div>
                 </div>
+            </div>
         }
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let dragged = null;
 
-           function drag(e) {
-               dragged = e.target;
-           }
 
-           document.addEventListener('dragover', e => e.preventDefault());
-           document.addEventListener('drop', e => {
-               if (dragged) {
-                   const r = document.getElementById('bountyBoard').getBoundingClientRect();
-                   dragged.style.left = Math.max(0, Math.min(e.clientX - r.left - dragged.offsetWidth / 2, r.width - dragged.offsetWidth)) + 'px';
-                   dragged.style.top = Math.max(0, Math.min(e.clientY - r.top - dragged.offsetHeight / 2, r.height - dragged.offsetHeight)) + 'px';
-               }
-           });
+                function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
 
-           // Touch support
-           document.addEventListener('touchstart', e => {
-               if (e.target.classList.contains('bounty-card')) {
-                   dragged = e.target;
-               }
-           });
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
 
-           document.addEventListener('touchmove', e => {
-               if (dragged) {
-                   const touch = e.touches[0];
-                   const r = document.getElementById('bountyBoard').getBoundingClientRect();
-                   dragged.style.left = Math.max(0, Math.min(touch.clientX - r.left - dragged.offsetWidth / 2, r.width - dragged.offsetWidth)) + 'px';
-                   dragged.style.top = Math.max(0, Math.min(touch.clientY - r.top - dragged.offsetHeight / 2, r.height - dragged.offsetHeight)) + 'px';
-                   e.preventDefault();
-               }
-           });
+        function resizeModalToFit(modal) {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const rect = modal.getBoundingClientRect();
 
-           document.addEventListener('touchend', () => {
-               dragged = null;
-           });
+            let scaleX = viewportWidth * 0.9 / rect.width; // leave a 10% margin
+            let scaleY = viewportHeight * 0.9 / rect.height;
 
-           window.addEventListener('DOMContentLoaded', () => {
-               // Play sound when any bounty modal opens
-               const checkSound = document.getElementById("checkSound");
-               document.querySelectorAll('[data-bs-toggle="modal"]').forEach(btn => {
-                   btn.addEventListener("click", () => {
-                       if (checkSound) {
-                           checkSound.currentTime = 0;
-                           checkSound.play();
-                       }
-                   });
-               });
+            let scale = Math.min(scaleX, scaleY, 1); // never scale up, only down
 
-               document.querySelectorAll('[title]').forEach(el => new bootstrap.Tooltip(el));
-           });
+            if (scale < 1) {
+                modal.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            } else {
+                modal.style.transform = `translate(-50%, -50%)`;
+            }
+        }
+
+        function clampModalToViewport(modal) {
+            const rect = modal.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            let newLeft = rect.left;
+            let newTop = rect.top;
+
+            if (rect.right > viewportWidth) {
+                newLeft = viewportWidth - rect.width - 10;
+            }
+            if (rect.bottom > viewportHeight) {
+                newTop = viewportHeight - rect.height - 10;
+            }
+            if (rect.left < 0) {
+                newLeft = 10;
+            }
+            if (rect.top < 0) {
+                newTop = 10;
+            }
+
+            modal.style.left = `${newLeft}px`;
+            modal.style.top = `${newTop}px`;
+        }
     </script>
+
 </body>
 </html>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -460,3 +837,48 @@
     lucide.createIcons();
 </script>
 
+
+<!-- 2) In your Razor loop, update the modal markup like this: -->
+@foreach (var c in Model)
+{
+
+    <!-- Modal: note the new modal-fullscreen-md-down class on modal-dialog -->
+    <div class="modal fade" id="charModal@(c.Id)" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-fullscreen-md-down">
+            <div class="modal-content wanted-poster">
+                <button type="button" class="btn position-absolute end-0 top-0 m-2"
+                        data-bs-dismiss="modal" aria-label="Close"
+                        style="background:none;border:none;">
+                    <i class="lucide" data-lucide="x-circle"
+                       style="color:saddlebrown; width:24px; height:24px;"></i>
+                </button>
+
+                <div class="wanted-header">WANTED</div>
+                <div class="wanted-subheader">
+                    <p><strong>Wanted For:</strong> @@wantedFor</p>
+                    <p><strong>Bounty:</strong> @@bounty</p>
+                </div>
+                <div class="wanted-body">
+                    <img src="@c.ImageUrl" alt="@c.Name’s portrait" />
+                    <div class="wanted-details">
+                        <!-- …details here… -->
+                    </div>
+                </div>
+                <div class="wanted-footer text-center">
+                    @if (c.ApplicationUserId == currentUserId)
+                    {
+                        <a class="btn btn-payoff" href="/Character/Delete/@c.Id">
+                            <i class="lucide" data-lucide="coins"></i> Payoff Bounty
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="text-muted small">
+                            Only the creator can remove this bounty.
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

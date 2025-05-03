@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Campaign Journal";
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";  // ✅ Use shared layout with navbar
     bool isAdmin = User.IsInRole("Admin");
 }
 
@@ -8,6 +8,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=600, user-scalable=no">
+
     <title>@ViewData["Title"]</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=MedievalSharp&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <style>
@@ -16,26 +18,64 @@
             font-family: 'Uncial Antiqua', cursive;
             background: url('/images/Questbook-shelf.jpg') no-repeat center center fixed;
             background-size: cover;
+            overflow-x: hidden;
+            width: 100%;
         }
 
-        .cover-screen, .leather-book {
-            width: 600px;
-            height: 900px;
-            margin: 2rem auto;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.9);
-        }
-
-        .cover-screen {
-            background: url('/images/Questbook-close.jpg') no-repeat center center;
-            background-size: cover;
+        .page-wrapper {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
+            justify-content: center;
+            transform: scale(1);
+            transform-origin: top center;
+            width: 100vw;
+            height: 100vh;
         }
 
+        /* 📱 Mobile: scale down but keep the same element sizes */
+        @@media (max-width: 768px) {
+            .page-wrapper
+
+        {
+            transform: scale(0.85); /* Shrinks everything uniformly */
+        }
+
+        }
+
+
+        .cover-screen, .leather-book {
+            width: 600px !important;
+            height: 900px !important;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.9);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 🏰 Cover Styling */
+        .cover-screen {
+            background-image: url('/images/Questbook-close.jpg');
+            justify-content: flex-start;
+            text-align: center;
+            padding-top: 4rem;
+            flex-shrink: 0;
+        }
+
+        /* 📖 Book Pages Styling */
+        .leather-book {
+            background-image: url('/images/Questbook-cover.jpg');
+            display: none;
+            justify-content: flex-start;
+            flex-shrink: 0;
+        }
+
+        /* Cover Title Styling */
         .cover-title {
             font-family: 'Cinzel Decorative', serif;
             font-size: 2.5rem;
@@ -44,6 +84,7 @@
             margin-bottom: 2rem;
         }
 
+        /* Cover Button */
         .enter-btn {
             font-family: 'Cinzel Decorative', serif;
             background: #5e3a1e;
@@ -56,21 +97,11 @@
             font-size: 1.5rem;
         }
 
-        .leather-book {
-            background: url('/images/Questbook-cover.jpg') no-repeat center center;
-            background-size: cover;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 1rem;
-            position: relative;
-        }
-
+        /* Page content */
         .parchment-page {
             background: url('/images/Questbook-paper.jpg') repeat;
             background-size: cover;
-            width: 100%;
+            width: 95%;
             height: 100%;
             padding: 1rem;
             border: 4px double #8B4513;
@@ -85,6 +116,13 @@
                 display: block;
             }
 
+            .parchment-page img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+            }
+
+        /* Navigation Buttons */
         .page-nav {
             text-align: center;
             margin-top: 1rem;
@@ -108,6 +146,7 @@
             color: #f8f1dc;
         }
 
+        /* Admin Edit Panel */
         .admin-edit-panel {
             background: rgba(20,20,20,0.8);
             padding: 1rem;
@@ -120,14 +159,19 @@
             display: none;
         }
 
-            .admin-edit-panel label, .admin-edit-panel input, .admin-edit-panel select, .admin-edit-panel textarea {
+            .admin-edit-panel label,
+            .admin-edit-panel input,
+            .admin-edit-panel select,
+            .admin-edit-panel textarea {
                 display: block;
                 width: 100%;
                 margin-bottom: 0.5rem;
                 font-family: inherit;
             }
 
-            .admin-edit-panel input, .admin-edit-panel textarea, .admin-edit-panel select {
+            .admin-edit-panel input,
+            .admin-edit-panel textarea,
+            .admin-edit-panel select {
                 padding: 0.5rem;
                 border-radius: 5px;
                 border: none;
@@ -143,9 +187,12 @@
                 cursor: pointer;
             }
 
+        /* Draggable Items */
         .draggable-item {
+            max-width: 100%;
+            max-height: 100%;
+            overflow: hidden;
             position: absolute;
-            cursor: move;
         }
 
             .draggable-item:hover::after {
@@ -160,22 +207,54 @@
                 border-radius: 50%;
                 cursor: pointer;
             }
+
+            /* Hide delete icon unless admin */
+            .draggable-item::after {
+                display: none;
+            }
+
+        body.admin .draggable-item:hover::after {
+            display: block;
+        }
+
+        /* Page Number */
+        .page-number-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 1rem;
+            color: #5a4635;
+            font-family: 'Cinzel Decorative', serif;
+            opacity: 0.8;
+        }
+
+        /* Index Styling */
+        .parchment-page[data-page-number="1"] ul li {
+            color: #5a4635;
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 1.1rem;
+        }
+
     </style>
 </head>
-<body>
+<body class="@(isAdmin ? "admin" : "")">
 
-    <div id="coverScreen" class="cover-screen">
-        <h1 class="cover-title">The Adventurer's Chronicle</h1>
-        <button class="enter-btn" onclick="startAdventure()">Open the Chronicle</button>
+
+    <div class="page-wrapper">
+        <div id="coverScreen" class="cover-screen">
+            <h1 class="cover-title">The Adventurer's Journal</h1>
+            <button class="enter-btn" onclick="startAdventure()">Open the Journal</button>
+        </div>
+
+        <div id="leatherBook" class="leather-book"></div>
+
+        <div class="page-nav">
+            <button onclick="prevPage()">Previous</button>
+            <span id="pageIndicator">Page 1 of <span id="totalPages"></span></span>
+            <button onclick="nextPage()">Next</button>
+        </div>
     </div>
 
-    <div id="leatherBook" class="leather-book"></div>
-
-    <div class="page-nav">
-        <button onclick="prevPage()">Previous</button>
-        <span id="pageIndicator">Page 1 of <span id="totalPages"></span></span>
-        <button onclick="nextPage()">Next</button>
-    </div>
 
     @if (isAdmin)
     {
@@ -183,74 +262,168 @@
             <h3>Edit This Page</h3>
             <label>Header:</label>
             <input type="text" id="adminHeader" />
+
             <label>Text:</label>
             <textarea id="adminText" rows="3"></textarea>
+
             <label>Font:</label>
             <select id="adminFont">
                 <option value="'Uncial Antiqua', cursive">Uncial Antiqua</option>
                 <option value="'Cinzel Decorative', serif">Cinzel Decorative</option>
                 <option value="'MedievalSharp', cursive">MedievalSharp</option>
             </select>
+
             <label>Font Size:</label>
             <input type="number" id="adminFontSize" value="16" />
+
             <label>Text Color:</label>
             <input type="color" id="adminColor" />
+
             <label>Insert Image:</label>
             <input type="file" id="adminImage" accept="image/*" />
+
             <label>Image Width (%):</label>
             <input type="range" id="adminImageWidth" min="10" max="100" value="50" />
+
             <button onclick="addToPage()">Add to Page</button>
+
             <div class="page-actions" style="text-align:center; margin: 1rem;">
                 <div style="margin-top: 0.5rem;">
-                    <button onclick="insertTag('<ul><li>Item 1</li><li>Item 2</li></ul>')">➤ Bullet List</button>
-                    <button onclick="insertTag('<strong>Your Bold Text</strong>')">B</button>
-                    <button onclick="insertTag('<em>Your Italic Text</em>')"><em>I</em></button>
-                    <button onclick="insertTag('<u>Your Underline</u>')"><u>U</u></button>
-                    <button onclick="insertTag('&nbsp;&nbsp;&nbsp;')">Indent</button>
+                    <button onclick="insertTag('bullet')">➤ Bullet List</button>
+                    <button onclick="insertTag('bold')"><strong>B</strong></button>
+                    <button onclick="insertTag('italic')"><em>I</em></button>
+                    <button onclick="insertTag('underline')"><u>U</u></button>
+                    <button onclick="insertTag('indent')">Indent</button>
                 </div>
 
                 <button onclick="savePage()" style="background:#3e8e41;color:#fff;border:none;padding:0.5rem 1rem;border-radius:6px;margin:0 0.5rem;cursor:pointer;">Save Page</button>
                 <button onclick="deleteCurrentPage()" style="background:#8b0000;color:#fff;border:none;padding:0.5rem 1rem;border-radius:6px;margin:0 0.5rem;cursor:pointer;">Delete Page</button>
+                <button onclick="addNewPage()" style="background:#444;color:#fff;border:none;padding:0.5rem 1rem;border-radius:6px;margin:1rem 0;cursor:pointer;">➕ Add New Page</button>
+
+            </div>
+            <button onclick="toggleIndex()" style="position:absolute; top:20px; right:20px;">📖 Index</button>
+            <div id="indexPanel" style="display:none; position:absolute; top:60px; right:20px; background:#fff; padding:1rem; border:1px solid #000; max-height:300px; overflow:auto; z-index:100;">
+                <input type="text" id="indexSearch" placeholder="Search..." oninput="filterIndex()" style="width:100%; margin-bottom:0.5rem;" />
+                <ul id="indexList" style="list-style:none; padding:0;"></ul>
             </div>
         </div>
 
 
     }
 
-    <script>
-        const leatherBook = document.getElementById('leatherBook');
-        const pageNav = document.querySelector('.page-nav');
-        const adminPanel = document.getElementById('adminPanel');
-        let currentPage = 1;
-        const pageContent = [""];
 
-        function startAdventure() {
-            document.getElementById('coverScreen').style.display = 'none';
-            leatherBook.style.display = 'flex';
-            pageNav.style.display = 'block';
-            if (adminPanel) adminPanel.style.display = 'block';
-            generatePages();
-            showPage(currentPage);
-        }
+
+    <script>
+                const leatherBook = document.getElementById('leatherBook');
+                const pageNav = document.querySelector('.page-nav');
+                const adminPanel = document.getElementById('adminPanel');
+                let currentPage = 1;
+                const pageContent = [{ title: "Index", content: "" }]; // Page 1 is Index
+                const isAdminUser = @(isAdmin.ToString().ToLower());
+
+             async function startAdventure() {
+    await loadBookFromDatabase(); // Load saved pages from DB first
+
+    // Then show book components after content is ready
+    document.getElementById('coverScreen').style.display = 'none';
+    leatherBook.style.display = 'flex';
+    pageNav.style.display = 'block';
+    if (adminPanel) adminPanel.style.display = 'block';
+
+    showPage(currentPage); // Ensure first page shows after load
+}
 
         function generatePages() {
-            leatherBook.innerHTML = '';
-            pageContent.forEach((_, index) => {
-                const page = document.createElement('div');
-                page.classList.add('parchment-page');
-                if (index === 0) page.classList.add('active');
-                leatherBook.appendChild(page);
-            });
-            updatePageCount();
+    leatherBook.innerHTML = '';
+
+    pageContent.forEach((pageData, index) => {
+        const page = document.createElement('div');
+        page.classList.add('parchment-page');
+        if (index === 0) page.classList.add('active'); // Show index initially
+        page.dataset.pageNumber = index + 1;
+
+        // 📝 Inject content ONLY for saved pages, not for index
+        if (index > 0 && pageData.content) {
+            page.innerHTML = pageData.content;
+
+            // 🛠️ Re-apply draggable functionality to saved elements
+            const draggables = page.querySelectorAll('.draggable-item');
+            draggables.forEach(el => setupDraggable(el));
         }
+
+        // 📄 Add the page number badge after content
+        const pageNumberBadge = document.createElement('div');
+        pageNumberBadge.classList.add('page-number-badge');
+        pageNumberBadge.innerText = `Page ${index + 1}`;
+        page.appendChild(pageNumberBadge);
+
+        leatherBook.appendChild(page);
+    });
+
+    renderIndexPage(); // Render index content as first page
+    updatePageCount();
+}
+
+
+  function renderIndexPage() {
+    const indexPage = leatherBook.querySelector('.parchment-page');
+    indexPage.innerHTML = ''; // Clear index page content
+
+    // 🏷️ Title
+    const titleEl = document.createElement('h2');
+    titleEl.innerText = 'Table of Contents';
+    titleEl.style.textAlign = 'center';
+    titleEl.style.fontFamily = "'Cinzel Decorative', serif";
+    indexPage.appendChild(titleEl);
+
+    if (pageContent.length <= 1) {
+        // 📖 Empty message if no saved pages
+        const emptyMsg = document.createElement('p');
+        emptyMsg.innerText = 'A story is still yet to be written...';
+        emptyMsg.style.textAlign = 'center';
+        emptyMsg.style.marginTop = '2rem';
+        indexPage.appendChild(emptyMsg);
+    } else {
+        // 📜 List of saved pages
+        const list = document.createElement('ul');
+        list.style.listStyle = 'none';
+        list.style.padding = '0';
+        list.style.marginTop = '2rem';
+
+        pageContent.slice(1).forEach((page, idx) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>Page ${idx + 2}:</strong> ${page.title || 'Untitled Page'}`;
+            li.style.cursor = 'pointer';
+            li.style.margin = '0.5rem 0';
+            li.onclick = () => {
+                currentPage = idx + 2; // +2 because index is page 1
+                showPage(currentPage);
+            };
+            list.appendChild(li);
+        });
+
+        indexPage.appendChild(list);
+    }
+
+    // 📄 Page number badge for index
+    const badge = document.createElement('div');
+    badge.classList.add('page-number-badge');
+    badge.innerText = 'Page 1';
+    indexPage.appendChild(badge);
+}
+
 
         function showPage(pageNum) {
             const pages = document.querySelectorAll('.parchment-page');
             pages.forEach((page, index) => {
                 page.classList.toggle('active', index + 1 === pageNum);
+                const badge = page.querySelector('.page-number-badge');
+                if (badge) badge.innerText = `Page ${index + 1}`;
             });
             document.getElementById('pageIndicator').innerText = `Page ${pageNum} of ${pageContent.length}`;
+            if (pageNum === 1) renderIndexPage();
         }
+
 
         function nextPage() {
             if (currentPage < pageContent.length) { currentPage++; showPage(currentPage); }
@@ -264,6 +437,14 @@
             document.getElementById('totalPages').innerText = pageContent.length;
         }
 
+                function addNewPage() {
+            pageContent.push({ title: "Untitled Page", content: "" });
+            generatePages(); // Rebuild pages
+            currentPage = pageContent.length; // Go to new page
+            showPage(currentPage); // Display it
+        }
+
+
         function addToPage() {
             const header = document.getElementById('adminHeader').value.trim();
             const text = document.getElementById('adminText').value.trim();
@@ -274,14 +455,19 @@
             const imageWidth = document.getElementById('adminImageWidth').value;
             const currentPageEl = document.querySelector('.parchment-page.active');
 
+            let addedSomething = false;
+
             if (header) {
                 const h2 = createElement('h2', header, font, fontSize, color);
                 currentPageEl.appendChild(h2);
+                if (currentPage > 1) pageContent[currentPage - 1].title = header;
+                addedSomething = true;
             }
 
             if (text) {
                 const p = createElement('p', text, font, fontSize, color);
                 currentPageEl.appendChild(p);
+                addedSomething = true;
             }
 
             if (imageInput) {
@@ -292,14 +478,21 @@
                     img.style.width = imageWidth + '%';
                     setupDraggable(img);
                     currentPageEl.appendChild(img);
+                    clearInputs();
+                    maybeAddNewPage();
                 };
                 reader.readAsDataURL(imageInput);
+            } else {
+                if (addedSomething) {
+                    clearInputs();
+                    maybeAddNewPage();
+                }
             }
+        }
 
-            clearInputs();
-
+        function maybeAddNewPage() {
             if (currentPage === document.querySelectorAll('.parchment-page').length) {
-                pageContent.push("");
+                pageContent.push({ title: "Untitled Page", content: "" });
                 generatePages();
                 showPage(currentPage);
             }
@@ -311,20 +504,28 @@
             document.getElementById('adminImage').value = '';
         }
 
-        function createElement(tag, content, font, size, color) {
+             function createElement(tag, content, font, size, color) {
             const el = document.createElement(tag);
-            el.innerText = content;
+            el.innerHTML = content;
             el.style.fontFamily = font;
             el.style.fontSize = size;
             el.style.color = color;
-            setupDraggable(el);
+
+            if (isAdminUser) {  // ✅ Only make draggable for admins
+                setupDraggable(el);
+            }
+
             return el;
         }
 
-         function setupDraggable(el) {
+        function setupDraggable(el) {
+            if (!isAdminUser) return;  // 🚫 Non-admins cannot drag or delete
+
             el.classList.add('draggable-item');
-            el.style.left = '10px';
-            el.style.top = '10px';
+            el.style.position = 'absolute';
+
+            if (!el.style.left) el.style.left = '10px';
+            if (!el.style.top) el.style.top = '10px';
 
             let isDragging = false;
             let shiftX, shiftY;
@@ -333,7 +534,6 @@
                 const parchment = el.closest('.parchment-page');
                 shiftX = e.clientX - el.getBoundingClientRect().left;
                 shiftY = e.clientY - el.getBoundingClientRect().top;
-
                 isDragging = true;
 
                 function moveAt(pageX, pageY) {
@@ -368,37 +568,175 @@
                 }
 
                 document.addEventListener('keydown', onKeyPress);
-
-                el.onmouseup = () => {
-                    // Ignore mouseup, we control with Enter
-                };
+                el.onmouseup = () => { };
             });
 
             el.ondragstart = () => false;
         }
 
-                function savePage() {
-            alert("Save functionality will be added later!");
-        }
 
-        function deleteCurrentPage() {
-            const pages = document.querySelectorAll('.parchment-page');
-            if (pages.length > 1) {
-                pages[currentPage - 1].remove();
-                pageContent.splice(currentPage - 1, 1);
-                currentPage = Math.max(1, currentPage - 1);
-                showPage(currentPage);
-                updatePageCount();
-            } else {
-                alert("You must keep at least one page.");
+
+     // 🔥 Load all saved pages from the database and include dynamic index handling
+async function loadBookFromDatabase() {
+    const response = await fetch('/api/BookPages');
+    if (response.ok) {
+        const pages = await response.json();
+        pageContent.length = 0; // Clear local pages
+
+        // Always ensure Page 1 is the dynamic Index
+        pageContent.push({ title: "Index", content: "" });
+
+        // Add saved pages from database starting from Page 2
+        pages.sort((a, b) => a.pageNumber - b.pageNumber); // Ensure correct order
+
+        pages.forEach(p => {
+            pageContent.push({
+                title: p.title,
+                content: p.contentHTML
+            });
+        });
+
+        generatePages();  // Build pages including the dynamic index
+        showPage(1);      // Always start at the index page
+    } else {
+        alert('Failed to load book from server.');
+    }
+}
+
+
+           async function savePage() {
+    const confirmSave = confirm(`Do you want to save changes to Page ${currentPage}?`);
+    if (!confirmSave) return;
+
+    const currentPageEl = document.querySelector('.parchment-page.active');
+    const badge = currentPageEl.querySelector('.page-number-badge');
+    if (badge) badge.remove(); // Remove badge before saving
+
+    // Save current page content
+    pageContent[currentPage - 1].content = currentPageEl.innerHTML;
+
+    // ✅ Capture title from Header input
+    const headerInput = document.getElementById('adminHeader').value.trim();
+    if (headerInput && currentPage > 1) {
+        pageContent[currentPage - 1].title = headerInput; // Update the title for index
+    }
+
+    const response = await fetch('/api/BookPages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            title: pageContent[currentPage - 1].title,
+            contentHTML: pageContent[currentPage - 1].content,
+            pageNumber: currentPage
+        })
+    });
+
+    if (response.ok) {
+        alert(`Page ${currentPage} saved successfully!`);
+        generatePages(); // Re-render pages and index with updated content
+        showPage(currentPage);
+    } else {
+        alert('Failed to save page to server.');
+    }
+}
+
+
+
+               async function deleteCurrentPage() {
+    if (pageContent.length > 1 && currentPage > 1) {
+        const confirmDelete = confirm(`Are you sure you want to permanently delete Page ${currentPage}?`);
+        if (!confirmDelete) return;
+
+        const response = await fetch(`/api/BookPages/${currentPage}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            console.log(`Page ${currentPage} deleted from database.`);
+
+            // Remove from frontend
+            pageContent.splice(currentPage - 1, 1);
+
+            // Re-index PageNumbers (local only, DB should ideally handle this too)
+            for (let i = 1; i < pageContent.length; i++) {
+                pageContent[i].pageNumber = i + 1;
             }
+
+            generatePages(); // Re-render pages and index after delete
+            currentPage = Math.max(1, currentPage - 1);
+            showPage(currentPage);
+        } else {
+            alert('Failed to delete page from server.');
         }
-                function insertTag(tag) {
+    } else {
+        alert("You must keep at least one page.");
+    }
+}
+
+
+
+        function insertTag(tagType) {
             const textarea = document.getElementById('adminText');
-            textarea.value += tag;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+
+            let newText = '';
+
+            switch (tagType) {
+                case 'bold':
+                    newText = `<strong>${selectedText || 'Bold Text'}</strong>`;
+                    break;
+                case 'italic':
+                    newText = `<em>${selectedText || 'Italic Text'}</em>`;
+                    break;
+                case 'underline':
+                    newText = `<u>${selectedText || 'Underlined Text'}</u>`;
+                    break;
+                case 'indent':
+                    newText = `&nbsp;&nbsp;&nbsp;${selectedText}`;
+                    break;
+                case 'bullet':
+                    newText = `<ul><li>${selectedText || 'Item 1'}</li><li>Item 2</li></ul>`;
+                    break;
+                default:
+                    break;
+            }
+
+            textarea.setRangeText(newText, start, end, 'end');
+            textarea.focus();
         }
 
+        // 📖 INDEX FUNCTIONS
+        function toggleIndex() {
+            const panel = document.getElementById('indexPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            renderIndex();
+        }
 
+        function renderIndex() {
+            const list = document.getElementById('indexList');
+            list.innerHTML = '';
+            pageContent.forEach((page, index) => {
+                const li = document.createElement('li');
+                li.innerText = `${index + 1}. ${page.title || 'Untitled Page'}`;
+                li.style.cursor = 'pointer';
+                li.onclick = () => {
+                    currentPage = index + 1;
+                    showPage(currentPage);
+                    document.getElementById('indexPanel').style.display = 'none';
+                };
+                list.appendChild(li);
+            });
+        }
+
+        function filterIndex() {
+            const search = document.getElementById('indexSearch').value.toLowerCase();
+            const items = document.querySelectorAll('#indexList li');
+            items.forEach(item => {
+                item.style.display = item.innerText.toLowerCase().includes(search) ? 'block' : 'none';
+            });
+        }
     </script>
 
 </body>

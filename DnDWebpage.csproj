@@ -24,6 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Services\" />
 		<Folder Include="Views\Items\" />
 		<Folder Include="Views\Campaign\" />
 		<Folder Include="Views\Spells\" />

@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets\\css\\battle.css"
     },
     {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\profile.css",
+      "PackagePath": "staticwebassets\\css\\profile.css"
+    },
+    {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\retro.css",
       "PackagePath": "staticwebassets\\css\\retro.css"
     },
@@ -109,6 +113,10 @@
       "PackagePath": "staticwebassets\\images\\corkboard-texture.jpg"
     },
     {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\covers\\crimson-wyrm.gif",
+      "PackagePath": "staticwebassets\\images\\covers\\crimson-wyrm.gif"
+    },
+    {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\covers\\profilebanner-option1.jpg",
       "PackagePath": "staticwebassets\\images\\covers\\profilebanner-option1.jpg"
     },
@@ -193,6 +201,22 @@
       "PackagePath": "staticwebassets\\images\\dndlogin.jpeg"
     },
     {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-black.png",
+      "PackagePath": "staticwebassets\\images\\dragon-black.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-blue.png",
+      "PackagePath": "staticwebassets\\images\\dragon-blue.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-green.png",
+      "PackagePath": "staticwebassets\\images\\dragon-green.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-red.png",
+      "PackagePath": "staticwebassets\\images\\dragon-red.png"
+    },
+    {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon.png",
       "PackagePath": "staticwebassets\\images\\dragon.png"
     },
@@ -243,6 +267,10 @@
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\icons\\user.png",
       "PackagePath": "staticwebassets\\images\\icons\\user.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\knight-special.png",
+      "PackagePath": "staticwebassets\\images\\knight-special.png"
     },
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\knight.png",
@@ -317,12 +345,24 @@
       "PackagePath": "staticwebassets\\images\\retire-to-tavern.jpg"
     },
     {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\rogue-player.png",
+      "PackagePath": "staticwebassets\\images\\rogue-player.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\seraphine.png",
+      "PackagePath": "staticwebassets\\images\\seraphine.png"
+    },
+    {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\shadowfell.jpg",
       "PackagePath": "staticwebassets\\images\\shadowfell.jpg"
     },
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\shop.jpg",
       "PackagePath": "staticwebassets\\images\\shop.jpg"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\sneak-attack-target.png",
+      "PackagePath": "staticwebassets\\images\\sneak-attack-target.png"
     },
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\subclasses\\arcane-trickster-subclass.png",
@@ -633,8 +673,20 @@
       "PackagePath": "staticwebassets\\images\\wax-seal.png"
     },
     {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\wizard-burn-effect.gif",
+      "PackagePath": "staticwebassets\\images\\wizard-burn-effect.gif"
+    },
+    {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\wizard.png",
       "PackagePath": "staticwebassets\\images\\wizard.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\character-creator.js",
+      "PackagePath": "staticwebassets\\js\\character-creator.js"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\profile.js",
+      "PackagePath": "staticwebassets\\js\\profile.js"
     },
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\site.js",
@@ -933,6 +985,10 @@
       "PackagePath": "staticwebassets\\sounds\\smite.mp3"
     },
     {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\sounds\\sneak-attack.mp3",
+      "PackagePath": "staticwebassets\\sounds\\sneak-attack.mp3"
+    },
+    {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\sounds\\sword-hit.mp3",
       "PackagePath": "staticwebassets\\sounds\\sword-hit.mp3"
     },
@@ -945,8 +1001,24 @@
       "PackagePath": "staticwebassets\\sounds\\tile-drop.mp3"
     },
     {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\0974389b-8de5-454b-81e5-fa9d63541429_wizard.png",
+      "PackagePath": "staticwebassets\\uploads\\0974389b-8de5-454b-81e5-fa9d63541429_wizard.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard.png",
+      "PackagePath": "staticwebassets\\uploads\\15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard.png"
+    },
+    {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\204a3cb2-9916-4a10-92a8-c8fa021d69eb.png",
       "PackagePath": "staticwebassets\\uploads\\204a3cb2-9916-4a10-92a8-c8fa021d69eb.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion.png",
+      "PackagePath": "staticwebassets\\uploads\\37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion.png",
+      "PackagePath": "staticwebassets\\uploads\\50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion.png"
     },
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\5f26f433-f9ab-4ba6-97fb-7ca1b01984bd.png",
@@ -955,6 +1027,18 @@
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\6c6e1ee9-0e65-451b-83e6-c6b997c5c7fc.webp",
       "PackagePath": "staticwebassets\\uploads\\6c6e1ee9-0e65-451b-83e6-c6b997c5c7fc.webp"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\6d50afe3-fe1b-4c07-ad21-eb23b337419b_Astarion.png",
+      "PackagePath": "staticwebassets\\uploads\\6d50afe3-fe1b-4c07-ad21-eb23b337419b_Astarion.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\6d6f1a66-004d-4fa4-8e66-d9d927ad939c_Astarion.png",
+      "PackagePath": "staticwebassets\\uploads\\6d6f1a66-004d-4fa4-8e66-d9d927ad939c_Astarion.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\754b4b55-e8fe-46a0-9bea-218ceaa13e02_Astarion.png",
+      "PackagePath": "staticwebassets\\uploads\\754b4b55-e8fe-46a0-9bea-218ceaa13e02_Astarion.png"
     },
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\781cb556-ea6e-4240-b766-f91cd3ee25a0.gif",
@@ -969,8 +1053,28 @@
       "PackagePath": "staticwebassets\\uploads\\781cb556-ea6e-4240-b766-f91cd3ee25a0.png"
     },
     {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion.png",
+      "PackagePath": "staticwebassets\\uploads\\95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\9b64a939-adab-4414-8135-a769a84ee319_Astarion.png",
+      "PackagePath": "staticwebassets\\uploads\\9b64a939-adab-4414-8135-a769a84ee319_Astarion.png"
+    },
+    {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\ab3e63b7-2229-4f6c-9428-8762da94dc31.gif",
       "PackagePath": "staticwebassets\\uploads\\ab3e63b7-2229-4f6c-9428-8762da94dc31.gif"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion.png",
+      "PackagePath": "staticwebassets\\uploads\\b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1).jpg",
+      "PackagePath": "staticwebassets\\uploads\\b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1).jpg"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard.png",
+      "PackagePath": "staticwebassets\\uploads\\caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard.png"
     },
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\d14d1ecf-bcb2-461c-9545-8859f72d5c93.png",
@@ -979,6 +1083,10 @@
     {
       "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\eba8dbd1-7f51-428b-b5fb-c853abae7d7c.png",
       "PackagePath": "staticwebassets\\uploads\\eba8dbd1-7f51-428b-b5fb-c853abae7d7c.png"
+    },
+    {
+      "Id": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\f27a02e5-5eb1-4ab6-a5ae-455518c7c316.webp",
+      "PackagePath": "staticwebassets\\uploads\\f27a02e5-5eb1-4ab6-a5ae-455518c7c316.webp"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.DnDWebpage.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",

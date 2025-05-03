@@ -611,5 +611,24 @@ img {
     word-wrap: break-word;
 }
 
+#bulletin-board {
+    position: relative;
+    width: 100%;
+    min-height: 600px; /* Ensures enough space for tokens */
+    overflow: auto; /* Allows scrolling if content overflows */
+}
 
-
+@media (max-width: 768px) {
+    #bulletin-board {
+        min-height: 800px; /* More room for mobile tokens */
+    }
+}
+.vote-tile {
+    touch-action: none; /* Prevent scrolling during drag */
+    user-select: none; /* Avoid text selection */
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: grab;
+    transition: transform 0.1s ease;
+}

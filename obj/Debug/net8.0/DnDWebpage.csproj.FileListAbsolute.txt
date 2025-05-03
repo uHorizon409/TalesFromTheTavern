@@ -313,10 +313,10 @@ C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\staticwebasse
 C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.DnDWebpage.props
 C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.DnDWebpage.props
 C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\DnDWebpage.csproj.Up2Date
 C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\DnDWebpage.dll
 C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\refint\DnDWebpage.dll
 C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\DnDWebpage.pdb
 C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\DnDWebpage.genruntimeconfig.cache
 C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\ref\DnDWebpage.dll
+C:\Users\funis\source\repos\DnDWebpage\DnDWebpage\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

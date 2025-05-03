@@ -22,6 +22,29 @@ namespace DnDWebpage.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BookPage", b =>
+                {
+                    b.Property<int>("PageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PageId"));
+
+                    b.Property<string>("ContentHTML")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PageNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("PageId");
+
+                    b.ToTable("BookPages");
+                });
+
             modelBuilder.Entity("BulletinPost", b =>
                 {
                     b.Property<int>("Id")
@@ -116,6 +139,9 @@ namespace DnDWebpage.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("HasCrimsonWyrmCover")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -173,6 +199,9 @@ namespace DnDWebpage.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Background")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -190,8 +219,10 @@ namespace DnDWebpage.Migrations
                     b.Property<int>("Dexterity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("HitPoints")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Intelligence")
@@ -199,6 +230,10 @@ namespace DnDWebpage.Migrations
 
                     b.Property<int>("Level")
                         .HasColumnType("int");
+
+                    b.Property<string>("LevelLog")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -216,20 +251,48 @@ namespace DnDWebpage.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Subrace")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Wisdom")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Characters");
+                });
+
+            modelBuilder.Entity("DnDWebpage.Models.Spell", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Classes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("School")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Spells");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -395,7 +458,7 @@ namespace DnDWebpage.Migrations
                 {
                     b.HasOne("DnDWebpage.Models.ApplicationUser", "User")
                         .WithMany("Characters")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("User");

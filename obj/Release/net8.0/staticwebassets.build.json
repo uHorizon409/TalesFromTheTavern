@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "l8Tl/nepWY4sEoaA/ws9kIetUJ90xEekn+fXzLVRYAU=",
+  "Hash": "jGupmNE+eddkgvqtvC9yKJ/9E+JyvVWY1oemd4tUlUQ=",
   "Source": "DnDWebpage",
   "BasePath": "_content/DnDWebpage",
   "Mode": "Default",
@@ -1333,11 +1333,32 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "zti4wz2ak4",
-      "Integrity": "qZvzkddO4IyLajD0x7vsO3+4la26Fq4DSyBPPWp9LSc=",
+      "Fingerprint": "4ogz8ycbwk",
+      "Integrity": "3HDetTgDPrehamBh8dO7m4slBMVqgv5kMSX/NzkkqlQ=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\battle.css"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\profile.css",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "css/profile#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yb6tzhd1xt",
+      "Integrity": "TrzhNK1RsSZv8x//Wuzmg3rIL9JwjzXFHIAXMzRYek4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\profile.css"
     },
     {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\retro.css",
@@ -1354,8 +1375,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "m9zlqref22",
-      "Integrity": "NhSErlBEiXO9hPJqHltU9hx4md3DOXEi+rpCOufYW2M=",
+      "Fingerprint": "av7gb9h7ct",
+      "Integrity": "KvVmsd+XeV2mGLgsoFXZUDcCSjywcAZoHudj0TLM1kw=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\retro.css"
@@ -1737,6 +1758,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\corkboard-texture.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\covers\\crimson-wyrm.gif",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/covers/crimson-wyrm#[.{fingerprint}]?.gif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "w0tokvnvbu",
+      "Integrity": "ELecObheq6qBw8H2K8jXcWre8JyUNYvunIEsmO20mV4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\covers\\crimson-wyrm.gif"
     },
     {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\covers\\profilebanner-option1.jpg",
@@ -2243,6 +2285,90 @@
       "OriginalItemSpec": "wwwroot\\images\\dragon.png"
     },
     {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-black.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/dragon-black#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "5b0ztcwwzc",
+      "Integrity": "UdkMhyiAL488XEkbZTHLfuO1ELbcHtSgaLolXCsQjQ8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\dragon-black.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-blue.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/dragon-blue#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "olmg4margt",
+      "Integrity": "bNI3uIeiF4QgxGvR/S+dDuYsPn5Hdysg1SvPRqRb36E=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\dragon-blue.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-green.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/dragon-green#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "5yv15233o6",
+      "Integrity": "/bT+t2/TwntxpKZF+h4XM04iIcwwXLy9/BnyVSboU38=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\dragon-green.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-red.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/dragon-red#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "a516cgvk23",
+      "Integrity": "TgcAw6Ckjk5KDpRK+0AlC9rW5lhhjcH9d3NkM83yNic=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\dragon-red.png"
+    },
+    {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\fireball.png",
       "SourceId": "DnDWebpage",
       "SourceType": "Discovered",
@@ -2509,11 +2635,32 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "qw1ojubwlp",
-      "Integrity": "VgUCM8ghVH+w88rdwoaP2/cMv+h7rK/uOHgwA5x2emQ=",
+      "Fingerprint": "e7e813uxov",
+      "Integrity": "6qZtiX+Dhc97agpo923o04uqTjmnihEmSsihI3/qJDw=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\knight.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\knight-special.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/knight-special#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "85dv1uwzvv",
+      "Integrity": "tBJhaLc4/KywJxbFGVs9eLWu/WDoYEbjjM1uJ2zGbJQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\knight-special.png"
     },
     {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\new-sword.png",
@@ -2598,6 +2745,90 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\potion.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-close.jpg",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/Questbook-close#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "08ihdau610",
+      "Integrity": "gGueZzx7iYd4eqcz3N/6w7rwd2YFVZA8ivsLVy3SvAs=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Questbook-close.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-cover.jpg",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/Questbook-cover#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "5789agawbn",
+      "Integrity": "P0SZaXAM2bOebsgdAsrdsVMkY42GJP4DXKr2fQtg4NY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Questbook-cover.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-paper.jpg",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/Questbook-paper#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ojdbl8sirx",
+      "Integrity": "VK6cZUaKkl9TaeygRUIxr+H15DqWph3PCBugKTSjo3A=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Questbook-paper.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-shelf.jpg",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/Questbook-shelf#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "js2f8rra8l",
+      "Integrity": "HcAHTmuNtSCj+FPS3S8o5W9ygVgAvrCL01cvivDfxDA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Questbook-shelf.jpg"
     },
     {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\races\\dhampir.png",
@@ -2873,6 +3104,48 @@
       "OriginalItemSpec": "wwwroot\\images\\retire-to-tavern.jpg"
     },
     {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\rogue-player.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/rogue-player#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "m1vsp8zvx1",
+      "Integrity": "1qq32u9XuPbBxMjHMvH6U4S7yUp07MIzNvtTqkWYJqY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\rogue-player.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\seraphine.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/seraphine#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yz5fmrbz4e",
+      "Integrity": "4qE9utoYUCbOPoTR9KOFQaAvzq3rzSO5Gpv446wM8mA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\seraphine.png"
+    },
+    {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\shadowfell.jpg",
       "SourceId": "DnDWebpage",
       "SourceType": "Discovered",
@@ -2913,6 +3186,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\shop.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\sneak-attack-target.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/sneak-attack-target#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "mr8k02x2js",
+      "Integrity": "nr6bqVyK/eiVH8aVLOKfz48WBH2Ce6mseC1uW/YfrxQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\sneak-attack-target.png"
     },
     {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\subclasses\\arcane-trickster-subclass.png",
@@ -4546,11 +4840,74 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "9i1ka6pvpo",
-      "Integrity": "obY5GaF8CXpWKZErWk0kcre7VxZszE6ypmsjw6KoR78=",
+      "Fingerprint": "n2himtnndl",
+      "Integrity": "78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\wizard.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\wizard-burn-effect.gif",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "images/wizard-burn-effect#[.{fingerprint}]?.gif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ppzz957mnr",
+      "Integrity": "jWyLTLGIFToS/n+PW/EploAW4LVKE/cKNW3NMj8F3AY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\wizard-burn-effect.gif"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\character-creator.js",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "js/character-creator#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "x43xjewnyg",
+      "Integrity": "ITm/lWDpGUcDFuLL/f+HmXXxnQItMbXxE26iOU0TiZo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\character-creator.js"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\profile.js",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "js/profile#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "qpkt0gzk8j",
+      "Integrity": "Hn4/TIdWcZhDPDvaNaOoXb6rBinFpBNLRK3AlrpTtHM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\profile.js"
     },
     {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\site.js",
@@ -6107,6 +6464,27 @@
       "OriginalItemSpec": "wwwroot\\sounds\\smite.mp3"
     },
     {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\sounds\\sneak-attack.mp3",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "sounds/sneak-attack#[.{fingerprint}]?.mp3",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "iac24xtuhn",
+      "Integrity": "uqIkZVn9xb5PvFTErPFHDq6y19oDekN/2HCrvv94PWg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\sounds\\sneak-attack.mp3"
+    },
+    {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\sounds\\sword-hit.mp3",
       "SourceId": "DnDWebpage",
       "SourceType": "Discovered",
@@ -6170,6 +6548,48 @@
       "OriginalItemSpec": "wwwroot\\sounds\\tile-drop.mp3"
     },
     {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\0974389b-8de5-454b-81e5-fa9d63541429_wizard.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/0974389b-8de5-454b-81e5-fa9d63541429_wizard#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "n2himtnndl",
+      "Integrity": "78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\0974389b-8de5-454b-81e5-fa9d63541429_wizard.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "n2himtnndl",
+      "Integrity": "78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard.png"
+    },
+    {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\204a3cb2-9916-4a10-92a8-c8fa021d69eb.png",
       "SourceId": "DnDWebpage",
       "SourceType": "Discovered",
@@ -6189,6 +6609,48 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\204a3cb2-9916-4a10-92a8-c8fa021d69eb.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "l45w91and7",
+      "Integrity": "9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "l45w91and7",
+      "Integrity": "9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion.png"
     },
     {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\5f26f433-f9ab-4ba6-97fb-7ca1b01984bd.png",
@@ -6296,6 +6758,48 @@
       "OriginalItemSpec": "wwwroot\\uploads\\781cb556-ea6e-4240-b766-f91cd3ee25a0.png"
     },
     {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "l45w91and7",
+      "Integrity": "9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\9b64a939-adab-4414-8135-a769a84ee319_Astarion.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/9b64a939-adab-4414-8135-a769a84ee319_Astarion#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "l45w91and7",
+      "Integrity": "9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\9b64a939-adab-4414-8135-a769a84ee319_Astarion.png"
+    },
+    {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\ab3e63b7-2229-4f6c-9428-8762da94dc31.gif",
       "SourceId": "DnDWebpage",
       "SourceType": "Discovered",
@@ -6315,6 +6819,69 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\ab3e63b7-2229-4f6c-9428-8762da94dc31.gif"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "l45w91and7",
+      "Integrity": "9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1).jpg",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1)#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "kmoshhjy4c",
+      "Integrity": "rLADOvEZPax4eu62vRW+aFkXOG7hCC1wI/JZUTgUu+s=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1).jpg"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard.png",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "n2himtnndl",
+      "Integrity": "78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard.png"
     },
     {
       "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\d14d1ecf-bcb2-461c-9545-8859f72d5c93.png",
@@ -6357,9 +6924,75 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\eba8dbd1-7f51-428b-b5fb-c853abae7d7c.png"
+    },
+    {
+      "Identity": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\f27a02e5-5eb1-4ab6-a5ae-455518c7c316.webp",
+      "SourceId": "DnDWebpage",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\",
+      "BasePath": "_content/DnDWebpage",
+      "RelativePath": "uploads/f27a02e5-5eb1-4ab6-a5ae-455518c7c316#[.{fingerprint}]?.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "k2wv5p3gk3",
+      "Integrity": "HA1ClrVsxMFL81A+stI7z0rxi2R2ymCG4sArBt8worA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\f27a02e5-5eb1-4ab6-a5ae-455518c7c316.webp"
     }
   ],
   "Endpoints": [
+    {
+      "Route": "css/battle.4ogz8ycbwk.css",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\battle.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "38697"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3HDetTgDPrehamBh8dO7m4slBMVqgv5kMSX/NzkkqlQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 14:04:36 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4ogz8ycbwk"
+        },
+        {
+          "Name": "label",
+          "Value": "css/battle.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-3HDetTgDPrehamBh8dO7m4slBMVqgv5kMSX/NzkkqlQ="
+        }
+      ]
+    },
     {
       "Route": "css/battle.css",
       "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\battle.css",
@@ -6371,7 +7004,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "37421"
+          "Value": "38697"
         },
         {
           "Name": "Content-Type",
@@ -6379,11 +7012,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"qZvzkddO4IyLajD0x7vsO3+4la26Fq4DSyBPPWp9LSc=\""
+          "Value": "\"3HDetTgDPrehamBh8dO7m4slBMVqgv5kMSX/NzkkqlQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 17:24:07 GMT"
+          "Value": "Fri, 25 Apr 2025 14:04:36 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -6393,13 +7026,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-qZvzkddO4IyLajD0x7vsO3+4la26Fq4DSyBPPWp9LSc="
+          "Value": "sha256-3HDetTgDPrehamBh8dO7m4slBMVqgv5kMSX/NzkkqlQ="
         }
       ]
     },
     {
-      "Route": "css/battle.zti4wz2ak4.css",
-      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\battle.css",
+      "Route": "css/profile.css",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\profile.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -6408,7 +7041,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "37421"
+          "Value": "12893"
         },
         {
           "Name": "Content-Type",
@@ -6416,11 +7049,48 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"qZvzkddO4IyLajD0x7vsO3+4la26Fq4DSyBPPWp9LSc=\""
+          "Value": "\"TrzhNK1RsSZv8x//Wuzmg3rIL9JwjzXFHIAXMzRYek4=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 17:24:07 GMT"
+          "Value": "Fri, 02 May 2025 18:08:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-TrzhNK1RsSZv8x//Wuzmg3rIL9JwjzXFHIAXMzRYek4="
+        }
+      ]
+    },
+    {
+      "Route": "css/profile.yb6tzhd1xt.css",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\profile.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "12893"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TrzhNK1RsSZv8x//Wuzmg3rIL9JwjzXFHIAXMzRYek4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 02 May 2025 18:08:17 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -6430,15 +7100,60 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "zti4wz2ak4"
+          "Value": "yb6tzhd1xt"
         },
         {
           "Name": "label",
-          "Value": "css/battle.css"
+          "Value": "css/profile.css"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-qZvzkddO4IyLajD0x7vsO3+4la26Fq4DSyBPPWp9LSc="
+          "Value": "sha256-TrzhNK1RsSZv8x//Wuzmg3rIL9JwjzXFHIAXMzRYek4="
+        }
+      ]
+    },
+    {
+      "Route": "css/retro.av7gb9h7ct.css",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\retro.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "14441"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KvVmsd+XeV2mGLgsoFXZUDcCSjywcAZoHudj0TLM1kw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 14:07:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "av7gb9h7ct"
+        },
+        {
+          "Name": "label",
+          "Value": "css/retro.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-KvVmsd+XeV2mGLgsoFXZUDcCSjywcAZoHudj0TLM1kw="
         }
       ]
     },
@@ -6453,7 +7168,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "13879"
+          "Value": "14441"
         },
         {
           "Name": "Content-Type",
@@ -6461,11 +7176,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"NhSErlBEiXO9hPJqHltU9hx4md3DOXEi+rpCOufYW2M=\""
+          "Value": "\"KvVmsd+XeV2mGLgsoFXZUDcCSjywcAZoHudj0TLM1kw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 00:39:19 GMT"
+          "Value": "Thu, 24 Apr 2025 14:07:24 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -6475,52 +7190,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-NhSErlBEiXO9hPJqHltU9hx4md3DOXEi+rpCOufYW2M="
-        }
-      ]
-    },
-    {
-      "Route": "css/retro.m9zlqref22.css",
-      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\css\\retro.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "13879"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"NhSErlBEiXO9hPJqHltU9hx4md3DOXEi+rpCOufYW2M=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Tue, 22 Apr 2025 00:39:19 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "m9zlqref22"
-        },
-        {
-          "Name": "label",
-          "Value": "css/retro.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-NhSErlBEiXO9hPJqHltU9hx4md3DOXEi+rpCOufYW2M="
+          "Value": "sha256-KvVmsd+XeV2mGLgsoFXZUDcCSjywcAZoHudj0TLM1kw="
         }
       ]
     },
@@ -10385,6 +11055,88 @@
       ]
     },
     {
+      "Route": "images/covers/crimson-wyrm.gif",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\covers\\crimson-wyrm.gif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8663619"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/gif"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ELecObheq6qBw8H2K8jXcWre8JyUNYvunIEsmO20mV4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 17 Apr 2025 12:00:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ELecObheq6qBw8H2K8jXcWre8JyUNYvunIEsmO20mV4="
+        }
+      ]
+    },
+    {
+      "Route": "images/covers/crimson-wyrm.w0tokvnvbu.gif",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\covers\\crimson-wyrm.gif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8663619"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/gif"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ELecObheq6qBw8H2K8jXcWre8JyUNYvunIEsmO20mV4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 17 Apr 2025 12:00:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "w0tokvnvbu"
+        },
+        {
+          "Name": "label",
+          "Value": "images/covers/crimson-wyrm.gif"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ELecObheq6qBw8H2K8jXcWre8JyUNYvunIEsmO20mV4="
+        }
+      ]
+    },
+    {
       "Route": "images/covers/profilebanner-option1.8lhkmlbhfu.jpg",
       "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\covers\\profilebanner-option1.jpg",
       "Selectors": [],
@@ -12353,6 +13105,334 @@
       ]
     },
     {
+      "Route": "images/dragon-black.5b0ztcwwzc.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-black.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "407814"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UdkMhyiAL488XEkbZTHLfuO1ELbcHtSgaLolXCsQjQ8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:04:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5b0ztcwwzc"
+        },
+        {
+          "Name": "label",
+          "Value": "images/dragon-black.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-UdkMhyiAL488XEkbZTHLfuO1ELbcHtSgaLolXCsQjQ8="
+        }
+      ]
+    },
+    {
+      "Route": "images/dragon-black.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-black.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "407814"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"UdkMhyiAL488XEkbZTHLfuO1ELbcHtSgaLolXCsQjQ8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:04:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-UdkMhyiAL488XEkbZTHLfuO1ELbcHtSgaLolXCsQjQ8="
+        }
+      ]
+    },
+    {
+      "Route": "images/dragon-blue.olmg4margt.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-blue.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "528740"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bNI3uIeiF4QgxGvR/S+dDuYsPn5Hdysg1SvPRqRb36E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:04:13 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "olmg4margt"
+        },
+        {
+          "Name": "label",
+          "Value": "images/dragon-blue.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-bNI3uIeiF4QgxGvR/S+dDuYsPn5Hdysg1SvPRqRb36E="
+        }
+      ]
+    },
+    {
+      "Route": "images/dragon-blue.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-blue.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "528740"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bNI3uIeiF4QgxGvR/S+dDuYsPn5Hdysg1SvPRqRb36E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:04:13 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-bNI3uIeiF4QgxGvR/S+dDuYsPn5Hdysg1SvPRqRb36E="
+        }
+      ]
+    },
+    {
+      "Route": "images/dragon-green.5yv15233o6.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-green.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "609169"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/bT+t2/TwntxpKZF+h4XM04iIcwwXLy9/BnyVSboU38=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:03:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5yv15233o6"
+        },
+        {
+          "Name": "label",
+          "Value": "images/dragon-green.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/bT+t2/TwntxpKZF+h4XM04iIcwwXLy9/BnyVSboU38="
+        }
+      ]
+    },
+    {
+      "Route": "images/dragon-green.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-green.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "609169"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/bT+t2/TwntxpKZF+h4XM04iIcwwXLy9/BnyVSboU38=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:03:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-/bT+t2/TwntxpKZF+h4XM04iIcwwXLy9/BnyVSboU38="
+        }
+      ]
+    },
+    {
+      "Route": "images/dragon-red.a516cgvk23.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-red.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "582778"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TgcAw6Ckjk5KDpRK+0AlC9rW5lhhjcH9d3NkM83yNic=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:02:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "a516cgvk23"
+        },
+        {
+          "Name": "label",
+          "Value": "images/dragon-red.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-TgcAw6Ckjk5KDpRK+0AlC9rW5lhhjcH9d3NkM83yNic="
+        }
+      ]
+    },
+    {
+      "Route": "images/dragon-red.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\dragon-red.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "582778"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TgcAw6Ckjk5KDpRK+0AlC9rW5lhhjcH9d3NkM83yNic=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:02:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-TgcAw6Ckjk5KDpRK+0AlC9rW5lhhjcH9d3NkM83yNic="
+        }
+      ]
+    },
+    {
       "Route": "images/fireball.png",
       "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\fireball.png",
       "Selectors": [],
@@ -13337,6 +14417,51 @@
       ]
     },
     {
+      "Route": "images/knight.e7e813uxov.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\knight.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "476759"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6qZtiX+Dhc97agpo923o04uqTjmnihEmSsihI3/qJDw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:14:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "e7e813uxov"
+        },
+        {
+          "Name": "label",
+          "Value": "images/knight.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6qZtiX+Dhc97agpo923o04uqTjmnihEmSsihI3/qJDw="
+        }
+      ]
+    },
+    {
       "Route": "images/knight.png",
       "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\knight.png",
       "Selectors": [],
@@ -13347,7 +14472,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "628200"
+          "Value": "476759"
         },
         {
           "Name": "Content-Type",
@@ -13355,11 +14480,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"VgUCM8ghVH+w88rdwoaP2/cMv+h7rK/uOHgwA5x2emQ=\""
+          "Value": "\"6qZtiX+Dhc97agpo923o04uqTjmnihEmSsihI3/qJDw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 23 Apr 2025 14:52:31 GMT"
+          "Value": "Thu, 24 Apr 2025 21:14:41 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -13369,13 +14494,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-VgUCM8ghVH+w88rdwoaP2/cMv+h7rK/uOHgwA5x2emQ="
+          "Value": "sha256-6qZtiX+Dhc97agpo923o04uqTjmnihEmSsihI3/qJDw="
         }
       ]
     },
     {
-      "Route": "images/knight.qw1ojubwlp.png",
-      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\knight.png",
+      "Route": "images/knight-special.85dv1uwzvv.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\knight-special.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -13384,7 +14509,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "628200"
+          "Value": "568400"
         },
         {
           "Name": "Content-Type",
@@ -13392,11 +14517,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"VgUCM8ghVH+w88rdwoaP2/cMv+h7rK/uOHgwA5x2emQ=\""
+          "Value": "\"tBJhaLc4/KywJxbFGVs9eLWu/WDoYEbjjM1uJ2zGbJQ=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 23 Apr 2025 14:52:31 GMT"
+          "Value": "Wed, 23 Apr 2025 22:15:58 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -13406,15 +14531,52 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "qw1ojubwlp"
+          "Value": "85dv1uwzvv"
         },
         {
           "Name": "label",
-          "Value": "images/knight.png"
+          "Value": "images/knight-special.png"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-VgUCM8ghVH+w88rdwoaP2/cMv+h7rK/uOHgwA5x2emQ="
+          "Value": "sha256-tBJhaLc4/KywJxbFGVs9eLWu/WDoYEbjjM1uJ2zGbJQ="
+        }
+      ]
+    },
+    {
+      "Route": "images/knight-special.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\knight-special.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "568400"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"tBJhaLc4/KywJxbFGVs9eLWu/WDoYEbjjM1uJ2zGbJQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 22:15:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-tBJhaLc4/KywJxbFGVs9eLWu/WDoYEbjjM1uJ2zGbJQ="
         }
       ]
     },
@@ -13743,6 +14905,334 @@
         {
           "Name": "integrity",
           "Value": "sha256-klhHlpPsA8kSchJe1A6cpRIBX5+wGh9rHwNSdZQcmo8="
+        }
+      ]
+    },
+    {
+      "Route": "images/Questbook-close.08ihdau610.jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-close.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "235488"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gGueZzx7iYd4eqcz3N/6w7rwd2YFVZA8ivsLVy3SvAs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 20:32:08 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "08ihdau610"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Questbook-close.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-gGueZzx7iYd4eqcz3N/6w7rwd2YFVZA8ivsLVy3SvAs="
+        }
+      ]
+    },
+    {
+      "Route": "images/Questbook-close.jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-close.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "235488"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gGueZzx7iYd4eqcz3N/6w7rwd2YFVZA8ivsLVy3SvAs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 20:32:08 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-gGueZzx7iYd4eqcz3N/6w7rwd2YFVZA8ivsLVy3SvAs="
+        }
+      ]
+    },
+    {
+      "Route": "images/Questbook-cover.5789agawbn.jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-cover.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "184015"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"P0SZaXAM2bOebsgdAsrdsVMkY42GJP4DXKr2fQtg4NY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 20:17:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5789agawbn"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Questbook-cover.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-P0SZaXAM2bOebsgdAsrdsVMkY42GJP4DXKr2fQtg4NY="
+        }
+      ]
+    },
+    {
+      "Route": "images/Questbook-cover.jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-cover.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "184015"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"P0SZaXAM2bOebsgdAsrdsVMkY42GJP4DXKr2fQtg4NY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 20:17:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-P0SZaXAM2bOebsgdAsrdsVMkY42GJP4DXKr2fQtg4NY="
+        }
+      ]
+    },
+    {
+      "Route": "images/Questbook-paper.jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-paper.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1059753"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"VK6cZUaKkl9TaeygRUIxr+H15DqWph3PCBugKTSjo3A=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 19:05:48 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-VK6cZUaKkl9TaeygRUIxr+H15DqWph3PCBugKTSjo3A="
+        }
+      ]
+    },
+    {
+      "Route": "images/Questbook-paper.ojdbl8sirx.jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-paper.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1059753"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"VK6cZUaKkl9TaeygRUIxr+H15DqWph3PCBugKTSjo3A=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 19:05:48 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ojdbl8sirx"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Questbook-paper.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-VK6cZUaKkl9TaeygRUIxr+H15DqWph3PCBugKTSjo3A="
+        }
+      ]
+    },
+    {
+      "Route": "images/Questbook-shelf.jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-shelf.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "817557"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"HcAHTmuNtSCj+FPS3S8o5W9ygVgAvrCL01cvivDfxDA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 20:23:04 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-HcAHTmuNtSCj+FPS3S8o5W9ygVgAvrCL01cvivDfxDA="
+        }
+      ]
+    },
+    {
+      "Route": "images/Questbook-shelf.js2f8rra8l.jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\Questbook-shelf.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "817557"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"HcAHTmuNtSCj+FPS3S8o5W9ygVgAvrCL01cvivDfxDA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 23 Apr 2025 20:23:04 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "js2f8rra8l"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Questbook-shelf.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-HcAHTmuNtSCj+FPS3S8o5W9ygVgAvrCL01cvivDfxDA="
         }
       ]
     },
@@ -14813,6 +16303,170 @@
       ]
     },
     {
+      "Route": "images/rogue-player.m1vsp8zvx1.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\rogue-player.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "399136"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"1qq32u9XuPbBxMjHMvH6U4S7yUp07MIzNvtTqkWYJqY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:01:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "m1vsp8zvx1"
+        },
+        {
+          "Name": "label",
+          "Value": "images/rogue-player.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-1qq32u9XuPbBxMjHMvH6U4S7yUp07MIzNvtTqkWYJqY="
+        }
+      ]
+    },
+    {
+      "Route": "images/rogue-player.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\rogue-player.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "399136"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"1qq32u9XuPbBxMjHMvH6U4S7yUp07MIzNvtTqkWYJqY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 21:01:28 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-1qq32u9XuPbBxMjHMvH6U4S7yUp07MIzNvtTqkWYJqY="
+        }
+      ]
+    },
+    {
+      "Route": "images/seraphine.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\seraphine.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "269580"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4qE9utoYUCbOPoTR9KOFQaAvzq3rzSO5Gpv446wM8mA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 20:59:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-4qE9utoYUCbOPoTR9KOFQaAvzq3rzSO5Gpv446wM8mA="
+        }
+      ]
+    },
+    {
+      "Route": "images/seraphine.yz5fmrbz4e.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\seraphine.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "269580"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"4qE9utoYUCbOPoTR9KOFQaAvzq3rzSO5Gpv446wM8mA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 24 Apr 2025 20:59:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yz5fmrbz4e"
+        },
+        {
+          "Name": "label",
+          "Value": "images/seraphine.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-4qE9utoYUCbOPoTR9KOFQaAvzq3rzSO5Gpv446wM8mA="
+        }
+      ]
+    },
+    {
       "Route": "images/shadowfell.bul7ghcfvm.jpg",
       "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\shadowfell.jpg",
       "Selectors": [],
@@ -14973,6 +16627,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-6UP1L7JUaWAzgJk764V8anMgA+D/DT1BmGo9Z8cITzk="
+        }
+      ]
+    },
+    {
+      "Route": "images/sneak-attack-target.mr8k02x2js.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\sneak-attack-target.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "27648"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"nr6bqVyK/eiVH8aVLOKfz48WBH2Ce6mseC1uW/YfrxQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 13:21:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "mr8k02x2js"
+        },
+        {
+          "Name": "label",
+          "Value": "images/sneak-attack-target.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-nr6bqVyK/eiVH8aVLOKfz48WBH2Ce6mseC1uW/YfrxQ="
+        }
+      ]
+    },
+    {
+      "Route": "images/sneak-attack-target.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\sneak-attack-target.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "27648"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"nr6bqVyK/eiVH8aVLOKfz48WBH2Ce6mseC1uW/YfrxQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 13:21:30 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-nr6bqVyK/eiVH8aVLOKfz48WBH2Ce6mseC1uW/YfrxQ="
         }
       ]
     },
@@ -21291,7 +23027,7 @@
       ]
     },
     {
-      "Route": "images/wizard.9i1ka6pvpo.png",
+      "Route": "images/wizard.n2himtnndl.png",
       "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\wizard.png",
       "Selectors": [],
       "ResponseHeaders": [
@@ -21301,7 +23037,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "589817"
+          "Value": "647291"
         },
         {
           "Name": "Content-Type",
@@ -21309,11 +23045,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"obY5GaF8CXpWKZErWk0kcre7VxZszE6ypmsjw6KoR78=\""
+          "Value": "\"78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 23 Apr 2025 14:48:32 GMT"
+          "Value": "Thu, 24 Apr 2025 21:07:22 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -21323,7 +23059,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "9i1ka6pvpo"
+          "Value": "n2himtnndl"
         },
         {
           "Name": "label",
@@ -21331,7 +23067,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-obY5GaF8CXpWKZErWk0kcre7VxZszE6ypmsjw6KoR78="
+          "Value": "sha256-78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU="
         }
       ]
     },
@@ -21346,7 +23082,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "589817"
+          "Value": "647291"
         },
         {
           "Name": "Content-Type",
@@ -21354,11 +23090,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"obY5GaF8CXpWKZErWk0kcre7VxZszE6ypmsjw6KoR78=\""
+          "Value": "\"78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 23 Apr 2025 14:48:32 GMT"
+          "Value": "Thu, 24 Apr 2025 21:07:22 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -21368,7 +23104,253 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-obY5GaF8CXpWKZErWk0kcre7VxZszE6ypmsjw6KoR78="
+          "Value": "sha256-78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU="
+        }
+      ]
+    },
+    {
+      "Route": "images/wizard-burn-effect.gif",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\wizard-burn-effect.gif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30677"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/gif"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"jWyLTLGIFToS/n+PW/EploAW4LVKE/cKNW3NMj8F3AY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 13:55:39 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-jWyLTLGIFToS/n+PW/EploAW4LVKE/cKNW3NMj8F3AY="
+        }
+      ]
+    },
+    {
+      "Route": "images/wizard-burn-effect.ppzz957mnr.gif",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\images\\wizard-burn-effect.gif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30677"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/gif"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"jWyLTLGIFToS/n+PW/EploAW4LVKE/cKNW3NMj8F3AY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 13:55:39 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ppzz957mnr"
+        },
+        {
+          "Name": "label",
+          "Value": "images/wizard-burn-effect.gif"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-jWyLTLGIFToS/n+PW/EploAW4LVKE/cKNW3NMj8F3AY="
+        }
+      ]
+    },
+    {
+      "Route": "js/character-creator.js",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\character-creator.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "10607"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ITm/lWDpGUcDFuLL/f+HmXXxnQItMbXxE26iOU0TiZo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Apr 2025 21:03:06 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ITm/lWDpGUcDFuLL/f+HmXXxnQItMbXxE26iOU0TiZo="
+        }
+      ]
+    },
+    {
+      "Route": "js/character-creator.x43xjewnyg.js",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\character-creator.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "10607"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ITm/lWDpGUcDFuLL/f+HmXXxnQItMbXxE26iOU0TiZo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Apr 2025 21:03:06 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "x43xjewnyg"
+        },
+        {
+          "Name": "label",
+          "Value": "js/character-creator.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ITm/lWDpGUcDFuLL/f+HmXXxnQItMbXxE26iOU0TiZo="
+        }
+      ]
+    },
+    {
+      "Route": "js/profile.js",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\profile.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "10544"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hn4/TIdWcZhDPDvaNaOoXb6rBinFpBNLRK3AlrpTtHM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 02 May 2025 18:19:21 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Hn4/TIdWcZhDPDvaNaOoXb6rBinFpBNLRK3AlrpTtHM="
+        }
+      ]
+    },
+    {
+      "Route": "js/profile.qpkt0gzk8j.js",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\js\\profile.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "10544"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Hn4/TIdWcZhDPDvaNaOoXb6rBinFpBNLRK3AlrpTtHM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 02 May 2025 18:19:21 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "qpkt0gzk8j"
+        },
+        {
+          "Name": "label",
+          "Value": "js/profile.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Hn4/TIdWcZhDPDvaNaOoXb6rBinFpBNLRK3AlrpTtHM="
         }
       ]
     },
@@ -27441,6 +29423,88 @@
       ]
     },
     {
+      "Route": "sounds/sneak-attack.iac24xtuhn.mp3",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\sounds\\sneak-attack.mp3",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "126223"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "audio/mpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"uqIkZVn9xb5PvFTErPFHDq6y19oDekN/2HCrvv94PWg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 13:17:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "iac24xtuhn"
+        },
+        {
+          "Name": "label",
+          "Value": "sounds/sneak-attack.mp3"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-uqIkZVn9xb5PvFTErPFHDq6y19oDekN/2HCrvv94PWg="
+        }
+      ]
+    },
+    {
+      "Route": "sounds/sneak-attack.mp3",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\sounds\\sneak-attack.mp3",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "126223"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "audio/mpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"uqIkZVn9xb5PvFTErPFHDq6y19oDekN/2HCrvv94PWg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 25 Apr 2025 13:17:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-uqIkZVn9xb5PvFTErPFHDq6y19oDekN/2HCrvv94PWg="
+        }
+      ]
+    },
+    {
       "Route": "sounds/sword-hit.5nixxetio6.mp3",
       "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\sounds\\sword-hit.mp3",
       "Selectors": [],
@@ -27687,6 +29751,170 @@
       ]
     },
     {
+      "Route": "uploads/0974389b-8de5-454b-81e5-fa9d63541429_wizard.n2himtnndl.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\0974389b-8de5-454b-81e5-fa9d63541429_wizard.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "647291"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 12:33:48 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "n2himtnndl"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/0974389b-8de5-454b-81e5-fa9d63541429_wizard.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/0974389b-8de5-454b-81e5-fa9d63541429_wizard.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\0974389b-8de5-454b-81e5-fa9d63541429_wizard.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "647291"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 12:33:48 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard.n2himtnndl.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "647291"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 12:46:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "n2himtnndl"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\15349125-0433-4f5f-bdbd-e796fce7f1c0_wizard.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "647291"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 12:46:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU="
+        }
+      ]
+    },
+    {
       "Route": "uploads/204a3cb2-9916-4a10-92a8-c8fa021d69eb.png",
       "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\204a3cb2-9916-4a10-92a8-c8fa021d69eb.png",
       "Selectors": [],
@@ -27765,6 +29993,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-yhW9uus4DNU7BmAFVxK3t4YPohZqBtu+t59/l8rHMgY="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion.l45w91and7.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 14:07:44 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "l45w91and7"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\37d44479-35ce-4dd1-9d7b-bdc7232914b0_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 14:07:44 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion.l45w91and7.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Apr 2025 20:36:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "l45w91and7"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\50b61f60-dff4-4f6b-a429-363971b0b0fb_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Apr 2025 20:36:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
         }
       ]
     },
@@ -28179,6 +30571,170 @@
       ]
     },
     {
+      "Route": "uploads/95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion.l45w91and7.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 02 May 2025 17:57:36 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "l45w91and7"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\95ab7542-cad0-4d2a-91bd-ba4ecc50bdd0_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 02 May 2025 17:57:36 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/9b64a939-adab-4414-8135-a769a84ee319_Astarion.l45w91and7.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\9b64a939-adab-4414-8135-a769a84ee319_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 15:54:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "l45w91and7"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/9b64a939-adab-4414-8135-a769a84ee319_Astarion.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/9b64a939-adab-4414-8135-a769a84ee319_Astarion.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\9b64a939-adab-4414-8135-a769a84ee319_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 15:54:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
+        }
+      ]
+    },
+    {
       "Route": "uploads/ab3e63b7-2229-4f6c-9428-8762da94dc31.gif",
       "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\ab3e63b7-2229-4f6c-9428-8762da94dc31.gif",
       "Selectors": [],
@@ -28257,6 +30813,252 @@
         {
           "Name": "integrity",
           "Value": "sha256-ELecObheq6qBw8H2K8jXcWre8JyUNYvunIEsmO20mV4="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion.l45w91and7.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 02 May 2025 18:01:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "l45w91and7"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\b0c8a8ea-ea0e-4dfa-ba3d-39c23af9cc39_Astarion.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "523842"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 02 May 2025 18:01:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-9Y5fAD6dLCYP8h/U5DLJt1LcfUlREwRKaLWi2YkcfdU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1).jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1).jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "398789"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rLADOvEZPax4eu62vRW+aFkXOG7hCC1wI/JZUTgUu+s=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Apr 2025 21:14:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-rLADOvEZPax4eu62vRW+aFkXOG7hCC1wI/JZUTgUu+s="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1).kmoshhjy4c.jpg",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1).jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "398789"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rLADOvEZPax4eu62vRW+aFkXOG7hCC1wI/JZUTgUu+s=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 30 Apr 2025 21:14:12 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "kmoshhjy4c"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/b4d369bf-3808-491c-96a4-1da35fcffccb_IMG_3982(1).jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-rLADOvEZPax4eu62vRW+aFkXOG7hCC1wI/JZUTgUu+s="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard.n2himtnndl.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "647291"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 12:27:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "n2himtnndl"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard.png",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\caa00036-e7a0-4d24-a7cf-3dc21dd4adf0_wizard.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "647291"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 12:27:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-78C4r8TlP4dfvG1mMh8L1ZLZ+LQW+evBfzSLhIpoDHU="
         }
       ]
     },
@@ -28421,6 +31223,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-UDYyezWkJz9RGUWfr0lZv3t9OOP6nabXuTEWnIJn5ls="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/f27a02e5-5eb1-4ab6-a5ae-455518c7c316.k2wv5p3gk3.webp",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\f27a02e5-5eb1-4ab6-a5ae-455518c7c316.webp",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "433348"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/webp"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"HA1ClrVsxMFL81A+stI7z0rxi2R2ymCG4sArBt8worA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 10:11:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "k2wv5p3gk3"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/f27a02e5-5eb1-4ab6-a5ae-455518c7c316.webp"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-HA1ClrVsxMFL81A+stI7z0rxi2R2ymCG4sArBt8worA="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/f27a02e5-5eb1-4ab6-a5ae-455518c7c316.webp",
+      "AssetFile": "C:\\Users\\funis\\source\\repos\\DnDWebpage\\DnDWebpage\\wwwroot\\uploads\\f27a02e5-5eb1-4ab6-a5ae-455518c7c316.webp",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "433348"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/webp"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"HA1ClrVsxMFL81A+stI7z0rxi2R2ymCG4sArBt8worA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 29 Apr 2025 10:11:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-HA1ClrVsxMFL81A+stI7z0rxi2R2ymCG4sArBt8worA="
         }
       ]
     }

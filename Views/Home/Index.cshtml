@@ -1,6 +1,5 @@
 ﻿@model DnDWebpage.Models.BulletinBoardViewModel
 
-
 @using System.Security.Claims
 @{
     ViewData["Title"] = "Home";
@@ -42,7 +41,7 @@
             <a href="/Rules" class="btn dnd-btn" data-theme="rules">Rules</a>
             <a href="/Character/Create" class="btn dnd-btn" data-theme="character">Character Forge</a>
             <a href="/Spells" class="btn dnd-btn" data-theme="spells">Spell Grimoire</a>
-            <a href="/Campaigns" class="btn dnd-btn" data-theme="campaign">Quests</a>
+            <a href="/Campaigns" class="btn dnd-btn" data-theme="campaign">Quest Journal</a>
             <a href="/Bestiary" class="btn dnd-btn" data-theme="bestiary">Bestiary</a>
         </div>
     </div>
@@ -432,22 +431,32 @@
     // 6. Drag Logic (Pointer-based)
     // ────────────────────────────────────────────────────────────────────────
 
-    // 🚀 START DRAG
+       // 🚀 START DRAG (Pointer + Touch Enhanced)
     function startDrag(e) {
         if (e.target.dataset.userid !== document.body.dataset.userid) return;
+
+        e.preventDefault(); // Prevent scrolling on mobile
 
         activeToken = e.target;
         activeToken.style.pointerEvents = "none";
 
         const rect = activeToken.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
+        offsetX = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+        offsetY = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
 
-        activeToken.setPointerCapture(e.pointerId);
+        if (e.pointerId !== undefined) {
+            activeToken.setPointerCapture(e.pointerId);
+        }
+
         const board = document.getElementById("bulletin-board");
+
+        // Bind both Pointer and Touch for smoother mobile drag
         board.addEventListener("pointermove", onDrag);
         board.addEventListener("pointerup", endDrag);
+        board.addEventListener("touchmove", onDrag, { passive: false });
+        board.addEventListener("touchend", endDrag);
     }
+
 
     // 🕹️ ON DRAG
     function onDrag(e) {
@@ -459,8 +468,15 @@
         const tokenWidth = activeToken.offsetWidth;
 
         // Calculate raw position
-        let x = e.clientX - boardRect.left - offsetX;
-        let y = e.clientY - boardRect.top - offsetY;
+      let clientX = e.clientX || (e.touches && e.touches[0]?.clientX);
+let clientY = e.clientY || (e.touches && e.touches[0]?.clientY);
+
+if (clientX == null || clientY == null) return; // Prevent NaN errors
+
+let x = clientX - boardRect.left - offsetX;
+let y = clientY - boardRect.top - offsetY;
+
+
 
         // Clamp X within board width
         x = Math.max(0, Math.min(x, board.clientWidth - tokenWidth));
@@ -595,6 +611,9 @@
         // Rebind for next drag
         document.querySelectorAll(".vote-tile").forEach(tile => {
             tile.removeEventListener("pointerdown", startDrag);
+                document.removeEventListener("touchmove", onDrag);
+    document.removeEventListener("touchend", endDrag);
+
             tile.addEventListener("pointerdown", startDrag);
         });
     }
@@ -646,4 +665,3 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/D20BattleStyles.css" />
 }
-

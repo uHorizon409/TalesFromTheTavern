@@ -1,57 +1,60 @@
 ﻿@model DnDWebpage.Models.ApplicationUser
-@{
-    ViewData["Title"] = $"{Model.UserName}'s Profile";
-    Layout = "~/Views/Shared/_ParchmentLayout.cshtml";
+@using System.Linq
 
+@{
     var coverImage = !string.IsNullOrEmpty(Model.CoverUrl)
         ? Model.CoverUrl
         : "/images/covers/profilebanner-option10.jpg";
+
+    var isWyrmCover = coverImage.Contains("crimson-wyrm.gif");
 }
 
-<!-- ════════════════════════════════════════════════════════ -->
 <!-- 🔙 Back to Bulletin Button -->
-<!-- ════════════════════════════════════════════════════════ -->
 <div class="text-center mt-3 mb-4">
     <a href="/" class="btn dnd-btn" data-theme="campaign">
         Return to the Tavern Board
     </a>
 </div>
 
-<!-- ════════════════════════════════════════════════════════ -->
-<!-- 🔮 Heroic Cover Banner -->
-<!-- ════════════════════════════════════════════════════════ -->
-<div class="profile-banner" style="
-    background-image: url('@coverImage');
-    background-size: cover;
-    background-position: center top;
-    border: 4px double gold;
-    border-radius: 18px;
-    height: 340px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2.5rem;
-    box-shadow: 0 0 40px rgba(218, 165, 32, 0.9);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-">
-    <div style="
-        background: rgba(0, 0, 0, 0.5);
-        padding: 1.5rem 2rem;
-        border-radius: 12px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
-    ">
-        <h1 style="font-family: 'Cinzel Decorative', serif; color: gold; font-size: 3rem; text-shadow: 3px 3px 6px #000;">
-            @Model.UserName's Profile
-        </h1>
+<!-- 🔮 Heroic Cover Display -->
+@if (isWyrmCover)
+{
+    <div class="wyrm-banner-special text-center mx-auto">
+        <img src="@coverImage" alt="Crimson Wyrm Cover" class="wyrm-cover-img" />
+        <h1 class="wyrm-title">@Model.UserName's Profile</h1>
     </div>
-</div>
+}
+else
+{
+    <div class="profile-banner" style="
+        background-image: url('@coverImage');
+        background-size: cover;
+        background-position: center top;
+        height: 340px;
+        border: 4px double gold;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 0 40px rgba(218, 165, 32, 0.9);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        padding: 1rem;">
+        <div style="
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);">
+            <h1 style="font-family: 'Cinzel Decorative', serif; color: gold; font-size: 2rem; text-shadow: 3px 3px 6px #000; margin: 0;">
+                @Model.UserName's Profile
+            </h1>
+        </div>
+    </div>
+}
 
-
-<!-- ════════════════════════════════════════════════════════ -->
 <!-- 🧾 Profile Info -->
-<!-- ════════════════════════════════════════════════════════ -->
 <div class="container text-light">
     <div class="row mb-5 align-items-center">
         <!-- Profile Image -->
@@ -71,9 +74,7 @@
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════ -->
     <!-- 🧝 Character Gallery -->
-    <!-- ════════════════════════════════════════════════════════ -->
     <hr class="border-warning" />
     <h3 class="text-center text-warning mb-3" style="font-family: 'Cinzel Decorative', serif;">
         Characters Gallery
@@ -120,13 +121,145 @@
     {
         <p class="text-center text-muted">This adventurer hasn’t created any characters yet.</p>
     }
+</div>
 
-
-<!-- ════════════════════════════════════════════════════════ -->
-<!-- 🛠 Restore Navbar Avatar for this view -->
-<!-- ════════════════════════════════════════════════════════ -->
+<!-- 🛠 Restore Navbar Avatar -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         document.body.dataset.avatar = '@ViewBag.NavAvatar';
     });
 </script>
+
+<!-- Styles -->
+<style>
+    /* Special Crimson Wyrm Banner (as a hero banner) */
+    /* Special Crimson Wyrm Banner - Legendary Styling */
+    .wyrm-banner-special {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto 2rem auto;
+        border: 4px solid gold;
+        border-radius: 16px;
+        box-shadow: 0 0 20px gold, 0 0 40px crimson, 0 0 60px gold, 0 0 80px crimson; /* Multiple layers for stronger glow */
+        overflow: hidden;
+        height: 250px;
+        position: relative;
+        background: radial-gradient(rgba(255, 215, 0, 0.1), rgba(220, 20, 60, 0.2)); /* subtle background glow inside too */
+        animation: wyrmGlow 4s ease-in-out infinite alternate;
+    }
+
+    /* Glowing animation for wyrm banner */
+    @@keyframes wyrmGlow {
+        0%
+
+    {
+        box-shadow: 0 0 15px gold, 0 0 30px crimson, 0 0 45px gold, 0 0 60px crimson;
+    }
+
+    100% {
+        box-shadow: 0 0 25px gold, 0 0 50px crimson, 0 0 75px gold, 0 0 100px crimson;
+    }
+
+    }
+
+    /* Mobile adjustments */
+    @@media (max-width: 768px) {
+        .wyrm-banner-special {
+            height: 180px;
+        }
+
+        .wyrm-title {
+            font-size: 1.4rem;
+            padding: 0.4rem 0.8rem;
+        }
+    }
+
+    .wyrm-cover-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* crop correctly */
+        object-position: center; /* show center of image */
+        border-radius: 12px;
+    }
+
+    .wyrm-title {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Cinzel Decorative', serif;
+        color: gold;
+        font-size: 2rem;
+        text-shadow: 3px 3px 6px #000;
+        margin: 0;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+    }
+
+    /* Mobile adjustments */
+    @@media (max-width: 768px) {
+        .wyrm-banner-special {
+            height: 200px;
+        }
+
+        .wyrm-title {
+            font-size: 1.4rem;
+            padding: 0.4rem 0.8rem;
+        }
+    }
+
+    /* Profile banner (non-Wyrm) */
+    .profile-banner {
+        background-size: cover;
+        background-position: center center; /* Change from center top to center center */
+        border: 4px double gold;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 0 40px rgba(218, 165, 32, 0.9);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        padding: 1rem;
+        width: 100%;
+        min-height: 250px; /* Minimum height */
+        height: 40vh; /* Responsive height based on screen */
+        max-height: 400px; /* Max height to avoid being massive */
+    }
+
+        .profile-banner > div {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .profile-banner h1 {
+            font-family: 'Cinzel Decorative', serif;
+            color: gold;
+            font-size: 2rem;
+            text-shadow: 3px 3px 6px #000;
+            margin: 0;
+        }
+
+    /* Mobile adjustments */
+    @@media (max-width: 768px) {
+        .wyrm-title {
+            font-size: 1.5rem;
+        }
+
+        .profile-banner {
+            height: 30vh; /* Slightly smaller height on mobile */
+            min-height: 180px;
+            padding: 0.5rem;
+        }
+
+            .profile-banner h1 {
+                font-size: 1.5rem;
+            }
+    }
+</style>

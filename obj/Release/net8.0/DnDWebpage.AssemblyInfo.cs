@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DnDWebpage")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+973f0e1e3e2ec38627b0a92b719e61e9b437f1ad")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b7f22cdde3503496504d1e65e0f85d7e7ab61f80")]
 [assembly: System.Reflection.AssemblyProductAttribute("DnDWebpage")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DnDWebpage")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

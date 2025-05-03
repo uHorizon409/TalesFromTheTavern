@@ -1,5 +1,8 @@
 ﻿@page
 @model DnDWebpage.Areas.Identity.Pages.Account.Manage.ProfileModel
+<form id="antiForgeryForm">
+    @Html.AntiForgeryToken()
+</form>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml"; // Enforces use of main layout
 
@@ -12,6 +15,7 @@
 
     ViewData["Title"] = "Your Heroic Profile";
 }
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Fonts & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=MedievalSharp&display=swap" rel="stylesheet">
@@ -26,24 +30,64 @@
     <div class="cover-modal-box">
         <span class="cover-modal-close" onclick="closeCoverModal()">✖</span>
         <h3 class="cover-modal-title">Select Your Cover</h3>
+
+        <!-- 🔥 Cover Thumbnails -->
         <div class="cover-thumbnails">
-            @for (int i = 1; i <= 15; i++)
+            @for (int i = 1; i <= 16; i++)
             {
-                var coverPath = Url.Content($"~/images/covers/profilebanner-option{i}.jpg");
-                <img src="@coverPath" alt="Cover @i" class="cover-thumbnail" onclick="selectCover('@coverPath')" />
+                var coverPath = i == 16
+                ? Url.Content("~/images/covers/crimson-wyrm.gif")
+                : Url.Content($"~/images/covers/profilebanner-option{i}.jpg");
+
+                var isLocked = i == 16 && !Model.HasCrimsonWyrmCover;
+                var coverClass = isLocked ? "cover-thumbnail locked" : "cover-thumbnail";
+                var dataLocked = isLocked.ToString().ToLower();
+                <div class="thumbnail-wrapper">
+                <img src="@coverPath"
+                     alt="Cover @i"
+                     class="@coverClass"
+                     data-locked="@isLocked.ToString().ToLower()"
+                     data-cover="@coverPath"
+                     onclick="selectCover('@Html.Raw(coverPath)', @isLocked.ToString().ToLower())" />
+                @if (isLocked && coverPath.Contains("crimson-wyrm.gif"))
+                {
+                    <div class="locked-overlay">
+                        🔒 Locked
+                    </div>
+                }
+                </div>
+
+
             }
+
         </div>
+
+        <div class="cover-preview-container">
+            <img id="selectedCoverPreview" src="" alt="Selected Cover" class="cover-preview" style="display:none;" />
+        </div>
+
+
+        <!-- Save the selected cover -->
+        <button type="button" class="btn magic-btn" onclick="document.getElementById('profileForm').submit()">Save Cover</button>
     </div>
 </div>
+
+<!-- 🔔 Tooltip for Locked Covers -->
+<div id="lockedTooltip" style="display:none; position:absolute; background:rgba(0,0,0,0.85); color:white; padding:5px 10px; border-radius:5px; z-index:9999; font-family: 'MedievalSharp', cursive; font-size: 0.9rem;">
+    You must acquire the Retirement ending to unlock this cover.
+</div>
+
+
 <style>
     /* Global Styles */
     body {
         margin: 0;
         padding: 0;
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(92, 0, 0, 0.7)), url('@backgroundCover') no-repeat center center fixed;
+        background: url('@backgroundCover') no-repeat center center fixed;
         background-size: cover;
         font-family: 'Cinzel Decorative', serif;
     }
+
 
     .profile-wrapper {
         display: flex;
@@ -576,7 +620,165 @@
             background-color: rgba(128, 0, 0, 0.8);
             transform: scale(1.03);
             box-shadow: 0 0 10px crimson;
+
+
         }
+
+    .cover-thumbnail.locked {
+        filter: grayscale(100%) brightness(0.5);
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    .cover-thumbnail.locked {
+        position: relative;
+        cursor: not-allowed;
+    }
+
+        .cover-thumbnail.locked::after {
+            content: "🔒 Locked";
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+    .cover-preview-container {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    .cover-preview {
+        max-width: 300px;
+        height: auto;
+        border: 2px solid crimson;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+
+
+    .thumbnail-wrapper {
+        position: relative; /* Wraps just the thumbnail */
+        display: inline-block;
+    }
+
+    .locked-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 0, 0, 0.7);
+        color: gold;
+        font-weight: bold;
+        font-family: 'MedievalSharp', cursive;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        pointer-events: none; /* Prevents it from blocking */
+        border-radius: 4px; /* match thumbnail if rounded */
+    }
+
+    /* 1) turn off SweetAlert2’s white background & scrollbar */
+    .swal2-mystic {
+        background: linear-gradient(135deg, #200020, #400040) !important;
+        color: #eee !important;
+        border: 2px solid #660066 !important;
+        box-shadow: 0 0 30px #880088 !important;
+        overflow: visible !important; /* no scrollbars on the popup */
+    }
+
+    /* 2) let your body expand freely */
+    .swal2-mystic-body {
+        overflow: visible !important;
+        max-height: none !important;
+    }
+
+    /* 3) grid wrapper inside the popup */
+    .swal2-mystic #subclass-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+        gap: 1rem;
+    }
+
+    /* 4) your mystic‑card styles */
+    .swal2-mystic .subclass-card.mystic {
+        position: relative;
+        background: linear-gradient(135deg, rgba(20,0,30,0.9), rgba(40,0,60,0.8));
+        border: 2px solid #550055;
+        border-radius: 12px;
+        padding: 0.5rem;
+        cursor: pointer;
+        box-shadow: 0 0 8px #440044, inset 0 0 4px #220022;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .swal2-mystic .subclass-card.mystic::before {
+            content: "";
+            position: absolute;
+            top: -20%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background: url('/images/arcane-runes-overlay.png') center/contain no-repeat;
+            opacity: 0.08;
+            transform: rotate(25deg);
+            pointer-events: none;
+        }
+
+        .swal2-mystic .subclass-card.mystic:hover {
+            transform: scale(1.05) rotate(-1deg);
+            box-shadow: 0 0 12px #880088, inset 0 0 6px #660066, 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .swal2-mystic .subclass-card.mystic.selected {
+            border-color: #FFD700;
+            background: linear-gradient(135deg, rgba(30,0,30,0.9), rgba(60,0,60,0.85));
+            box-shadow: 0 0 14px #FFD700, inset 0 0 8px #ffeb80;
+        }
+
+    .swal2-mystic .mystic-img {
+        width: 100%;
+        border-radius: 6px;
+        box-shadow: 0 0 4px #220022;
+    }
+
+    .swal2-mystic .mystic-title {
+        margin: 0.5rem 0 0;
+        color: #e0c8ff;
+        text-shadow: 0 0 4px #330033;
+        font-size: 1.1rem;
+    }
+
+    .swal2-mystic .mystic-desc {
+        font-size: 0.85rem;
+        color: #ccc0ff;
+        text-shadow: 0 0 2px #220022;
+    }
+
+    /* 5) style the confirm & cancel buttons */
+    .swal2-mystic .swal2-confirm {
+        background-color: #8855ff !important;
+        border: none !important;
+    }
+
+    .swal2-mystic .swal2-cancel {
+        background-color: #555 !important;
+        border: none !important;
+        margin-left: .5em;
+    }
+
+    /* 6) brighten the title */
+    .swal2-mystic .swal2-title {
+        font-family: 'Cinzel Decorative', serif;
+        color: #ffd0ff;
+        text-shadow: 0 0 6px #660066;
+    }
 
 </style>
 
@@ -654,22 +856,15 @@
 
 
         <!-- Profile Form -->
-        <form method="post" asp-page-handler="Update" enctype="multipart/form-data">
-
+        <form id="profileForm" method="post" asp-page-handler="Update" enctype="multipart/form-data">
             <label>Username</label>
             <div class="form-control-plaintext" style="background-color: transparent; color: gold; font-family: 'MedievalSharp', cursive; padding-left: 0.5rem;">
                 @User.Identity.Name
             </div>
 
             <label asp-for="Input.Bio">Bio</label>
-            <textarea asp-for="Input.Bio"
-                      class="form-control"
-                      placeholder="Tell your tale (max 200 characters)"
-                      rows="3"
-                      maxlength="200"
-                      oninput="updateCharCount(this)"></textarea>
+            <textarea asp-for="Input.Bio" class="form-control" placeholder="Tell your tale (max 200 characters)" rows="3" maxlength="200" oninput="updateCharCount(this)"></textarea>
             <small id="bioCharCount" class="form-text">0 / 200 characters used</small>
-
             <span asp-validation-for="Input.Bio" class="text-danger"></span>
 
             <label asp-for="Input.ProfileImage" class="mt-3">Upload New Profile Icon</label>
@@ -684,57 +879,77 @@
 
             <div class="text-center mt-4">
                 <button type="submit" class="btn magic-btn">
-                    <img src="~/images/icons/tied-scroll.png"
-                         alt="Scroll Icon"
-                         class="icon-fantasy" />
+                    <img src="~/images/icons/tied-scroll.png" alt="Scroll Icon" class="icon-fantasy" />
                     Update Profile
                 </button>
             </div>
 
             <div class="text-center mt-3">
                 <button type="button" class="btn btn-warning" onclick="openCoverModal()">
-                    <img src="~/images/icons/cover.png"
-                         alt="Cover Icon"
-                         class="icon-fantasy" />
+                    <img src="~/images/icons/cover.png" alt="Cover Icon" class="icon-fantasy" />
                     Choose Cover
                 </button>
             </div>
 
             <div class="text-center mt-3">
                 <button type="button" class="btn btn-outline-warning" onclick="openPasswordModal()">
-                    <img src="~/images/icons/secret-book.png"
-                         alt="Password Icon"
-                         class="icon-fantasy" />
+                    <img src="~/images/icons/secret-book.png" alt="Password Icon" class="icon-fantasy" />
                     Change Password
                 </button>
             </div>
         </form>
 
+        <!-- Hidden AntiForgeryToken Form -->
+        <form id="antiForgeryForm" style="display:none;">
+            @Html.AntiForgeryToken()
+        </form>
+
         <h3 class="text-warning mb-3" style="font-family: 'Cinzel Decorative', serif; text-shadow: 0 0 6px crimson;">
-             Your Characters
+            Your Characters
         </h3>
         <hr style="border-top: 2px dashed crimson; width: 200px; margin-bottom: 1rem;" />
 
         @foreach (var c in Model.UserCharacters)
         {
+            var isOwner = User.Identity?.IsAuthenticated == true && User.FindFirst("sub")?.Value == c.ApplicationUserId;
+
             <div class="col-12 mb-3">
                 <div class="card bounty-card p-2">
-                    <!-- Clickable Character Name -->
+                    <!-- Character Toggle -->
                     <div class="character-toggle" onclick="toggleSheet('@c.Id')">
                         <i class="fa-solid fa-scroll me-2"></i> @c.Name
                     </div>
 
-                    <!-- Expandable Character Sheet -->
+                    <!-- Character Sheet -->
                     <div id="sheet-@c.Id" class="character-sheet" style="display: none;">
                         <hr />
-                        <p><strong>Class:</strong> @c.Class @(!string.IsNullOrEmpty(c.Subclass) ? $"({c.Subclass})" : "")</p>
+                        <p><strong class="character-class">@c.Class</strong> @(!string.IsNullOrEmpty(c.Subclass) ? $"({c.Subclass})" : "")</p>
                         <p><strong>Race:</strong> @c.Race @(!string.IsNullOrEmpty(c.Subrace) ? $"({c.Subrace})" : "")</p>
-                        <p><strong>Level:</strong> @c.Level</p>
-                        <p><strong>Background:</strong> @c.Background</p>
-                        <div class="text-center my-2">
+                        <p><strong class="character-level">Level: @c.Level</strong></p>
+
+                        <p><strong>Backstory:</strong></p>
+                        <div style="white-space: pre-wrap; font-style: italic; margin-bottom: 1rem;">
+                            @c.Background
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(c.LevelLog))
+                        {
+                            <div class="mt-4">
+                                <h5 class="text-warning" style="font-family: 'Cinzel Decorative', serif;">✨ Level Log</h5>
+                                <ul style="padding-left: 1.2rem; list-style: disc;">
+                                    @foreach (var entry in c.LevelLog.Split('\n').Where(e => !string.IsNullOrWhiteSpace(e)))
+                                    {
+                                        <li>@entry.Trim()</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <div class="text-center my-3">
                             <img src="@c.ImageUrl" class="img-fluid rounded" style="max-height: 220px;" alt="@c.Name portrait" />
                         </div>
-                        <div class="row text-center">
+
+                        <div class="row text-center mb-3">
                             <div class="col"><strong>STR:</strong><br />@c.Strength</div>
                             <div class="col"><strong>DEX:</strong><br />@c.Dexterity</div>
                             <div class="col"><strong>CON:</strong><br />@c.Constitution</div>
@@ -742,234 +957,321 @@
                             <div class="col"><strong>WIS:</strong><br />@c.Wisdom</div>
                             <div class="col"><strong>CHA:</strong><br />@c.Charisma</div>
                         </div>
+
+                        @if (isOwner && c.Level < 20)
+                        {
+                            <div class="text-center mt-3">
+                                <button type="button" class="btn magic-btn"
+                                        onclick="levelUpCharacter(@c.Id)">
+                                    <i class="fa-solid fa-arrow-up me-1"></i> Level Up
+                                </button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
         }
 
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // --- Avatar Preview ---
+                    const avatarInput = document.getElementById("avatarUpload");
+                    const avatarWrapper = document.getElementById("avatarWrapper");
+                    const modalImg = document.getElementById("modalAvatarImage");
+                    const fileLabel = document.querySelector('.custom-file-label');
 
-    <script>
-        // --- Avatar Preview Functionality ---
-        const avatarInput = document.getElementById("avatarUpload");
-        const avatarWrapper = document.getElementById("avatarWrapper");
-        const modal = document.getElementById("avatarModal");
-        const modalImg = document.getElementById("modalAvatarImage");
-        const fileLabel = document.querySelector('.custom-file-label');
+                    avatarInput.addEventListener("change", function () {
+                        if (this.files && this.files[0]) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                avatarWrapper.innerHTML = "";
+                                const img = document.createElement("img");
+                                img.src = e.target.result;
+                                img.alt = "New Avatar";
+                                img.classList.add("clickable-avatar", "avatar-image");
+                                img.id = "avatarPreview";
+                                img.onclick = openAvatarModal;
+                                avatarWrapper.appendChild(img);
+                                modalImg.src = e.target.result;
+                            };
+                            reader.readAsDataURL(this.files[0]);
+                            fileLabel.innerHTML = `<i class="fa-solid fa-scroll me-1"></i> ${this.files[0].name}`;
+                            stopRuneAnimation();
+                            const clockTick = document.getElementById("clockTickSound");
+                            clockTick.pause();
+                            clockTick.currentTime = 0;
+                        }
+                    });
 
-        avatarInput.addEventListener("change", function () {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    avatarWrapper.innerHTML = "";
-                    const img = document.createElement("img");
-                    img.src = e.target.result;
-                    img.alt = "New Avatar";
-                    img.classList.add("clickable-avatar", "avatar-image");
-                    img.id = "avatarPreview"; // reference for modal preview
-                    img.onclick = openAvatarModal;
-                    avatarWrapper.appendChild(img);
-                    modalImg.src = e.target.result; // update preview in modal
-                };
-                reader.readAsDataURL(this.files[0]);
-                const fileName = this.files[0]?.name || "Using Chronomancy Rewrite What You Once Were";
-                fileLabel.innerHTML = `<i class="fa-solid fa-scroll me-1"></i> ${fileName}`;
-                // Stop dynamic runes and clocktick audio once an image is selected.
-                stopRuneAnimation();
-                const clockTick = document.getElementById("clockTickSound");
-                clockTick.pause();
-                clockTick.currentTime = 0;
-            }
-        });
+                    const bioTextarea = document.querySelector("textarea[asp-for='Input.Bio']");
+                    if (bioTextarea) updateCharCount(bioTextarea);
+                    bioTextarea?.addEventListener("input", function () {
+                        updateCharCount(this);
+                    });
 
-        function openAvatarModal() {
-            const preview = document.getElementById("avatarPreview");
-            if (preview) {
-                modalImg.src = preview.src;
-            }
-            document.getElementById("avatarModal").style.display = "block";
-            // Do not start runes here.
-        }
+                    const dropdowns = document.querySelectorAll('.dropdown-toggle');
+                    dropdowns.forEach(function (dropdown) {
+                        new bootstrap.Dropdown(dropdown);
+                    });
+                });
+
+                // --- Avatar Modal ---
+                function openAvatarModal() {
+                    const preview = document.getElementById("avatarPreview");
+                    if (preview) document.getElementById("modalAvatarImage").src = preview.src;
+                    document.getElementById("avatarModal").style.display = "block";
+                }
+
                 function closeAvatarModal(event) {
-                    // Only close if background was clicked, not the image
                     if (event && event.target.id === "modalAvatarImage") return;
-
                     document.getElementById("avatarModal").style.display = "none";
                     stopRuneAnimation();
-
                     const clockTick = document.getElementById("clockTickSound");
                     clockTick.pause();
                     clockTick.currentTime = 0;
                 }
 
-
-        // --- Password Modal Functions ---
-        function openPasswordModal() {
-            const passwordModal = document.getElementById("passwordModal");
-            passwordModal.style.display = "block";
-
-            // Play magic sound
-            const sound = document.getElementById("magicSound");
-            sound.currentTime = 0;
-            sound.play().catch(e => console.warn("Magic sound failed to play:", e));
-
-            // Also play clock tick sound on loop
-            const clockTick = document.getElementById("clockTickSound");
-            clockTick.currentTime = 0;
-            clockTick.play().catch(e => console.warn("Clock tick failed to play:", e));
-
-            // Start dynamic rune animation
-            startRuneAnimation();
-        }
-
-        function closePasswordModal() {
-            const passwordModal = document.getElementById("passwordModal");
-            if (passwordModal) {
-                passwordModal.style.display = "none";
-            }
-            stopRuneAnimation();
-            // Stop clock tick audio when password modal is manually exited.
-            const clockTick = document.getElementById("clockTickSound");
-            clockTick.pause();
-            clockTick.currentTime = 0;
-        }
-
-        // --- Cover Modal Functions ---
-        function openCoverModal() {
-            document.getElementById("coverModal").classList.add("active");
-        }
-        function closeCoverModal() {
-            document.getElementById("coverModal").classList.remove("active");
-        }
-              function selectCover(imagePath) {
-            // Set background
-            document.body.style.background = `linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(92, 0, 0, 0.7)), url('${imagePath}') no-repeat center center fixed`;
-            document.body.style.backgroundSize = "cover";
-
-            // ✅ Set the hidden input value so it posts with the form
-            const hiddenCoverInput = document.getElementById("selectedCoverUrl");
-            if (hiddenCoverInput) {
-                hiddenCoverInput.value = imagePath;
-            }
-
-            // Close modal
-            closeCoverModal();
-        }
-
-        function saveUserCoverChoice(imagePath) {
-            fetch('/Profile?handler=SaveCoverChoice', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ coverUrl: imagePath })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Failed to save cover choice.");
-                }
-                return response.json();
-            })
-            .then(data => console.log("Cover saved:", data))
-            .catch(err => console.error(err));
-        }
-
-        // --- Dynamic Runes Effect ---
-        let runeInterval;
-        function startRuneAnimation() {
-            // Spawn two runes every 300 ms for increased density.
-            runeInterval = setInterval(() => {
-                spawnRune();
-                spawnRune();
-            }, 300);
-        }
-        function spawnRune() {
-            const runes = ["ᚠ", "ᛞ", "ᛃ", "ᚨ", "ᚱ", "ᚾ"];
-            const colors = ["#4B0082", "#191970", "silver", "gold"];
-            const runeElement = document.createElement("div");
-            runeElement.classList.add("rune");
-            const randomRune = runes[Math.floor(Math.random() * runes.length)];
-            runeElement.textContent = randomRune;
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            runeElement.style.color = randomColor;
-            runeElement.style.left = Math.floor(Math.random() * 95) + "%";
-            document.getElementById("runeContainer").appendChild(runeElement);
-            setTimeout(() => {
-                if (runeElement.parentNode) {
-                    runeElement.parentNode.removeChild(runeElement);
-                }
-            }, 5500);
-        }
-        function stopRuneAnimation() {
-            clearInterval(runeInterval);
-            document.getElementById("runeContainer").innerHTML = "";
-        }
-        function startRuneAnimationAndPlayClock() {
-            startRuneAnimation();
-            const clockTick = document.getElementById("clockTickSound");
-            clockTick.currentTime = 0;
-            clockTick.play().catch(e => console.warn("Clocktick failed to play:", e));
-        }
-
-        function updateCharCount(textarea) {
-       const count = textarea.value.length;
-        const max = textarea.maxLength;
-         document.getElementById("bioCharCount").textContent = `${count} / ${max} characters used`;
+                // --- Password Modal ---
+                function openPasswordModal() {
+                    const passwordModal = document.getElementById("passwordModal");
+                    passwordModal.style.display = "block";
+                    const sound = document.getElementById("magicSound");
+                    sound.currentTime = 0;
+                    sound.play().catch(e => console.warn("Magic sound failed to play:", e));
+                    const clockTick = document.getElementById("clockTickSound");
+                    clockTick.currentTime = 0;
+                    clockTick.play().catch(e => console.warn("Clock tick failed to play:", e));
+                    startRuneAnimation();
                 }
 
-      document.addEventListener("DOMContentLoaded", function () {
-          const bioTextarea = document.querySelector("textarea[asp-for='Input.Bio']");
-              if (bioTextarea) {
-         updateCharCount(bioTextarea);
-             }
-           });
-                 function updateCharCount(textarea) {
+                function closePasswordModal() {
+                    const passwordModal = document.getElementById("passwordModal");
+                    passwordModal.style.display = "none";
+                    stopRuneAnimation();
+                    const clockTick = document.getElementById("clockTickSound");
+                    clockTick.pause();
+                    clockTick.currentTime = 0;
+                }
+
+                // --- Cover Modal ---
+                window.openCoverModal = function () {
+                    document.getElementById("coverModal").classList.add("active");
+                }
+
+                window.closeCoverModal = function () {
+                    document.getElementById("coverModal").classList.remove("active");
+                }
+
+                               function selectCover(imagePath, isLocked) {
+                    if (isLocked) {
+                        alert("You must acquire the Retirement ending to unlock this cover.");
+                        return;
+                    }
+
+                    const selectedCoverPreview = document.getElementById("selectedCoverPreview");
+                    if (selectedCoverPreview) {
+                        selectedCoverPreview.src = imagePath;
+                        selectedCoverPreview.style.display = "block";
+                    }
+
+                    const hiddenCoverInput = document.getElementById("selectedCoverUrl");
+                    if (hiddenCoverInput) {
+                        hiddenCoverInput.value = imagePath;
+                    }
+
+                    // Highlight selected
+                    document.querySelectorAll('.cover-thumbnail').forEach(img => img.classList.remove('selected'));
+                    const selectedImg = [...document.querySelectorAll('.cover-thumbnail')].find(img => img.getAttribute('data-cover') === imagePath);
+                    if (selectedImg) {
+                        selectedImg.classList.add('selected');
+                    }
+                }
+
+
+
+                window.saveUserCoverChoice = function () {
+                    document.getElementById('profileForm').submit();
+                }
+
+                // --- Tooltip ---
+                function showTooltip(img) {
+                    const tooltip = document.getElementById("lockedTooltip");
+                    tooltip.style.display = "block";
+                    tooltip.style.left = (event.pageX + 10) + "px";
+                    tooltip.style.top = (event.pageY + 10) + "px";
+
+                    setTimeout(() => tooltip.style.display = "none", 2000);
+                }
+
+                document.addEventListener("mousemove", function (event) {
+                    const tooltip = document.getElementById("lockedTooltip");
+                    if (tooltip.style.display === "block") {
+                        tooltip.style.left = (event.pageX + 10) + "px";
+                        tooltip.style.top = (event.pageY + 10) + "px";
+                    }
+                });
+
+                // --- Toggle Sheet ---
+                function toggleSheet(id) {
+                    const sheet = document.getElementById(`sheet-${id}`);
+                    sheet.style.display = (sheet.style.display === 'block') ? 'none' : 'block';
+                }
+
+                // --- Char Count ---
+                function updateCharCount(textarea) {
                     const count = textarea.value.length;
                     const max = textarea.maxLength;
                     const counter = document.getElementById("bioCharCount");
 
                     counter.textContent = `${count} / ${max} characters used`;
-
-                    // Reset any previous colors
                     counter.style.color = "";
 
-                    // Apply color logic
-                    if (count >= 200) {
-                        counter.style.color = "crimson";
-                    } else if (count >= 190) {
-                        counter.style.color = "orange";
-                    } else if (count >= 150) {
-                        counter.style.color = "gold";
-                    } else {
-                        counter.style.color = "lightgreen";
-                    }
+                    if (count >= 200) counter.style.color = "crimson";
+                    else if (count >= 190) counter.style.color = "orange";
+                    else if (count >= 150) counter.style.color = "gold";
+                    else counter.style.color = "lightgreen";
                 }
 
-                document.addEventListener("DOMContentLoaded", function () {
-                    const bioTextarea = document.querySelector("textarea[asp-for='Input.Bio']");
-                    if (bioTextarea) {
-                        updateCharCount(bioTextarea);
-                    }
-                });
-                            function toggleSheet(id) {
-                    const sheet = document.getElementById(`sheet-${id}`);
-                    if (sheet) {
-                        const isVisible = sheet.style.display === 'block';
-                        sheet.style.display = isVisible ? 'none' : 'block';
-                    }
+                // --- Runes ---
+                let runeInterval;
+                function startRuneAnimation() {
+                    runeInterval = setInterval(() => {
+                        spawnRune();
+                        spawnRune();
+                    }, 300);
                 }
 
-                             document.addEventListener('DOMContentLoaded', function () {
-                    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
-                    dropdownElementList.map(function (dropdownToggleEl) {
-                        new bootstrap.Dropdown(dropdownToggleEl);
-                    });
-                });
-    </script>
+                function spawnRune() {
+                    const runes = ["ᚠ", "ᛞ", "ᛃ", "ᚨ", "ᚱ", "ᚾ"];
+                    const colors = ["#4B0082", "#191970", "silver", "gold"];
+                    const runeElement = document.createElement("div");
+                    runeElement.classList.add("rune");
+                    runeElement.textContent = runes[Math.floor(Math.random() * runes.length)];
+                    runeElement.style.color = colors[Math.floor(Math.random() * colors.length)];
+                    runeElement.style.left = Math.floor(Math.random() * 95) + "%";
+                    document.getElementById("runeContainer").appendChild(runeElement);
+                    setTimeout(() => runeElement.remove(), 5500);
+                }
+
+                function stopRuneAnimation() {
+                    clearInterval(runeInterval);
+                    document.getElementById("runeContainer").innerHTML = "";
+                }
+
+                function startRuneAnimationAndPlayClock() {
+                    startRuneAnimation();
+                    const clockTick = document.getElementById("clockTickSound");
+                    clockTick.currentTime = 0;
+                    clockTick.play().catch(e => console.warn("Clocktick failed to play:", e));
+                }
+
+             
+
+
+                                    window._subclassOptions = {
+                    barbarian: [
+                        { value: "Path of the Berserker", img: "/images/subclasses/barbberserker-subclass.png", desc: "Unbridled rage that maximizes raw damage." },
+                        { value: "Path of Wild Magic", img: "/images/subclasses/barbwildmagic-subclass.png", desc: "Churns chaotic energies during each rage." },
+                        { value: "Path of The Giant", img: "/images/subclasses/barbgiant-subclass.png", desc: "Embrace the colossal might and ancient power of the giants." },
+                        { value: "Wildheart", img: "/images/subclasses/barbwildheart-subclass.png", desc: "Channel the primal fury and untamed spirit of nature." }
+                    ],
+                    bard: [
+                        { value: "College of Lore", img: "/images/subclasses/bardlore-subclass.png", desc: "Scholars of wide knowledge and magical secrets." },
+                        { value: "College of Valor", img: "/images/subclasses/bardvalour-subclass.png", desc: "Inspires martial prowess in allies." },
+                        { value: "College of Glamour", img: "/images/subclasses/bardglamour-subclass.png", desc: "Enchanters who harness the Feywild’s beauty and magic." },
+                        { value: "College of Swords", img: "/images/subclasses/bardsword-subclass.png", desc: "Blends artistry with swordplay and blade flourishes." }
+                    ],
+                    cleric: [
+                        { value: "Life Domain", img: "/images/subclasses/clericlife-subclass.png", desc: "Embodies healing and the defense of life." },
+                        { value: "Light Domain", img: "/images/subclasses/clericlight-subclass.png", desc: "Channels radiant power to banish darkness." },
+                        { value: "War Domain", img: "/images/subclasses/clericwar-subclass.png", desc: "Mixes martial prowess with divine wrath." },
+                        { value: "Knowledge Domain", img: "/images/subclasses/clericknowledge-subclass.png", desc: "Pursues divine insight and secrets." },
+                        { value: "Nature Domain", img: "/images/subclasses/clericnature-subclass.png", desc: "Protects flora, fauna, and the natural order." },
+                        { value: "Tempest Domain", img: "/images/subclasses/clerictempest-subclass.png", desc: "Wields lightning and thunder in divine wrath." },
+                        { value: "Trickery Domain", img: "/images/subclasses/clerictrickster-subclass.png", desc: "Employs deception as a holy tool." }
+                    ],
+                    druid: [
+                        { value: "Circle of the Land", img: "/images/subclasses/circleofland-subclass.png", desc: "Draws arcane power from a chosen land type." },
+                        { value: "Circle of the Moon", img: "/images/subclasses/circleofmoon-subclass.png", desc: "Masters combat Wild Shape with powerful beast forms." },
+                        { value: "Circle of Spores", img: "/images/subclasses/circleofspore-subclass.png", desc: "Harnesses fungal growth for necrotic power." },
+                        { value: "Circle of Stars", img: "/images/subclasses/circleofstars-subclass.png", desc: "Channels cosmic constellations and star maps." }
+                    ],
+                    fighter: [
+                        { value: "Champion", img: "/images/subclasses/champion-subclass.png", desc: "Focuses on raw physical prowess and wider crit range." },
+                        { value: "Battle Master", img: "/images/subclasses/battlemaster-subclass.png", desc: "Adopts maneuvers for battlefield control." },
+                        { value: "Eldritch Knight", img: "/images/subclasses/fightereldritchknight-subclass.png", desc: "Blends arcane magic with martial prowess." },
+                        { value: "Arcane Archer", img: "/images/subclasses/fighterarcanearcher-subclass.png", desc: "Infuses arrows with magical effects." }
+                    ],
+                    monk: [
+                        { value: "Way of the Open Hand", img: "/images/subclasses/monkopenhand-subclass.png", desc: "Masters of unarmed strikes and ki manipulation." },
+                        { value: "Way of Shadow", img: "/images/subclasses/monkshadow-subclass.png", desc: "Utilizes darkness for subterfuge and swift strikes." },
+                        { value: "Way of the Four Elements", img: "/images/subclasses/monkfourelemants-subclass.png", desc: "Channels elemental forces through martial arts." },
+                        { value: "Way of the Drunken Master", img: "/images/subclasses/monkdrunkmaster-subclass.png", desc: "Unpredictable movements and staggering steps." }
+                    ],
+                    paladin: [
+                        { value: "Oath of Devotion", img: "/images/subclasses/paladindevotion-subclass.png", desc: "Embodies honesty, purity, and chivalric virtue." },
+                        { value: "Oath of the Ancients", img: "/images/subclasses/paladinancients-subclass.png", desc: "Defends nature and fosters renewal and light." },
+                        { value: "Oath of Vengeance", img: "/images/subclasses/paladinvengence-subclass.png", desc: "Hunts down evildoers with merciless resolve." },
+                        { value: "Oathbreaker", img: "/images/subclasses/paladinoathbreaker-subclass.png", desc: "A fallen paladin using unholy powers." },
+                        { value: "Oath of the Crown", img: "/images/subclasses/paladincrown-subclass.png", desc: "Upholds civilization, law, and loyalty." }
+                    ],
+                    ranger: [
+                        { value: "Hunter", img: "/images/subclasses/rangerhunter-subclass.png", desc: "Chooses specialized tactics for monstrous foes." },
+                        { value: "Beast Master", img: "/images/subclasses/rangerbeastmaster-subclass.png", desc: "Forms a close bond with a loyal beast companion." },
+                        { value: "Gloom Stalker", img: "/images/subclasses/rangergloomstalker-subclass.png", desc: "Thrives in the dark, striking from the shadows." },
+                        { value: "Swarmkeeper", img: "/images/subclasses/rangerswarmkeeper-subclass.png", desc: "Manifests a writhing swarm of nature spirits." }
+                    ],
+                    rogue: [
+                        { value: "Thief", img: "/images/subclasses/roguethief-subclass.png", desc: "Experts in stealth, infiltration, and quick movement." },
+                        { value: "Assassin", img: "/images/subclasses/rogueassassin-subclass.png", desc: "Strikes from the shadows for devastating surprise attacks." },
+                        { value: "Arcane Trickster", img: "/images/subclasses/arcane-trickster-subclass.png", desc: "Merges roguish stealth with minor spellcasting." },
+                        { value: "Swashbuckler", img: "/images/subclasses/rogueswashbuckler-subclass.png", desc: "Charismatic duelists who thrive in single combat." },
+                        { value: "Soulknife", img: "/images/subclasses/soulknife-subclass.png", desc: "Psionic assassins who manifest psychic blades." }
+                    ],
+                    sorcerer: [
+                        { value: "Draconic Bloodline", img: "/images/subclasses/sorcererdragonic-subclass.png", desc: "Arcane power inherited from dragon ancestry." },
+                        { value: "Wild Magic", img: "/images/subclasses/sorcererwild-subclass.png", desc: "Chaotic surges that can reshape reality." },
+                        { value: "Shadow Magic", img: "/images/subclasses/sorcerershadow-subclass.png", desc: "Harnesses the power of darkness." },
+                        { value: "Storm Sorcery", img: "/images/subclasses/sorcererstorm-subclass.png", desc: "Channels the power of raging storms." }
+                    ],
+                    warlock: [
+                        { value: "The Fiend", img: "/images/subclasses/warlockfiend-subclass.png", desc: "Pact with a demon or devil for destructive flames." },
+                        { value: "The Archfey", img: "/images/subclasses/warlockarchfey-subclass.png", desc: "Gains whimsical and beguiling Feywild powers." },
+                        { value: "The Great Old One", img: "/images/subclasses/warlockgreatoldone-subclass.png", desc: "Taps into cosmic horrors for forbidden knowledge." },
+                        { value: "The Hexblade", img: "/images/subclasses/warlockhexblade-subclass.png", desc: "Channels the power of a sentient weapon." }
+                    ],
+                    wizard: [
+                        { value: "Abjuration", img: "/images/subclasses/wizardabjuration-subclass.png", desc: "Protective wards and anti-magic effects." },
+                        { value: "Conjuration", img: "/images/subclasses/wizardconjuration-subclass.png", desc: "Summons creatures and objects." },
+                        { value: "Divination", img: "/images/subclasses/wizarddivination-subclass.png", desc: "Foresight and portents to reshape fate." },
+                        { value: "Enchantment", img: "/images/subclasses/wizardenchantment-subclass.png", desc: "Controlling minds and emotions." },
+                        { value: "Evocation", img: "/images/subclasses/wizardevocation-subclass.png", desc: "Blasts foes with potent elemental spells." },
+                        { value: "Illusion", img: "/images/subclasses/wizardillusion-subclass.png", desc: "Weaves deceptive imagery and phantasms." },
+                        { value: "Necromancy", img: "/images/subclasses/wizardnecromancy-subclass.png", desc: "Manipulates life energy, animates undead." },
+                        { value: "Transmutation", img: "/images/subclasses/wizardtransmutation-subclass.png", desc: "Alters matter and energy." },
+                        { value: "Bladesinging", img: "/images/subclasses/wizardbladesinging-subclass.png", desc: "Melds swordplay with arcane dance." }
+                    ]
+                };
+
+               
+
+          
+
+
+            </script>
+        }
+
+    
+            <script src="~/js/profile-character.js"></script>
+        
+
+
 
     <!-- Audio Elements -->
     <audio id="magicSound" src="/sounds/magic-sound-effect.mp3" preload="auto"></audio>
     <audio id="clockTickSound" src="/sounds/clocktick.mp3" preload="auto" loop></audio>
 }
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
